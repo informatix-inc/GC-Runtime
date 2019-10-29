@@ -1,0 +1,2 @@
+/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86-normal-client-release/corba/gensrc/org/omg/Messaging/SyncScopeHelper.java: /cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/corba/src/share/classes/org/omg/PortableInterceptor/Messaging.idl
+/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86-normal-client-release/corba/gensrc/org/omg/Messaging/SYNC_WITH_TRANSPORT.java: /cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/corba/src/share/classes/org/omg/PortableInterceptor/Messaging.idl

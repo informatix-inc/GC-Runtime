@@ -1,0 +1,32 @@
+SunLayoutEngine.cpp
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\common\jni_util.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\build\windows-x86-normal-client-release\jdk\include\jni.h
+メモ: インクルード ファイル:    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\stdio.h
+メモ: インクルード ファイル:     C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:      C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\sal.h
+メモ: インクルード ファイル:       C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\ConcurrencySal.h
+メモ: インクルード ファイル:      C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\vadefs.h
+メモ: インクルード ファイル:     C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\swprintf.inl
+メモ: インクルード ファイル:    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\stdarg.h
+メモ: インクルード ファイル:     C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:    c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\windows\javavm\export\jni_md.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\common\jlong.h
+メモ: インクルード ファイル:    c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\windows\native\common\jlong_md.h
+メモ: インクルード ファイル:     C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\stddef.h
+メモ: インクルード ファイル:      C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\stdlib.h
+メモ: インクルード ファイル:   C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:   C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\limits.h
+メモ: インクルード ファイル:    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\FontInstanceAdapter.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\LETypes.h
+メモ: インクルード ファイル:    c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\LEStandalone.h
+メモ: インクルード ファイル:     C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\string.h
+メモ: インクルード ファイル:      C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\LEFontInstance.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\sunfontids.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\fontscalerdefs.h
+メモ: インクルード ファイル:    c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\AccelGlyphCache.h
+メモ: インクルード ファイル:     c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\fontscalerdefs.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\LayoutEngine.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\build\windows-x86-normal-client-release\jdk\gensrc_headers\sun_font_SunLayoutEngine.h

@@ -1,0 +1,26 @@
+NonContextualGlyphSubstProc2.cpp
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\LETypes.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\LEStandalone.h
+メモ: インクルード ファイル:    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\stdlib.h
+メモ: インクルード ファイル:     C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:      C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\sal.h
+メモ: インクルード ファイル:       C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\ConcurrencySal.h
+メモ: インクルード ファイル:      C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\vadefs.h
+メモ: インクルード ファイル:     C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\limits.h
+メモ: インクルード ファイル:      C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\string.h
+メモ: インクルード ファイル:     C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\MorphTables.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\LayoutTables.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\LETableReference.h
+メモ: インクルード ファイル:    c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\LEFontInstance.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\SubtableProcessor2.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\NonContextualGlyphSubst.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\LookupTables.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\NonContextualGlyphSubstProc2.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\SimpleArrayProcessor2.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\SegmentSingleProcessor2.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\SegmentArrayProcessor2.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\SingleTableProcessor2.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\TrimmedArrayProcessor2.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\LESwaps.h

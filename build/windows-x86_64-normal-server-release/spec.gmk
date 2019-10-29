@@ -1,0 +1,725 @@
+#
+# Copyright (c) 2011, 2019, Oracle and/or its affiliates. All rights reserved.
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+#
+# This code is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License version 2 only, as
+# published by the Free Software Foundation.  Oracle designates this
+# particular file as subject to the "Classpath" exception as provided
+# by Oracle in the LICENSE file that accompanied this code.
+#
+# This code is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# version 2 for more details (a copy is included in the LICENSE file that
+# accompanied this code).
+#
+# You should have received a copy of the GNU General Public License version
+# 2 along with this work; if not, write to the Free Software Foundation,
+# Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+# Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
+# or visit www.oracle.com if you need additional information or have any
+# questions.
+#
+
+# Configured Fri Oct 25 17:46:09 JST 2019 to build
+# for target system windows-x86_64
+#   (called x86_64-unknown-cygwin by autoconf)
+# on build system windows-x86_64
+#   (called x86_64-unknown-cygwin by autoconf)
+# using 'configure --with-boot-jdk=/cygdrive/c/AdoptOpenJDK/prerequisite/jdk7 --with-jvm-variants=server --with-freetype=/cygdrive/c/AdoptOpenJDK/prerequisite/freetype --disable-debug-symbols --disable-zip-debug-info --with-milestone=001 --with-user-release-suffix=informatix'
+
+# When calling macros, the spaces between arguments are
+# often semantically important! Sometimes we need to subst
+# spaces and commas, therefore we need the following macros.
+X:=
+SPACE:=$(X) $(X)
+COMMA:=,
+HASH:=\#
+SQUOTE:='
+#'
+DQUOTE:="
+#"
+define NEWLINE
+
+
+endef
+
+# The command line given to configure.
+CONFIGURE_COMMAND_LINE:=--with-boot-jdk=/cygdrive/c/AdoptOpenJDK/prerequisite/jdk7 --with-jvm-variants=server --with-freetype=/cygdrive/c/AdoptOpenJDK/prerequisite/freetype --disable-debug-symbols --disable-zip-debug-info --with-milestone=001 --with-user-release-suffix=informatix
+
+# A self-referential reference to this file.
+SPEC:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/spec.gmk
+
+# Specify where the spec file is.
+MAKE_ARGS="SPEC=$(SPEC)"
+
+MAKE:=/usr/bin/make
+
+# Pass along the verbosity and log level settings.
+ifeq (,$(findstring VERBOSE=,$(MAKE)))
+  MAKE:=$(MAKE) $(VERBOSE) VERBOSE="$(VERBOSE)" LOG_LEVEL="$(LOG_LEVEL)"
+endif
+
+# No implicit variables or rules!
+ifeq (,$(findstring -R,$(MAKE)))
+  MAKE:=$(MAKE) -R
+endif
+
+# Specify where the common include directory for makefiles is.
+ifeq (,$(findstring -I /cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/make/common,$(MAKE)))
+  MAKE:=$(MAKE) -I /cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/make/common
+endif
+
+# The "human readable" name of this configuration
+CONF_NAME:=windows-x86_64-normal-server-release
+
+# The built jdk will run in this target system.
+OPENJDK_TARGET_OS:=windows
+OPENJDK_TARGET_OS_API:=winapi
+OPENJDK_TARGET_OS_ENV:=windows.cygwin
+
+OPENJDK_TARGET_CPU:=x86_64
+OPENJDK_TARGET_CPU_ARCH:=x86
+OPENJDK_TARGET_CPU_BITS:=64
+OPENJDK_TARGET_CPU_ENDIAN:=little
+
+COMPILE_TYPE:=native
+
+# Legacy support
+OPENJDK_TARGET_CPU_ISADIR:=
+OPENJDK_TARGET_CPU_LIBDIR:=/amd64
+OPENJDK_TARGET_CPU_LEGACY:=amd64
+OPENJDK_TARGET_CPU_LEGACY_LIB:=amd64
+OPENJDK_TARGET_CPU_OSARCH:=amd64
+OPENJDK_TARGET_CPU_JLI_CFLAGS:=-DLIBARCHNAME='"amd64"'
+OPENJDK_TARGET_OS_API_DIR:=windows
+OPENJDK_TARGET_OS_EXPORT_DIR:=windows
+
+# We are building on this build system.
+# When not cross-compiling, it is the same as the target.
+OPENJDK_BUILD_OS:=windows
+OPENJDK_BUILD_OS_API:=winapi
+OPENJDK_BUILD_OS_ENV:=windows.cygwin
+
+OPENJDK_BUILD_CPU:=x86_64
+OPENJDK_BUILD_CPU_ARCH:=x86
+OPENJDK_BUILD_CPU_BITS:=64
+OPENJDK_BUILD_CPU_ENDIAN:=little
+
+# Legacy OS values for use in release file.
+REQUIRED_OS_NAME:=Windows
+REQUIRED_OS_VERSION:=5.2
+
+OPENJDK=true
+LIBM:=-lm
+LIBDL:=
+
+# colon or semicolon
+PATH_SEP:=;
+
+ifeq ($(OPENJDK_TARGET_OS), windows)
+  # On Windows, the Visual Studio toolchain needs the LIB and INCLUDE
+  # environment variables (in Windows path style), and the PATH needs to
+  # be adjusted to include Visual Studio tools (but this needs to be in
+  # cygwin/msys style).
+  export PATH:=/cygdrive/c/Program Files (x86)/Microsoft Visual Studio 12.0/Common7/IDE/CommonExtensions/Microsoft/TestWindow:/cygdrive/c/Program Files (x86)/MSBuild/12.0/bin:/cygdrive/c/Program Files (x86)/Microsoft Visual Studio 12.0/Common7/IDE:/cygdrive/c/Program Files (x86)/Microsoft Visual Studio 12.0/VC/BIN/x86_amd64:/cygdrive/c/Program Files (x86)/Microsoft Visual Studio 12.0/VC/BIN:/cygdrive/c/Program Files (x86)/Microsoft Visual Studio 12.0/Common7/Tools:/cygdrive/c/Windows/Microsoft.NET/Framework/v4.0.30319:/cygdrive/c/Program Files (x86)/Microsoft Visual Studio 12.0/VC/VCPackages:/cygdrive/c/Program Files (x86)/Microsoft Visual Studio 12.0/Team Tools/Performance Tools:/cygdrive/c/Program Files (x86)/Windows Kits/8.1/bin/x86:/cygdrive/c/Program Files (x86)/Microsoft SDKs/Windows/v8.1A/bin/NETFX 4.5.1 Tools/x64:/usr/local/bin:/usr/bin:/cygdrive/c/Windows/system32:/cygdrive/c/Windows:/cygdrive/c/Windows/System32/Wbem:/cygdrive/c/Windows/System32/WindowsPowerShell/v1.0:/cygdrive/c/Program Files/Microsoft SQL Server/110/Tools/Binn:/usr/bin
+  export INCLUDE:=C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE;C:\Program Files (x86)\Windows Kits\8.1\include\shared;C:\Program Files (x86)\Windows Kits\8.1\include\um;C:\Program Files (x86)\Windows Kits\8.1\include\winrt;
+  export LIB:=C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\LIB\amd64;C:\Program Files (x86)\Windows Kits\8.1\lib\winv6.3\um\x64;
+endif
+
+SYSROOT_CFLAGS := 
+SYSROOT_LDFLAGS := 
+
+# Paths to the source code
+ADD_SRC_ROOT:=
+OVERRIDE_SRC_ROOT:=
+
+# The top-level directory of the forest (SRC_ROOT is a traditional alias)
+TOPDIR:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u
+SRC_ROOT:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u
+
+OUTPUT_ROOT:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release
+JDK_TOPDIR:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/jdk
+LANGTOOLS_TOPDIR:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/langtools
+CORBA_TOPDIR:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/corba
+JAXP_TOPDIR:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/jaxp
+JAXWS_TOPDIR:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/jaxws
+HOTSPOT_TOPDIR:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/hotspot
+NASHORN_TOPDIR:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/nashorn
+COPYRIGHT_YEAR:=2019
+
+# Platform naming variables
+LAUNCHER_NAME:=gc
+PRODUCT_NAME:=
+PRODUCT_SUFFIX:=Runtime Environment
+JDK_RC_PLATFORM_NAME:=Runtime
+COMPANY_NAME:=Informatix
+MACOSX_BUNDLE_NAME_BASE=GC
+MACOSX_BUNDLE_ID_BASE=jp.co.informatix.gc
+VENDOR_URL:=
+VENDOR_URL_BUG:=
+VENDOR_URL_VM_BUG:=
+
+# Location where build customization files may be found
+CUSTOM_MAKE_DIR:=
+
+# Information gathered from the version.numbers file.
+JDK_MAJOR_VERSION:=1
+JDK_MINOR_VERSION:=8
+JDK_MICRO_VERSION:=0
+JDK_UPDATE_VERSION:=
+JDK_BUILD_NUMBER:=b00
+MILESTONE:=001
+USER_RELEASE_SUFFIX=informatix
+
+ifneq ($(COMPANY_NAME),)
+  # COMPANY_NAME is set to "N/A" in $AUTOCONF_DIR/version-numbers by default,
+  # but can be customized with the '--with-vendor-name' configure option.
+  # Only export "VENDOR" to the build if COMPANY_NAME contains a real value.
+  # Otherwise the default value for VENDOR, which is used to set the "java.vendor"
+  # and "java.vm.vendor" properties is hard-coded into the source code (i.e. in
+  # System.c in the jdk for "vm.vendor" and vm_version.cpp in the VM for "java.vm.vendor")
+  ifneq ($(COMPANY_NAME), N/A)
+    VERSION_CFLAGS += -DVENDOR='"$(COMPANY_NAME)"'
+  endif
+endif
+
+# Only export VENDOR_URL, VENDOR_URL_BUG and VENDOR_VM_URL_BUG to the build if
+# they are not empty. Otherwise, default values which are defined in the sources
+# will be used.
+ifneq ($(VENDOR_URL),)
+  VERSION_CFLAGS += -DVENDOR_URL='"$(VENDOR_URL)"'
+endif
+ifneq ($(VENDOR_URL_BUG),)
+  VERSION_CFLAGS += -DVENDOR_URL_BUG='"$(VENDOR_URL_BUG)"'
+endif
+ifneq ($(VENDOR_URL_VM_BUG),)
+  VERSION_CFLAGS += -DVENDOR_URL_VM_BUG='"$(VENDOR_URL_VM_BUG)"'
+endif
+
+# Different version strings generated from the above information.
+JDK_VERSION:=1.8.0
+RUNTIME_NAME=$(PRODUCT_NAME) $(PRODUCT_SUFFIX)
+COOKED_JDK_UPDATE_VERSION:=0
+COOKED_BUILD_NUMBER:=0
+# These variables need to be generated here so that MILESTONE and
+# JDK_BUILD_NUMBER can be overridden on the make command line.
+ifeq ($(MILESTONE), fcs)
+  RELEASE=$(JDK_VERSION)$(BUILD_VARIANT_RELEASE)
+else
+  RELEASE=$(JDK_VERSION)-$(MILESTONE)$(BUILD_VARIANT_RELEASE)
+endif
+
+ifneq ($(USER_RELEASE_SUFFIX), )
+  FULL_VERSION=$(RELEASE)-$(USER_RELEASE_SUFFIX)-$(JDK_BUILD_NUMBER)
+else
+  FULL_VERSION=$(RELEASE)-$(JDK_BUILD_NUMBER)
+endif
+JRE_RELEASE_VERSION:=$(FULL_VERSION)
+
+# How to compile the code: release, fastdebug or slowdebug
+DEBUG_LEVEL:=release
+
+# This is the JDK variant to build.
+# The JDK variant is a name for a specific set of modules to be compiled for the JDK.
+JDK_VARIANT:=normal
+
+# Should we compile support for running with a graphical UI? (ie headful)
+# Should we compile support for running without? (ie headless)
+SUPPORT_HEADFUL:=yes
+SUPPORT_HEADLESS:=yes
+# Legacy defines controlled by the SUPPORT_HEADLESS and SUPPORT_HEADFUL options.
+BUILD_HEADLESS:=true
+
+# These are the libjvms that we want to build.
+# The java launcher uses the default.
+# The others can be selected by specifying -client -server -minimal1 -kernel -zero or -zeroshark
+# on the java launcher command line.
+JVM_VARIANTS:=,server,
+JVM_VARIANT_SERVER:=true
+JVM_VARIANT_CLIENT:=false
+JVM_VARIANT_MINIMAL1:=false
+JVM_VARIANT_KERNEL:=false
+JVM_VARIANT_ZERO:=false
+JVM_VARIANT_ZEROSHARK:=false
+JVM_VARIANT_CORE:=false
+
+# Universal binaries on macosx
+MACOSX_UNIVERSAL=
+
+# Legacy setting: -debug or -fastdebug
+# Still used in version string...
+BUILD_VARIANT_RELEASE:=
+
+# JDK_OUTPUTDIR specifies where a working jvm is built.
+# You can run $(JDK_OUTPUTDIR)/bin/java
+# Though the layout of the contents of $(JDK_OUTPUTDIR) is not
+# yet the same as a default installation.
+#
+# When you run "make install" it will create the standardized
+# layout for the jdk and the jre inside the IMAGES_OUTPUTDIR subdir.
+# Then it will copy the contents of the jdk into the installation
+# directory.
+
+BUILD_OUTPUT:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release
+# Colon left out to be able to override IMAGES_OUTPUTDIR for bootcycle-images
+LANGTOOLS_OUTPUTDIR=$(BUILD_OUTPUT)/langtools
+CORBA_OUTPUTDIR=$(BUILD_OUTPUT)/corba
+JAXP_OUTPUTDIR=$(BUILD_OUTPUT)/jaxp
+JAXWS_OUTPUTDIR=$(BUILD_OUTPUT)/jaxws
+HOTSPOT_OUTPUTDIR=$(BUILD_OUTPUT)/hotspot
+JDK_OUTPUTDIR=$(BUILD_OUTPUT)/jdk
+NASHORN_OUTPUTDIR=$(BUILD_OUTPUT)/nashorn
+IMAGES_OUTPUTDIR=$(BUILD_OUTPUT)/images
+
+LANGTOOLS_DIST=$(LANGTOOLS_OUTPUTDIR)/dist
+CORBA_DIST=$(CORBA_OUTPUTDIR)/dist
+JAXP_DIST=$(JAXP_OUTPUTDIR)/dist
+JAXWS_DIST=$(JAXWS_OUTPUTDIR)/dist
+HOTSPOT_DIST=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/hotspot/dist
+NASHORN_DIST=$(NASHORN_OUTPUTDIR)/dist
+
+BUILD_HOTSPOT=true
+
+# The boot jdk to use
+BOOT_JDK:=/cygdrive/c/AdoptOpenJDK/prerequisite/jdk7
+BOOT_RTJAR:=/cygdrive/c/AdoptOpenJDK/prerequisite/jdk7/jre/lib/rt.jar
+BOOT_TOOLSJAR=$(BOOT_JDK)/lib/tools.jar
+
+# When compiling Java source to be run by the boot jdk
+# use these extra flags, eg -source 6 -target 6
+BOOT_JDK_SOURCETARGET:=-source 7 -target 7
+
+# Information about the build system
+NUM_CORES:=4
+# Enable sjavac support = use a javac server,
+# multi core javac compilation and dependency tracking.
+ENABLE_SJAVAC:=no
+# Store sjavac server synchronization files here, and
+# the sjavac server log files.
+SJAVAC_SERVER_DIR:=
+
+# Number of parallel jobs to use for compilation
+JOBS?=4
+
+FREETYPE_LIBS:=/cygdrive/c/AdoptOpenJDK/prerequisite/freetype/lib/freetype.lib
+FREETYPE_CFLAGS:=-I/cygdrive/c/AdoptOpenJDK/prerequisite/freetype/include
+FREETYPE_BUNDLE_LIB_PATH=/cygdrive/c/AdoptOpenJDK/prerequisite/freetype/lib
+FONTCONFIG_CFLAGS:=
+CUPS_CFLAGS:=
+ALSA_LIBS:=
+ALSA_CFLAGS:=
+
+PACKAGE_PATH=/opt/local
+
+# Source file for cacerts
+CACERTS_FILE=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/lib/security/cacerts
+
+# Enable unlimited crypto policy
+UNLIMITED_CRYPTO=false
+
+# Necessary additional compiler flags to compile X11
+X_CFLAGS:=
+X_LIBS:=
+
+# The lowest required version of macosx to enforce compatiblity for
+MACOSX_VERSION_MIN=
+
+# Toolchain type: gcc, clang, solstudio, lxc, microsoft...
+TOOLCHAIN_TYPE:=microsoft
+
+# Option used to tell the compiler whether to create 32- or 64-bit executables
+COMPILER_TARGET_BITS_FLAG:=-m
+COMPILER_SUPPORTS_TARGET_BITS_FLAG=true
+
+CC_OUT_OPTION:=-Fo
+EXE_OUT_OPTION:=-out:
+LD_OUT_OPTION:=-out:
+AR_OUT_OPTION:=-out:
+
+# Flags used for overriding the default opt setting for a C/C++ source file.
+C_O_FLAG_HIGHEST:=-O2
+C_O_FLAG_HI:=-O1
+C_O_FLAG_NORM:=-O1
+C_O_FLAG_NONE:=-Od
+CXX_O_FLAG_HIGHEST:=-O2
+CXX_O_FLAG_HI:=-O1
+CXX_O_FLAG_NORM:=-O1
+CXX_O_FLAG_NONE:=-Od
+
+C_FLAG_DEPS:=
+CXX_FLAG_DEPS:=
+
+# Tools that potentially need to be cross compilation aware.
+CC:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/fixpath.exe -c  /cygdrive/c/progra~2/micros~1.0/vc/bin/x86_am~1/cl
+
+# CFLAGS used to compile the jdk native libraries (C-code)
+FDLIBM_CFLAGS:=
+CFLAGS_JDKLIB:= -nologo          -Zi -MD -Zc:wchar_t- -W3 -wd4800         -DWIN32_LEAN_AND_MEAN         -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE         -DWIN32 -DIAL -D_AMD64_ -Damd64  -D_LITTLE_ENDIAN -DWINDOWS -DARCH='"amd64"' -Damd64 -DNDEBUG -DRELEASE='"$(RELEASE)"'       -I/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/jdk/include       -I/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/jdk/include/windows       -I/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/javavm/export       -I/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/windows/javavm/export       -I/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/common       -I/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/windows/native/common    
+CXXFLAGS_JDKLIB:= -nologo          -Zi -MD -Zc:wchar_t- -W3 -wd4800         -DWIN32_LEAN_AND_MEAN         -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE         -DWIN32 -DIAL -D_AMD64_ -Damd64  -D_LITTLE_ENDIAN -DWINDOWS -DARCH='"amd64"' -Damd64 -DNDEBUG -DRELEASE='"$(RELEASE)"'       -I/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/jdk/include       -I/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/jdk/include/windows       -I/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/javavm/export       -I/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/windows/javavm/export       -I/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/common       -I/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/windows/native/common     
+
+# CFLAGS used to compile the jdk native launchers (C-code)
+CFLAGS_JDKEXE:= -nologo          -Zi -MD -Zc:wchar_t- -W3 -wd4800         -DWIN32_LEAN_AND_MEAN         -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE         -DWIN32 -DIAL -D_AMD64_ -Damd64  -D_LITTLE_ENDIAN -DWINDOWS -DARCH='"amd64"' -Damd64 -DNDEBUG -DRELEASE='"$(RELEASE)"'       -I/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/jdk/include       -I/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/jdk/include/windows       -I/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/javavm/export       -I/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/windows/javavm/export       -I/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/common       -I/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/windows/native/common  
+CXXFLAGS_JDKEXE:= -nologo          -Zi -MD -Zc:wchar_t- -W3 -wd4800         -DWIN32_LEAN_AND_MEAN         -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE         -DWIN32 -DIAL -D_AMD64_ -Damd64  -D_LITTLE_ENDIAN -DWINDOWS -DARCH='"amd64"' -Damd64 -DNDEBUG -DRELEASE='"$(RELEASE)"'       -I/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/jdk/include       -I/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/jdk/include/windows       -I/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/javavm/export       -I/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/windows/javavm/export       -I/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/common       -I/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/windows/native/common  
+
+NO_DELETE_NULL_POINTER_CHECKS_CFLAG=
+NO_LIFETIME_DSE_CFLAG=
+CXXSTD_CXXFLAG=
+
+CXX:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/fixpath.exe -c  /cygdrive/c/progra~2/micros~1.0/vc/bin/x86_am~1/cl
+#CXXFLAGS:= -I/cygdrive/c/AdoptOpenJDK/prerequisite/freetype/include
+
+OBJC:= 
+#OBJCFLAGS:=
+
+CPP:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/fixpath.exe -c /cygdrive/c/progra~2/micros~1.0/vc/bin/x86_am~1/cl -E
+#CPPFLAGS:=
+
+# The linker can be gcc or ld on posix systems, or link.exe on windows systems.
+LD:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/fixpath.exe -c /cygdrive/c/progra~2/micros~1.0/vc/bin/x86_am~1/link
+
+ifeq ($(OPENJDK_TARGET_OS), macosx)
+  # Xcode SDK and tools path
+  SDKPATH:=
+  
+endif
+
+# The linker on older SuSE distros (e.g. on SLES 10) complains with:
+# "Invalid version tag `SUNWprivate_1.1'. Only anonymous version tag is allowed in executable."
+# if feeded with a version script which contains named tags.
+USING_BROKEN_SUSE_LD:=no
+
+# LDFLAGS used to link the jdk native libraries (C-code)
+LDFLAGS_JDKLIB:=  -nologo -opt:ref -incremental:no -debug -dll -libpath:/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/jdk/lib
+LDFLAGS_JDKLIB_SUFFIX:=
+
+# On some platforms the linker cannot be used to create executables, thus
+# the need for a separate LDEXE command.
+LDEXE:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/fixpath.exe -c /cygdrive/c/progra~2/micros~1.0/vc/bin/x86_am~1/link
+
+# LDFLAGS used to link the jdk native launchers (C-code)
+LDFLAGS_JDKEXE:=  -nologo -opt:ref -incremental:no -debug /STACK:1048576
+LDFLAGS_JDKEXE_SUFFIX:=
+
+# LDFLAGS specific to C++ linking.
+LDFLAGS_CXX_JDK:=
+
+# Sometimes a different linker is needed for c++ libs
+LDCXX:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/fixpath.exe -c /cygdrive/c/progra~2/micros~1.0/vc/bin/x86_am~1/link
+# The flags for linking libstdc++ linker.
+LIBCXX:=
+
+# Sometimes a different linker is needed for c++ executables
+LDEXECXX:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/fixpath.exe -c /cygdrive/c/progra~2/micros~1.0/vc/bin/x86_am~1/link
+
+# BUILD_CC/BUILD_LD is a compiler/linker that generates code that is runnable on the
+# build platform.
+BUILD_CC:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/fixpath.exe -c /cygdrive/c/progra~2/micros~1.0/vc/bin/x86_am~1/cl
+BUILD_LD:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/fixpath.exe -c /cygdrive/c/progra~2/micros~1.0/vc/bin/x86_am~1/link
+
+AS:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/fixpath.exe -c /cygdrive/c/progra~2/micros~1.0/vc/bin/x86_am~1/cl -c
+
+# AR is used to create a static library (is ar in posix, lib.exe in windows)
+AR:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/fixpath.exe -c /cygdrive/c/progra~2/micros~1.0/vc/bin/x86_am~1/lib
+ARFLAGS:=-nologo -NODEFAULTLIB:MSVCRT
+
+NM:=
+GNM:=
+STRIP:=
+MCS:=
+
+# Command to create a shared library
+SHARED_LIBRARY_FLAGS:=-LD
+
+# Options to linker to specify a mapfile.
+# (Note absence of := assignment, because we do not want to evaluate the macro body here)
+SET_SHARED_LIBRARY_MAPFILE=
+
+# Options for C/CXX compiler to be used if linking is performed
+#   using reorder file
+C_FLAG_REORDER:=
+CXX_FLAG_REORDER:=
+
+#
+# Options for generating debug symbols
+ENABLE_DEBUG_SYMBOLS:=false
+CFLAGS_DEBUG_SYMBOLS:=
+ASFLAGS_DEBUG_SYMBOLS:=
+CXXFLAGS_DEBUG_SYMBOLS:=
+ZIP_DEBUGINFO_FILES:=false
+STRIP_POLICY:=min_strip
+DEBUG_BINARIES:=
+
+#
+# Compress (or not) jars
+COMPRESS_JARS=false
+
+# Options to linker to specify the library name.
+# (Note absence of := assignment, because we do not want to evaluate the macro body here)
+SET_SHARED_LIBRARY_NAME=
+
+# Set origin using the linker, ie use the relative path to the dependent library to find the dependees.
+# (Note absence of := assignment, because we do not want to evaluate the macro body here)
+SET_SHARED_LIBRARY_ORIGIN=
+SET_EXECUTABLE_ORIGIN=
+
+# Different OS:es have different ways of naming shared libraries.
+# The SHARED_LIBRARY macro takes "verify" as and argument and returns:
+#    "libverify.so" or "libverify.dylib" or "verify.dll" depending on platform.
+# (Note absence of := assignment, because we do not want to evaluate the macro body here)
+SHARED_LIBRARY=$1.dll
+STATIC_LIBRARY=$1.lib
+LIBRARY_PREFIX:=
+SHARED_LIBRARY_SUFFIX:=.dll
+STATIC_LIBRARY_SUFFIX:=.lib
+EXE_SUFFIX:=.exe
+OBJ_SUFFIX:=.obj
+
+POST_STRIP_CMD:=
+POST_MCS_CMD:=
+
+JAVA_FLAGS:= 
+JAVA_FLAGS_BIG:= -Xms64M -Xmx1600M -XX:ThreadStackSize=1536 -XX:PermSize=32m -XX:MaxPermSize=160m
+JAVA_FLAGS_SMALL:= -XX:+UseSerialGC -Xms32M -Xmx512M
+
+JAVA=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/fixpath.exe -c $(BOOT_JDK)/bin/java $(JAVA_FLAGS_BIG) $(JAVA_FLAGS)
+JAVA_SMALL=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/fixpath.exe -c $(BOOT_JDK)/bin/java $(JAVA_FLAGS_SMALL) $(JAVA_FLAGS)
+
+JAVAC=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/fixpath.exe -c $(BOOT_JDK)/bin/javac
+# Hotspot sets this variable before reading the SPEC when compiling sa-jdi.jar. Avoid
+# overriding that value by using ?=.
+JAVAC_FLAGS?=
+
+JAVAH=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/fixpath.exe -c $(BOOT_JDK)/bin/javah
+
+JAR=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/fixpath.exe -c $(BOOT_JDK)/bin/jar
+
+RMIC=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/fixpath.exe -c $(BOOT_JDK)/bin/rmic
+
+NATIVE2ASCII=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/fixpath.exe -c $(BOOT_JDK)/bin/native2ascii $(addprefix -J, $(JAVA_FLAGS_SMALL))
+
+JARSIGNER=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/fixpath.exe -c $(BOOT_JDK)/bin/jarsigner
+
+# You run the new javac using the boot jdk with $(BOOT_JDK)/bin/java $(NEW_JAVAC) ...
+BOOTSTRAP_JAVAC_JAR:=$(LANGTOOLS_OUTPUTDIR)/dist/bootstrap/lib/javac.jar
+BOOTSTRAP_JAVAC_ARGS:="-Xbootclasspath/p:$(BOOTSTRAP_JAVAC_JAR)" -cp $(BOOTSTRAP_JAVAC_JAR)
+NEW_JAVAC   = $(BOOTSTRAP_JAVAC_ARGS) com.sun.tools.javac.Main
+NEW_JAVADOC = $(BOOTSTRAP_JAVAC_ARGS) com.sun.tools.javadoc.Main
+
+# Base flags for RC
+# Guarding this against resetting value. Legacy make files include spec multiple
+# times.
+ifndef RC_FLAGS
+  RC_FLAGS:=-nologo -l 0x409 -r -d NDEBUG         -d "JDK_BUILD_ID=$(FULL_VERSION)"         -d "JDK_COMPANY=$(COMPANY_NAME)"         -d "JDK_COMPONENT=$(PRODUCT_NAME) $(JDK_RC_PLATFORM_NAME) binary"         -d "JDK_VER=$(JDK_MINOR_VERSION).$(JDK_MICRO_VERSION).$(COOKED_JDK_UPDATE_VERSION).$(COOKED_BUILD_NUMBER)"         -d "JDK_COPYRIGHT=Copyright \xA9 2019"         -d "JDK_NAME=$(PRODUCT_NAME) $(JDK_RC_PLATFORM_NAME) $(JDK_MINOR_VERSION) $(JDK_UPDATE_META_TAG)"         -d "JDK_FVER=$(JDK_MINOR_VERSION),$(JDK_MICRO_VERSION),$(if $(COOKED_JDK_UPDATE_VERSION),$(COOKED_JDK_UPDATE_VERSION),0),$(COOKED_BUILD_NUMBER)"
+endif
+
+# A specific java binary with specific options can be used to run
+# the long running background sjavac servers and other long running tasks.
+SJAVAC_SERVER_JAVA:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/fixpath.exe -c /cygdrive/c/AdoptOpenJDK/prerequisite/jdk7/bin/java  -verbosegc -d64 -Xms1G -Xmx3G
+
+# Tools adhering to a minimal and common standard of posix compliance.
+AWK:=gawk
+BASENAME:=/usr/bin/basename
+BASH:=/usr/bin/bash
+CAT:=/usr/bin/cat
+CCACHE:=
+# CD is going away, but remains to cater for legacy makefiles.
+CD:=cd
+CHMOD:=/usr/bin/chmod
+CODESIGN:=
+COMM:=/usr/bin/comm
+CP:=/usr/bin/cp
+CPIO:=/usr/bin/cpio
+CUT:=/usr/bin/cut
+DATE:=/usr/bin/date
+DIFF:=/usr/bin/diff
+DIRNAME:=/usr/bin/dirname
+DSYMUTIL:=
+FIND:=/usr/bin/find
+FIND_DELETE:=-delete
+ECHO:=/usr/bin/echo
+EGREP:=/usr/bin/grep -E
+FGREP:=/usr/bin/grep -F
+GREP:=/usr/bin/grep
+HEAD:=/usr/bin/head
+LS:=/usr/bin/ls
+LN:=/usr/bin/ln
+MKDIR:=/usr/bin/mkdir
+MV:=/usr/bin/mv
+NAWK:=/usr/bin/gawk
+PRINTF:=/usr/bin/printf
+PWD:=@THEPWDCMD@
+RM:=/usr/bin/rm -f
+SED:=/usr/bin/sed
+SH:=/usr/bin/sh
+SORT:=/usr/bin/sort
+TAR:=/usr/bin/tar
+TAIL:=/usr/bin/tail
+TEE:=/usr/bin/tee
+TIME:=
+IS_GNU_TIME:=no
+TR:=/usr/bin/tr
+TOUCH:=/usr/bin/touch
+UNIQ:=/usr/bin/uniq
+WC:=/usr/bin/wc
+XARGS:=/usr/bin/xargs
+ZIPEXE:=/usr/bin/zip
+ZIP:=/usr/bin/zip
+UNZIP:=/usr/bin/unzip
+MT:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/fixpath.exe -c /cygdrive/c/progra~2/wi3cf2~1/8.1/bin/x86/mt
+RC:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/fixpath.exe -c /cygdrive/c/progra~2/wi3cf2~1/8.1/bin/x86/rc
+DUMPBIN:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/fixpath.exe -c /cygdrive/c/progra~2/micros~1.0/vc/bin/x86_am~1/dumpbin
+CYGPATH:=/usr/bin/cygpath
+LDD:=/usr/bin/ldd
+OTOOL:=
+READELF:=/usr/bin/readelf
+EXPR:=/usr/bin/expr
+FILE:=/usr/bin/file
+HG:=
+OBJCOPY:=
+SETFILE:=
+XATTR:=
+JT_HOME:=
+JTREGEXE:=
+
+XCODEBUILD=
+FIXPATH:=/cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/fixpath.exe -c
+
+# Where the build output is stored for your convenience.
+BUILD_LOG:=$(OUTPUT_ROOT)/build.log
+BUILD_LOG_PREVIOUS:=$(OUTPUT_ROOT)/build.log.old
+# Disable the build log wrapper on sjavac+winapi until
+# we have solved how to prevent the log wrapper to wait
+# for the background sjavac server process.
+ifeq (noXwinapi,yesXwinapi)
+  BUILD_LOG_WRAPPER:=
+else
+  BUILD_LOG_WRAPPER:=$(BASH) $(SRC_ROOT)/common/bin/logger.sh $(BUILD_LOG)
+endif
+
+# Build setup
+ENABLE_JFR=@ENABLE_JFR@
+ENABLE_INTREE_EC=yes
+USE_EXTERNAL_LIBJPEG:=true
+USE_EXTERNAL_LIBGIF:=false
+USE_EXTERNAL_LIBZ:=false
+LIBZIP_CAN_USE_MMAP:=true
+MSVCR_DLL:=/cygdrive/c/progra~2/micros~1.0/vc/redist/x64/micros~1.crt/msvcr120.dll
+MSVCP_DLL:=/cygdrive/c/progra~2/micros~1.0/vc/redist/x64/micros~1.crt/msvcp120.dll
+UCRT_DLL_DIR:=
+
+
+# ADD_SRCS takes a single argument with source roots
+# and appends any corresponding source roots found
+# below --with-add-source-root and below
+# --with-override-source-root. It is the responsibility
+# of the next macro to get rid of superfluous files.
+ADD_SRCS=$1
+ifneq (,$(ADD_SRC_ROOT))
+  # Append wildcard rule to pickup any matching source roots found below ADD_SRC_ROOT
+  ADD_SRCS+=$(wildcard $(subst $(SRC_ROOT),$(ADD_SRC_ROOT),$1))
+endif
+ifneq (,$(OVERRIDE_SRC_ROOT))
+  # Append wildcard rule to pickup any matching source roots found below OVERRIDE_SRC_ROOT
+  ADD_SRCS+=$(wildcard $(subst $(SRC_ROOT),$(OVERRIDE_SRC_ROOT),$1))
+endif
+
+# OVR_SRCS creates a filter expression to filter out sources in
+# the original source directory that lie inside directories below
+# --with-override-source-root.
+# Use := here since we want to scan for these files here. To avoid recomputation later.
+# We cannot do the scan in configure, since that would force us to rerun configure when
+# we add overridden sources.
+ifneq (,$(OVERRIDE_SRC_ROOT))
+  OVR_SRCS:=$(addsuffix %,$(subst $(OVERRIDE_SRC_ROOT),$(SRC_ROOT),$(sort $(dir $(shell $(FIND) $(OVERRIDE_SRC_ROOT) -type f)))))
+else
+  OVR_SRCS:=
+endif
+
+####################################################
+#
+# INSTALLATION
+#
+
+# Common prefix for all installed files. Defaults to /usr/local,
+# but /opt/myjdk is another common version.
+INSTALL_PREFIX=/usr/local
+
+# Directories containing architecture-dependent files should be relative to exec_prefix
+INSTALL_EXECPREFIX=${prefix}
+
+# java,javac,javah,javap etc are installed here.
+INSTALL_BINDIR=${exec_prefix}/bin
+
+# Read only architecture-independent data
+INSTALL_DATADIR=${datarootdir}
+
+# Root of above.
+INSTALL_DATAROOTDIR=${prefix}/share
+
+# Doc files, other than info and man.
+INSTALL_DOCDIR=${datarootdir}/doc/${PACKAGE_TARNAME}
+
+# Html documentation
+INSTALL_HTMLDIR=${docdir}
+
+# Installing C header files, JNI headers for example.
+INSTALL_INCLUDEDIR=${prefix}/include
+
+# Installing library files....
+INSTALL_INCLUDEDIR=${exec_prefix}/lib
+
+# Executables that other programs run.
+INSTALL_LIBEXECDIR=${exec_prefix}/libexec
+
+# Locale-dependent but architecture-independent data, such as message catalogs.
+INSTALL_LOCALEDIR=${datarootdir}/locale
+
+# Modifiable single-machine data
+INSTALL_LOCALSTATEDIR=${prefix}/var
+
+# Man pages
+INSTALL_MANDIR=${datarootdir}/man
+
+# Modifiable architecture-independent data.
+INSTALL_SHAREDSTATEDIR=${prefix}/com
+
+# Read-only single-machine data
+INSTALL_SYSCONFDIR=${prefix}/etc
+
+
+####################################################
+#
+# Misc
+#
+
+# Name of Service Agent library
+SALIB_NAME=sawindbg.dll
+
+INCLUDE_SA=true
+
+OS_VERSION_MAJOR:=2
+OS_VERSION_MINOR:=11
+OS_VERSION_MICRO:=2(0
+
+# Images directory definitions
+JDK_IMAGE_SUBDIR:=j2sdk-image
+JRE_IMAGE_SUBDIR:=j2re-image
+JDK_OVERLAY_IMAGE_SUBDIR:=j2sdk-overlay-image
+JRE_OVERLAY_IMAGE_SUBDIR:=j2re-overlay-image
+# Colon left out to be able to override output dir for bootcycle-images
+JDK_IMAGE_DIR=$(IMAGES_OUTPUTDIR)/$(JDK_IMAGE_SUBDIR)
+JRE_IMAGE_DIR=$(IMAGES_OUTPUTDIR)/$(JRE_IMAGE_SUBDIR)
+JDK_OVERLAY_IMAGE_DIR=$(IMAGES_OUTPUTDIR)/$(JDK_OVERLAY_IMAGE_SUBDIR)
+JRE_OVERLAY_IMAGE_DIR=$(IMAGES_OUTPUTDIR)/$(JRE_OVERLAY_IMAGE_SUBDIR)
+
+# Macosx bundles directory definitions
+JDK_BUNDLE_SUBDIR=j2sdk-bundle/jdk$(JDK_VERSION).jdk/Contents
+JRE_BUNDLE_SUBDIR=j2re-bundle/jre$(JDK_VERSION).jre/Contents
+JDK_BUNDLE_DIR=$(IMAGES_OUTPUTDIR)/$(JDK_BUNDLE_SUBDIR)
+JRE_BUNDLE_DIR=$(IMAGES_OUTPUTDIR)/$(JRE_BUNDLE_SUBDIR)
+
+# Include the custom-spec.gmk file if it exists
+-include $(dir /cygdrive/c/cygwin64/home/fujimoto/openjdk-jdk8u/build/windows-x86_64-normal-server-release/spec.gmk)/custom-spec.gmk

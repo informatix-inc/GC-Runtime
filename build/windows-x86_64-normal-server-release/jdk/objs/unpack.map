@@ -1,0 +1,948 @@
+ unpack
+
+ Timestamp is 5db2bec4 (Fri Oct 25 10:22:12 2019)
+
+ Preferred load address is 0000000180000000
+
+ Start         Length     Name                   Class
+ 0001:00000000 0000c3bcH .text$mn                CODE
+ 0001:0000c3c0 0000007bH .text$x                 CODE
+ 0002:00000000 000001a8H .idata$5                DATA
+ 0002:000001a8 00000008H .CRT$XCA                DATA
+ 0002:000001b0 00000008H .CRT$XCZ                DATA
+ 0002:000001b8 00000008H .CRT$XIA                DATA
+ 0002:000001c0 00000008H .CRT$XIAA               DATA
+ 0002:000001c8 00000008H .CRT$XIC                DATA
+ 0002:000001d0 00000008H .CRT$XIZ                DATA
+ 0002:000001e0 00002c10H .rdata                  DATA
+ 0002:00002df0 00000094H .rdata$debug            DATA
+ 0002:00002e88 00000008H .rtc$IAA                DATA
+ 0002:00002e90 00000008H .rtc$IZZ                DATA
+ 0002:00002e98 00000008H .rtc$TAA                DATA
+ 0002:00002ea0 00000008H .rtc$TZZ                DATA
+ 0002:00002ea8 00000490H .xdata                  DATA
+ 0002:00003340 000001f8H .edata                  DATA
+ 0002:00003538 00000050H .idata$2                DATA
+ 0002:00003588 00000014H .idata$3                DATA
+ 0002:000035a0 000001a8H .idata$4                DATA
+ 0002:00003748 00000332H .idata$6                DATA
+ 0003:00000000 00000b14H .data                   DATA
+ 0003:00000b20 00000a10H .bss                    DATA
+ 0004:00000000 00000654H .pdata                  DATA
+ 0005:00000000 00000058H .rsrc$01                DATA
+ 0005:00000060 00000308H .rsrc$02                DATA
+
+  Address         Publics by Value              Rva+Base               Lib:Object
+
+ 0000:00000000       __guard_fids_count         0000000000000000     <absolute>
+ 0000:00000000       __guard_flags              0000000000000000     <absolute>
+ 0000:00000000       ___safe_se_handler_count   0000000000000000     <absolute>
+ 0000:00000000       __guard_fids_table         0000000000000000     <absolute>
+ 0000:00000000       ___safe_se_handler_table   0000000000000000     <absolute>
+ 0000:00000000       __ImageBase                0000000180000000     <linker-defined>
+ 0001:00000000       ?getIntCount@band@@QEAAHH@Z 0000000180001000 f   bands.obj
+ 0001:000000fc       ?getIntTotal@band@@QEAAHXZ 00000001800010fc f   bands.obj
+ 0001:000001b0       ?getLong@band@@QEAA_JAEAU1@_N@Z 00000001800011b0 f   bands.obj
+ 0001:000001fc       ?getRefCommon@band@@QEAAPEAUentry@@PEAUcpindex@@_N@Z 00000001800011fc f   bands.obj
+ 0001:000002a0       ?initIndexes@band@@SAXPEAUunpacker@@@Z 00000001800012a0 f   bands.obj
+ 0001:000002fc       ?makeBands@band@@SAPEAU1@PEAUunpacker@@@Z 00000001800012fc f   bands.obj
+ 0001:000003a8       ?readData@band@@QEAAXH@Z   00000001800013a8 f   bands.obj
+ 0001:000005c4       ?setIndex@band@@QEAAXPEAUcpindex@@@Z 00000001800015c4 f   bands.obj
+ 0001:000005cc       ?setIndexByTag@band@@QEAAXC@Z 00000001800015cc f   bands.obj
+ 0001:00000608       ?compareTo@bytes@@QEAAHAEAU1@@Z 0000000180001608 f   bytes.obj
+ 0001:00000658       ?copyFrom@bytes@@QEAAXPEBX_K1@Z 0000000180001658 f   bytes.obj
+ 0001:00000664       ?ensureSize@fillbytes@@QEAAX_K@Z 0000000180001664 f   bytes.obj
+ 0001:00000694       ?free@bytes@@QEAAXXZ       0000000180001694 f   bytes.obj
+ 0001:000006c8       ?freeAll@ptrlist@@QEAAXXZ  00000001800016c8 f   bytes.obj
+ 0001:0000072c       ?grow@fillbytes@@QEAAPEAC_K@Z 000000018000172c f   bytes.obj
+ 0001:00000808       ?indexOf@ptrlist@@QEAAHPEBX@Z 0000000180001808 f   bytes.obj
+ 0001:00000838       ?malloc@bytes@@QEAAX_K@Z   0000000180001838 f   bytes.obj
+ 0001:000008a4       ?realloc@bytes@@QEAAX_K@Z  00000001800018a4 f   bytes.obj
+ 0001:00000960       ?saveFrom@bytes@@QEAAXPEBX_K@Z 0000000180001960 f   bytes.obj
+ 0001:000009a8       ?writeTo@bytes@@QEAAPEACPEAC@Z 00000001800019a8 f   bytes.obj
+ 0001:000009dc       ?findByIndex@coding@@SAPEAU1@H@Z 00000001800019dc f   coding.obj
+ 0001:00000a00       ?findBySpec@coding@@SAPEAU1@H@Z 0000000180001a00 f   coding.obj
+ 0001:00000a74       ?findBySpec@coding@@SAPEAU1@HHHH@Z 0000000180001a74 f   coding.obj
+ 0001:00000aac       ?getInt@value_stream@@QEAAHXZ 0000000180001aac f   coding.obj
+ 0001:00000de0       ?init@coding@@QEAAPEAU1@XZ 0000000180001de0 f   coding.obj
+ 0001:00000fa0       ?init@coding_method@@QEAAXAEAPEACPEAC0HPEAUcoding@@HPEAUintlist@@@Z 0000000180001fa0 f   coding.obj
+ 0001:00001788       ?init@value_stream@@QEAAXPEAC0PEAUcoding@@@Z 0000000180002788 f   coding.obj
+ 0001:000017a4       ?parse@coding@@SAIAEAPEACHH@Z 00000001800027a4 f   coding.obj
+ 0001:00001824       ?parseMultiple@coding@@SAXAEAPEACHPEACHH@Z 0000000180002824 f   coding.obj
+ 0001:000018c4       ?parse_lgH@coding@@SAIAEAPEACHHH@Z 00000001800028c4 f   coding.obj
+ 0001:00001944       ?reset@coding_method@@QEAAXPEAUvalue_stream@@@Z 0000000180002944 f   coding.obj
+ 0001:00001994       ?setCoding@value_stream@@QEAAXPEAUcoding@@@Z 0000000180002994 f   coding.obj
+ 0001:00001aa8       ?sumInUnsignedRange@coding@@QEAAHHH@Z 0000000180002aa8 f   coding.obj
+ 0001:00001ad8       ?CallLongMethod@JNIEnv_@@QEAA_JPEAV_jobject@@PEAU_jmethodID@@ZZ 0000000180002ad8 f i jni.obj
+ 0001:00001afc       ?CallStaticObjectMethod@JNIEnv_@@QEAAPEAV_jobject@@PEAV_jclass@@PEAU_jmethodID@@ZZ 0000000180002afc f i jni.obj
+ 0001:00001b20       ?current@unpacker@@SAPEAU1@XZ 0000000180002b20 f   jni.obj
+ 0001:00001cf8       Java_com_sun_java_util_jar_pack_NativeUnpack_finish 0000000180002cf8 f   jni.obj
+ 0001:00001d9c       Java_com_sun_java_util_jar_pack_NativeUnpack_getNextFile 0000000180002d9c f   jni.obj
+ 0001:00001fac       Java_com_sun_java_util_jar_pack_NativeUnpack_getOption 0000000180002fac f   jni.obj
+ 0001:00002068       Java_com_sun_java_util_jar_pack_NativeUnpack_getUnusedInput 0000000180003068 f   jni.obj
+ 0001:0000210c       Java_com_sun_java_util_jar_pack_NativeUnpack_initIDs 000000018000310c f   jni.obj
+ 0001:0000223c       Java_com_sun_java_util_jar_pack_NativeUnpack_setOption 000000018000323c f   jni.obj
+ 0001:00002310       Java_com_sun_java_util_jar_pack_NativeUnpack_start 0000000180003310 f   jni.obj
+ 0001:00002414       ?abort@unpacker@@QEAAXPEBD@Z 0000000180003414 f   unpack.obj
+ 0001:00002474       ?alloc_heap@unpacker@@QEAAPEAX_K_N1@Z 0000000180003474 f   unpack.obj
+ 0001:0000255c       ?buildBands@attr_definitions@unpacker@@QEAAPEAPEAUband@@PEAUlayout_definition@2@@Z 000000018000355c f   unpack.obj
+ 0001:000026d8       ?checkLegacy@unpacker@@QEAAXPEBD@Z 00000001800036d8 f   unpack.obj
+ 0001:00002748       ?check_options@unpacker@@QEAAXXZ 0000000180003748 f   unpack.obj
+ 0001:00002784       ?close_output@unpacker@@QEAAPEAUfillbytes@@PEAU2@@Z 0000000180003784 f   unpack.obj
+ 0001:0000289c       ?computeOutputIndexes@cpool@@QEAAXXZ 000000018000389c f   unpack.obj
+ 0001:0000291c       ?defineLayout@attr_definitions@unpacker@@QEAAPEAUlayout_definition@2@HPEBD0@Z 000000018000391c f   unpack.obj
+ 0001:00002a28       ?ensureClass@cpool@@QEAAPEAUentry@@AEAUbytes@@@Z 0000000180003a28 f   unpack.obj
+ 0001:00002b10       ?ensureUtf8@cpool@@QEAAPEAUentry@@AEAUbytes@@@Z 0000000180003b10 f   unpack.obj
+ 0001:00002bcc       ?ensure_input@unpacker@@QEAA_N_J@Z 0000000180003bcc f   unpack.obj
+ 0001:00002d04       ?ensure_put_space@unpacker@@QEAAX_K@Z 0000000180003d04 f   unpack.obj
+ 0001:00002d70       ?expandSignatures@cpool@@QEAAXXZ 0000000180003d70 f   unpack.obj
+ 0001:00002f74       ?free@attr_definitions@unpacker@@QEAAXXZ 0000000180003f74 f i unpack.obj
+ 0001:00003010       ?free@unpacker@@QEAAXXZ    0000000180004010 f   unpack.obj
+ 0001:0000325c       ?get@cpindex@@QEAAPEAUentry@@I@Z 000000018000425c f   unpack.obj
+ 0001:00003288       ?getKQIndex@cpool@@QEAAPEAUcpindex@@XZ 0000000180004288 f   unpack.obj
+ 0001:00003330       ?get_abort_message@unpacker@@QEAAPEBDXZ 0000000180004330 f   unpack.obj
+ 0001:00003338       ?get_code_header@unpacker@@QEAAXAEAH000@Z 0000000180004338 f   unpack.obj
+ 0001:000033e8       ?get_next_file@unpacker@@QEAAPEAUfile@1@XZ 00000001800043e8 f   unpack.obj
+ 0001:0000376c       ?get_option@unpacker@@QEAAPEBDPEBD@Z 000000018000476c f   unpack.obj
+ 0001:000038f0       ?hashTabRef@cpool@@QEAAAEAPEAUentry@@CAEAUbytes@@@Z 00000001800048f0 f   unpack.obj
+ 0001:000039c4       ?init@cpool@@QEAAXPEAUunpacker@@QEAH@Z 00000001800049c4 f   unpack.obj
+ 0001:00003be8       ?init@unpacker@@QEAAXP6A_JPEAU1@PEAX_J2@Z@Z 0000000180004be8 f   unpack.obj
+ 0001:00003c8c       ?initGroupIndexes@cpool@@QEAAXXZ 0000000180004c8c f   unpack.obj
+ 0001:00003da4       ?initLoadableValues@cpool@@QEAAHPEAPEAUentry@@@Z 0000000180004da4 f   unpack.obj
+ 0001:00003e38       ?initMemberIndexes@cpool@@QEAAXXZ 0000000180004e38 f   unpack.obj
+ 0001:0000416c       ?parseIntLayout@attr_definitions@unpacker@@QEAAPEBDPEBDAEAPEAUband@@C_N@Z 000000018000516c f   unpack.obj
+ 0001:00004298       ?parseLayout@attr_definitions@unpacker@@QEAAPEBDPEBDAEAPEAPEAUband@@H@Z 0000000180005298 f   unpack.obj
+ 0001:00004a1c       ?parseNumeral@attr_definitions@unpacker@@QEAAPEBDPEBDAEAH@Z 0000000180005a1c f   unpack.obj
+ 0001:00004ac8       ?popBody@attr_definitions@unpacker@@QEAAPEAPEAUband@@H@Z 0000000180005ac8 f   unpack.obj
+ 0001:00004b98       ?put_label@unpacker@@QEAAXHH@Z 0000000180005b98 f   unpack.obj
+ 0001:00004c0c       ?put_space@unpacker@@QEAAPEAC_K@Z 0000000180005c0c f   unpack.obj
+ 0001:00004c58       ?put_stackmap_type@unpacker@@QEAAXXZ 0000000180005c58 f   unpack.obj
+ 0001:00004cf0       ?putlayout@unpacker@@QEAAXPEAPEAUband@@@Z 0000000180005cf0 f   unpack.obj
+ 0001:00004f38       ?putref@unpacker@@QEAAXPEAUentry@@@Z 0000000180005f38 f   unpack.obj
+ 0001:00004f90       ?putref_index@unpacker@@QEAAHPEAUentry@@H@Z 0000000180005f90 f   unpack.obj
+ 0001:00005044       ?putu1ref@unpacker@@QEAAXPEAUentry@@@Z 0000000180006044 f   unpack.obj
+ 0001:00005078       ?putu2@unpacker@@QEAAXH@Z  0000000180006078 f   unpack.obj
+ 0001:000050b8       ?putu4@unpacker@@QEAAXH@Z  00000001800060b8 f   unpack.obj
+ 0001:000050ec       ?putu8@unpacker@@QEAAX_J@Z 00000001800060ec f   unpack.obj
+ 0001:0000514c       ?readBandData@attr_definitions@unpacker@@QEAAXH@Z 000000018000614c f   unpack.obj
+ 0001:00005230       ?readBandData@attr_definitions@unpacker@@QEAAXPEAPEAUband@@I@Z 0000000180006230 f   unpack.obj
+ 0001:000053d0       ?read_Utf8_values@unpacker@@QEAAXPEAUentry@@H@Z 00000001800063d0 f i unpack.obj
+ 0001:00005b08       ?read_attr_defs@unpacker@@QEAAXXZ 0000000180006b08 f   unpack.obj
+ 0001:00005e48       ?read_attrs@unpacker@@QEAAXHH@Z 0000000180006e48 f   unpack.obj
+ 0001:00006af4       ?read_bands@unpacker@@QEAAXXZ 0000000180007af4 f   unpack.obj
+ 0001:00006b7c       ?read_bcs@unpacker@@QEAAXXZ 0000000180007b7c f i unpack.obj
+ 0001:00006f34       ?read_bootstrap_methods@unpacker@@QEAAXPEAUentry@@H@Z 0000000180007f34 f   unpack.obj
+ 0001:000070d8       ?read_classes@unpacker@@QEAAXXZ 00000001800080d8 f   unpack.obj
+ 0001:00007250       ?read_code_headers@unpacker@@QEAAXXZ 0000000180008250 f   unpack.obj
+ 0001:000073f0       ?read_cp@unpacker@@QEAAXXZ 00000001800083f0 f   unpack.obj
+ 0001:00007720       ?read_double_refs@unpacker@@QEAAXAEAUband@@CCPEAUentry@@H@Z 0000000180008720 f   unpack.obj
+ 0001:0000780c       ?read_double_words@unpacker@@QEAAXAEAUband@@PEAUentry@@H@Z 000000018000880c f   unpack.obj
+ 0001:0000788c       ?read_file_header@unpacker@@QEAAXXZ 000000018000888c f   unpack.obj
+ 0001:00008180       ?read_files@unpacker@@QEAAXXZ 0000000180009180 f   unpack.obj
+ 0001:000082a8       ?read_ics@unpacker@@QEAAXXZ 00000001800092a8 f   unpack.obj
+ 0001:00008764       ?read_method_handle@unpacker@@QEAAXPEAUentry@@H@Z 0000000180009764 f   unpack.obj
+ 0001:00008864       ?read_method_type@unpacker@@QEAAXPEAUentry@@H@Z 0000000180009864 f   unpack.obj
+ 0001:0000893c       ?read_signature_values@unpacker@@QEAAXPEAUentry@@H@Z 000000018000993c f   unpack.obj
+ 0001:00008b00       ?read_single_refs@unpacker@@QEAAXAEAUband@@CPEAUentry@@H@Z 0000000180009b00 f   unpack.obj
+ 0001:00008bf8       ?redirect_stdio@unpacker@@QEAAXXZ 0000000180009bf8 f   unpack.obj
+ 0001:00008cec       ?ref_band_for_op@unpacker@@QEAAPEAUband@@H@Z 0000000180009cec f   unpack.obj
+ 0001:00008e34       ?ref_band_for_self_op@unpacker@@QEAAPEAUband@@HAEA_NAEAH@Z 0000000180009e34 f   unpack.obj
+ 0001:00008eb0       ?requestOutputIndex@entry@@QEAAXAEAUcpool@@H@Z 0000000180009eb0 f   unpack.obj
+ 0001:00008f54       ?resetOutputIndexes@cpool@@QEAAXXZ 0000000180009f54 f   unpack.obj
+ 0001:00008fc0       ?reset_cur_classfile@unpacker@@QEAAXXZ 0000000180009fc0 f   unpack.obj
+ 0001:00009018       ?saveTo@unpacker@@QEAAXAEAUbytes@@PEAC_K@Z 000000018000a018 f   unpack.obj
+ 0001:000090ac       ?set_option@unpacker@@QEAA_NPEBD0@Z 000000018000a0ac f   unpack.obj
+ 0001:00009280       ?start@unpacker@@QEAAXPEAX_K@Z 000000018000a280 f   unpack.obj
+ 0001:00009308       ?to_bci@unpacker@@QEAAII@Z 000000018000a308 f   unpack.obj
+ 0001:0000937c       ?typeSize@entry@@QEAAHXZ   000000018000a37c f   unpack.obj
+ 0001:00009418       ?write_attrs@unpacker@@QEAAHH_K@Z 000000018000a418 f   unpack.obj
+ 0001:0000a070       ?write_bc_ops@unpacker@@QEAAXXZ 000000018000b070 f i unpack.obj
+ 0001:0000aa30       ?write_bsms@unpacker@@QEAAHHH@Z 000000018000ba30 f   unpack.obj
+ 0001:0000abc4       ?write_classfile_head@unpacker@@QEAAXXZ 000000018000bbc4 f   unpack.obj
+ 0001:0000ad90       ?write_classfile_tail@unpacker@@QEAAXXZ 000000018000bd90 f   unpack.obj
+ 0001:0000b078       ?write_code@unpacker@@QEAAXXZ 000000018000c078 f i unpack.obj
+ 0001:0000b2a0       ?write_ics@unpacker@@QEAAHHH@Z 000000018000c2a0 f   unpack.obj
+ 0001:0000b68c       ?write_members@unpacker@@QEAAXHH@Z 000000018000c68c f   unpack.obj
+ 0001:0000b7f4       outputEntry_cmp            000000018000c7f4 f   unpack.obj
+ 0001:0000b864       raw_address_cmp            000000018000c864 f   unpack.obj
+ 0001:0000b878       ?must_malloc@@YAPEAX_K@Z   000000018000c878 f   utils.obj
+ 0001:0000b8d0       ?unpack_abort@@YAXPEBDPEAUunpacker@@@Z 000000018000c8d0 f   utils.obj
+ 0001:0000b928       ?unpack_aborting@@YA_NPEAUunpacker@@@Z 000000018000c928 f   utils.obj
+ 0001:0000b970       ?free@gunzip@@QEAAXXZ      000000018000c970 f   zip.obj
+ 0001:0000b974       ?init@jar@@QEAAXPEAUunpacker@@@Z 000000018000c974 f   zip.obj
+ 0001:0000b9a2       JNU_ThrowIOException       000000018000c9a2 f   java:java.dll
+ 0001:0000b9a8       __GSHandlerCheck           000000018000c9a8 f   MSVCRT:gshandler.obj
+ 0001:0000b9c8       __GSHandlerCheckCommon     000000018000c9c8 f   MSVCRT:gshandler.obj
+ 0001:0000ba40       __security_check_cookie    000000018000ca40 f   MSVCRT:amdsecgs.obj
+ 0001:0000ba60       memcmp                     000000018000ca60 f   MSVCRT:MSVCR120.dll
+ 0001:0000ba66       memcpy                     000000018000ca66 f   MSVCRT:MSVCR120.dll
+ 0001:0000ba6c       memset                     000000018000ca6c f   MSVCRT:MSVCR120.dll
+ 0001:0000ba72       ??2@YAPEAX_K@Z             000000018000ca72 f   MSVCRT:MSVCR120.dll
+ 0001:0000ba78       ??3@YAXPEAX@Z              000000018000ca78 f   MSVCRT:MSVCR120.dll
+ 0001:0000ba7e       strcat                     000000018000ca7e f   MSVCRT:MSVCR120.dll
+ 0001:0000ba84       strcmp                     000000018000ca84 f   MSVCRT:MSVCR120.dll
+ 0001:0000ba8a       strlen                     000000018000ca8a f   MSVCRT:MSVCR120.dll
+ 0001:0000baa0       __chkstk                   000000018000caa0 f   MSVCRT:chkstk.obj
+ 0001:0000baa0       _alloca_probe              000000018000caa0 f   MSVCRT:chkstk.obj
+ 0001:0000bb50       _CRT_INIT                  000000018000cb50 f   MSVCRT:crtdll.obj
+ 0001:0000bd9c       _DllMainCRTStartup         000000018000cd9c f   MSVCRT:crtdll.obj
+ 0001:0000bf14       __raise_securityfailure    000000018000cf14 f   MSVCRT:gs_report.obj
+ 0001:0000bf60       __report_gsfailure         000000018000cf60 f   MSVCRT:gs_report.obj
+ 0001:0000c032       __CppXcptFilter            000000018000d032 f   MSVCRT:MSVCR120.dll
+ 0001:0000c038       _amsg_exit                 000000018000d038 f   MSVCRT:MSVCR120.dll
+ 0001:0000c040       _FindPESection             000000018000d040 f   MSVCRT:pesect.obj
+ 0001:0000c090       _IsNonwritableInCurrentImage 000000018000d090 f   MSVCRT:pesect.obj
+ 0001:0000c0e0       _ValidateImageBase         000000018000d0e0 f   MSVCRT:pesect.obj
+ 0001:0000c110       __atonexitinit             000000018000d110 f   MSVCRT:atonexit.obj
+ 0001:0000c160       _onexit                    000000018000d160 f   MSVCRT:atonexit.obj
+ 0001:0000c210       atexit                     000000018000d210 f   MSVCRT:atonexit.obj
+ 0001:0000c228       __security_init_cookie     000000018000d228 f   MSVCRT:gs_support.obj
+ 0001:0000c2d4       DllMain                    000000018000d2d4 f   MSVCRT:dllmain.obj
+ 0001:0000c2f8       _RTC_Initialize            000000018000d2f8 f   MSVCRT:initsect.obj
+ 0001:0000c330       _RTC_Terminate             000000018000d330 f   MSVCRT:initsect.obj
+ 0001:0000c368       _initterm                  000000018000d368 f   MSVCRT:MSVCR120.dll
+ 0001:0000c36e       _initterm_e                000000018000d36e f   MSVCRT:MSVCR120.dll
+ 0001:0000c374       __clean_type_info_names    000000018000d374 f   MSVCRT:tncleanup.obj
+ 0001:0000c380       __C_specific_handler       000000018000d380 f   MSVCRT:MSVCR120.dll
+ 0001:0000c386       __crt_debugger_hook        000000018000d386 f   MSVCRT:MSVCR120.dll
+ 0001:0000c38c       __crtUnhandledException    000000018000d38c f   MSVCRT:MSVCR120.dll
+ 0001:0000c392       __crtTerminateProcess      000000018000d392 f   MSVCRT:MSVCR120.dll
+ 0001:0000c398       __crtCapturePreviousContext 000000018000d398 f   MSVCRT:MSVCR120.dll
+ 0001:0000c39e       _lock                      000000018000d39e f   MSVCRT:MSVCR120.dll
+ 0001:0000c3a4       _unlock                    000000018000d3a4 f   MSVCRT:MSVCR120.dll
+ 0001:0000c3aa       __dllonexit                000000018000d3aa f   MSVCRT:MSVCR120.dll
+ 0001:0000c3b0       __clean_type_info_names_internal 000000018000d3b0 f   MSVCRT:MSVCR120.dll
+ 0001:0000c3b6       IsProcessorFeaturePresent  000000018000d3b6 f   kernel32:KERNEL32.dll
+ 0002:00000000       __imp_GetCurrentThreadId   000000018000e000     kernel32:KERNEL32.dll
+ 0002:00000008       __imp_DisableThreadLibraryCalls 000000018000e008     kernel32:KERNEL32.dll
+ 0002:00000010       __imp_GetSystemTimeAsFileTime 000000018000e010     kernel32:KERNEL32.dll
+ 0002:00000018       __imp_QueryPerformanceCounter 000000018000e018     kernel32:KERNEL32.dll
+ 0002:00000020       __imp_IsProcessorFeaturePresent 000000018000e020     kernel32:KERNEL32.dll
+ 0002:00000028       __imp_IsDebuggerPresent    000000018000e028     kernel32:KERNEL32.dll
+ 0002:00000030       __imp_DecodePointer        000000018000e030     kernel32:KERNEL32.dll
+ 0002:00000038       __imp_EncodePointer        000000018000e038     kernel32:KERNEL32.dll
+ 0002:00000040       __imp_GetCurrentProcessId  000000018000e040     kernel32:KERNEL32.dll
+ 0002:00000048       \177KERNEL32_NULL_THUNK_DATA 000000018000e048     kernel32:KERNEL32.dll
+ 0002:00000050       __imp_??2@YAPEAX_K@Z       000000018000e050     MSVCRT:MSVCR120.dll
+ 0002:00000058       __imp_??3@YAXPEAX@Z        000000018000e058     MSVCRT:MSVCR120.dll
+ 0002:00000060       __imp___iob_func           000000018000e060     MSVCRT:MSVCR120.dll
+ 0002:00000068       __imp_fopen                000000018000e068     MSVCRT:MSVCR120.dll
+ 0002:00000070       __imp_fprintf              000000018000e070     MSVCRT:MSVCR120.dll
+ 0002:00000078       __imp__snprintf            000000018000e078     MSVCRT:MSVCR120.dll
+ 0002:00000080       __imp_sprintf              000000018000e080     MSVCRT:MSVCR120.dll
+ 0002:00000088       __imp_strcat               000000018000e088     MSVCRT:MSVCR120.dll
+ 0002:00000090       __imp_strcmp               000000018000e090     MSVCRT:MSVCR120.dll
+ 0002:00000098       __imp_strlen               000000018000e098     MSVCRT:MSVCR120.dll
+ 0002:000000a0       __imp_strchr               000000018000e0a0     MSVCRT:MSVCR120.dll
+ 0002:000000a8       __imp_strncat              000000018000e0a8     MSVCRT:MSVCR120.dll
+ 0002:000000b0       __imp_atoi                 000000018000e0b0     MSVCRT:MSVCR120.dll
+ 0002:000000b8       __imp_qsort                000000018000e0b8     MSVCRT:MSVCR120.dll
+ 0002:000000c0       __imp__time64              000000018000e0c0     MSVCRT:MSVCR120.dll
+ 0002:000000c8       __imp_abort                000000018000e0c8     MSVCRT:MSVCR120.dll
+ 0002:000000d0       __imp_malloc               000000018000e0d0     MSVCRT:MSVCR120.dll
+ 0002:000000d8       __imp_memset               000000018000e0d8     MSVCRT:MSVCR120.dll
+ 0002:000000e0       __imp___CppXcptFilter      000000018000e0e0     MSVCRT:MSVCR120.dll
+ 0002:000000e8       __imp__amsg_exit           000000018000e0e8     MSVCRT:MSVCR120.dll
+ 0002:000000f0       __imp__malloc_crt          000000018000e0f0     MSVCRT:MSVCR120.dll
+ 0002:000000f8       __imp__initterm            000000018000e0f8     MSVCRT:MSVCR120.dll
+ 0002:00000100       __imp__initterm_e          000000018000e100     MSVCRT:MSVCR120.dll
+ 0002:00000108       __imp___C_specific_handler 000000018000e108     MSVCRT:MSVCR120.dll
+ 0002:00000110       __imp___crt_debugger_hook  000000018000e110     MSVCRT:MSVCR120.dll
+ 0002:00000118       __imp___crtUnhandledException 000000018000e118     MSVCRT:MSVCR120.dll
+ 0002:00000120       __imp___crtTerminateProcess 000000018000e120     MSVCRT:MSVCR120.dll
+ 0002:00000128       __imp___crtCapturePreviousContext 000000018000e128     MSVCRT:MSVCR120.dll
+ 0002:00000130       __imp__lock                000000018000e130     MSVCRT:MSVCR120.dll
+ 0002:00000138       __imp__unlock              000000018000e138     MSVCRT:MSVCR120.dll
+ 0002:00000140       __imp__calloc_crt          000000018000e140     MSVCRT:MSVCR120.dll
+ 0002:00000148       __imp___dllonexit          000000018000e148     MSVCRT:MSVCR120.dll
+ 0002:00000150       __imp__onexit              000000018000e150     MSVCRT:MSVCR120.dll
+ 0002:00000158       __imp___clean_type_info_names_internal 000000018000e158     MSVCRT:MSVCR120.dll
+ 0002:00000160       __imp_memcpy               000000018000e160     MSVCRT:MSVCR120.dll
+ 0002:00000168       __imp_memcmp               000000018000e168     MSVCRT:MSVCR120.dll
+ 0002:00000170       __imp_realloc              000000018000e170     MSVCRT:MSVCR120.dll
+ 0002:00000178       __imp_free                 000000018000e178     MSVCRT:MSVCR120.dll
+ 0002:00000180       \177MSVCR120_NULL_THUNK_DATA 000000018000e180     MSVCRT:MSVCR120.dll
+ 0002:00000188       __imp_JNU_ThrowIOException 000000018000e188     java:java.dll
+ 0002:00000190       \177java_NULL_THUNK_DATA   000000018000e190     java:java.dll
+ 0002:00000198       __imp_JNI_GetCreatedJavaVMs 000000018000e198     jvm:jvm.dll
+ 0002:000001a0       \177jvm_NULL_THUNK_DATA    000000018000e1a0     jvm:jvm.dll
+ 0002:000001a8       __xc_a                     000000018000e1a8     MSVCRT:cinitexe.obj
+ 0002:000001b0       __xc_z                     000000018000e1b0     MSVCRT:cinitexe.obj
+ 0002:000001b8       __xi_a                     000000018000e1b8     MSVCRT:cinitexe.obj
+ 0002:000001d0       __xi_z                     000000018000e1d0     MSVCRT:cinitexe.obj
+ 0002:000010c0       ??_C@_0P@NFDCFGCL@cp_Utf8_prefix?$AA@ 000000018000f0c0     bands.obj
+ 0002:000010d0       ??_C@_0P@LOHPAGNO@cp_Utf8_suffix?$AA@ 000000018000f0d0     bands.obj
+ 0002:000010e0       ??_C@_0O@IHLLKPBK@cp_Utf8_chars?$AA@ 000000018000f0e0     bands.obj
+ 0002:000010f0       ??_C@_0BD@EOIEJGOP@cp_Utf8_big_suffix?$AA@ 000000018000f0f0     bands.obj
+ 0002:00001108       ??_C@_0BC@HDLINKIK@cp_Utf8_big_chars?$AA@ 000000018000f108     bands.obj
+ 0002:0000111c       ??_C@_06IGKKGOEN@cp_Int?$AA@ 000000018000f11c     bands.obj
+ 0002:00001128       ??_C@_08OBBFNHHD@cp_Float?$AA@ 000000018000f128     bands.obj
+ 0002:00001138       ??_C@_0L@HNFJMOEO@cp_Long_hi?$AA@ 000000018000f138     bands.obj
+ 0002:00001148       ??_C@_0L@CMAKMBBE@cp_Long_lo?$AA@ 000000018000f148     bands.obj
+ 0002:00001158       ??_C@_0N@CPNNOOPC@cp_Double_hi?$AA@ 000000018000f158     bands.obj
+ 0002:00001168       ??_C@_0N@HOIOOBKI@cp_Double_lo?$AA@ 000000018000f168     bands.obj
+ 0002:00001178       ??_C@_09HFEHKGNE@cp_String?$AA@ 000000018000f178     bands.obj
+ 0002:00001188       ??_C@_08BOENACK@cp_Class?$AA@ 000000018000f188     bands.obj
+ 0002:00001198       ??_C@_0BC@FENMLAPO@cp_Signature_form?$AA@ 000000018000f198     bands.obj
+ 0002:000011b0       ??_C@_0BF@MEOEAPGK@cp_Signature_classes?$AA@ 000000018000f1b0     bands.obj
+ 0002:000011c8       ??_C@_0O@JHMEINNJ@cp_Descr_name?$AA@ 000000018000f1c8     bands.obj
+ 0002:000011d8       ??_C@_0O@DMMHENKJ@cp_Descr_type?$AA@ 000000018000f1d8     bands.obj
+ 0002:000011e8       ??_C@_0P@EEAFDJFH@cp_Field_class?$AA@ 000000018000f1e8     bands.obj
+ 0002:000011f8       ??_C@_0O@FCFAPCDP@cp_Field_desc?$AA@ 000000018000f1f8     bands.obj
+ 0002:00001208       ??_C@_0BA@LDOOFFKI@cp_Method_class?$AA@ 000000018000f208     bands.obj
+ 0002:00001218       ??_C@_0P@NLGLFAKL@cp_Method_desc?$AA@ 000000018000f218     bands.obj
+ 0002:00001228       ??_C@_0BB@IIGJKIIK@cp_Imethod_class?$AA@ 000000018000f228     bands.obj
+ 0002:00001240       ??_C@_0BA@DCLGLKIL@cp_Imethod_desc?$AA@ 000000018000f240     bands.obj
+ 0002:00001250       ??_C@_0BI@NIJEEAN@cp_MethodHandle_refkind?$AA@ 000000018000f250     bands.obj
+ 0002:00001268       ??_C@_0BH@NKNCKAEO@cp_MethodHandle_member?$AA@ 000000018000f268     bands.obj
+ 0002:00001280       ??_C@_0O@NHPECHNH@cp_MethodType?$AA@ 000000018000f280     bands.obj
+ 0002:00001290       ??_C@_0BH@NPCIPIPL@cp_BootstrapMethod_ref?$AA@ 000000018000f290     bands.obj
+ 0002:000012a8       ??_C@_0BN@DJLEBMBH@cp_BootstrapMethod_arg_count?$AA@ 000000018000f2a8     bands.obj
+ 0002:000012c8       ??_C@_0BH@JNPGIEDO@cp_BootstrapMethod_arg?$AA@ 000000018000f2c8     bands.obj
+ 0002:000012e0       ??_C@_0BG@CIPOMBAC@cp_InvokeDynamic_spec?$AA@ 000000018000f2e0     bands.obj
+ 0002:000012f8       ??_C@_0BG@IFFCPCPP@cp_InvokeDynamic_desc?$AA@ 000000018000f2f8     bands.obj
+ 0002:00001310       ??_C@_0BI@KJJNKCHD@attr_definition_headers?$AA@ 000000018000f310     bands.obj
+ 0002:00001328       ??_C@_0BF@EEAHHHEA@attr_definition_name?$AA@ 000000018000f328     bands.obj
+ 0002:00001340       ??_C@_0BH@EKDDDJNL@attr_definition_layout?$AA@ 000000018000f340     bands.obj
+ 0002:00001358       ??_C@_0O@HJMNFDHJ@ic_this_class?$AA@ 000000018000f358     bands.obj
+ 0002:00001368       ??_C@_08CKLAPDFF@ic_flags?$AA@ 000000018000f368     bands.obj
+ 0002:00001378       ??_C@_0P@MGLGIOLC@ic_outer_class?$AA@ 000000018000f378     bands.obj
+ 0002:00001388       ??_C@_07OPOCOJIH@ic_name?$AA@ 000000018000f388     bands.obj
+ 0002:00001390       ??_C@_0L@GONOGKKN@class_this?$AA@ 000000018000f390     bands.obj
+ 0002:000013a0       ??_C@_0M@FMPLOBH@class_super?$AA@ 000000018000f3a0     bands.obj
+ 0002:000013b0       ??_C@_0BG@ELABOHHB@class_interface_count?$AA@ 000000018000f3b0     bands.obj
+ 0002:000013c8       ??_C@_0BA@GDKGLIFF@class_interface?$AA@ 000000018000f3c8     bands.obj
+ 0002:000013d8       ??_C@_0BC@GLACLOBG@class_field_count?$AA@ 000000018000f3d8     bands.obj
+ 0002:000013f0       ??_C@_0BD@MFLGOFPO@class_method_count?$AA@ 000000018000f3f0     bands.obj
+ 0002:00001408       ??_C@_0M@IINMAGFA@field_descr?$AA@ 000000018000f408     bands.obj
+ 0002:00001418       ??_C@_0P@LDBPJHCP@field_flags_hi?$AA@ 000000018000f418     bands.obj
+ 0002:00001428       ??_C@_0P@OCEMJIHF@field_flags_lo?$AA@ 000000018000f428     bands.obj
+ 0002:00001438       ??_C@_0BB@GJGJJLKK@field_attr_count?$AA@ 000000018000f438     bands.obj
+ 0002:00001450       ??_C@_0BD@LLAABMND@field_attr_indexes?$AA@ 000000018000f450     bands.obj
+ 0002:00001468       ??_C@_0BB@LHINHPHH@field_attr_calls?$AA@ 000000018000f468     bands.obj
+ 0002:00001480       ??_C@_0BH@NKCAAIDC@field_ConstantValue_KQ?$AA@ 000000018000f480     bands.obj
+ 0002:00001498       ??_C@_0BD@HMEKDNDB@field_Signature_RS?$AA@ 000000018000f498     bands.obj
+ 0002:000014b0       ??_C@_0BF@KACJMLOM@field_metadata_bands?$AA@ 000000018000f4b0     bands.obj
+ 0002:000014c8       ??_C@_0BB@NIMLDFOB@field_attr_bands?$AA@ 000000018000f4c8     bands.obj
+ 0002:000014e0       ??_C@_0N@GLCNNANE@method_descr?$AA@ 000000018000f4e0     bands.obj
+ 0002:000014f0       ??_C@_0BA@EIPLIEID@method_flags_hi?$AA@ 000000018000f4f0     bands.obj
+ 0002:00001500       ??_C@_0BA@BJKIILNJ@method_flags_lo?$AA@ 000000018000f500     bands.obj
+ 0002:00001510       ??_C@_0BC@OPGFNCHF@method_attr_count?$AA@ 000000018000f510     bands.obj
+ 0002:00001528       ??_C@_0BE@LCKALKDL@method_attr_indexes?$AA@ 000000018000f528     bands.obj
+ 0002:00001540       ??_C@_0BC@DBIBDGKI@method_attr_calls?$AA@ 000000018000f540     bands.obj
+ 0002:00001558       ??_C@_0BE@HAIBKECN@method_Exceptions_N?$AA@ 000000018000f558     bands.obj
+ 0002:00001570       ??_C@_0BF@ILMHJLAD@method_Exceptions_RC?$AA@ 000000018000f570     bands.obj
+ 0002:00001588       ??_C@_0BE@HFOKJLNJ@method_Signature_RS?$AA@ 000000018000f588     bands.obj
+ 0002:000015a0       ??_C@_0BG@JDLLNHF@method_metadata_bands?$AA@ 000000018000f5a0     bands.obj
+ 0002:000015b8       ??_C@_0BL@MNBFAABE@method_MethodParameters_NB?$AA@ 000000018000f5b8     bands.obj
+ 0002:000015d8       ??_C@_0CB@POGNKHAK@method_MethodParameters_name_RUN@ 000000018000f5d8     bands.obj
+ 0002:00001600       ??_C@_0CA@HDKLJONB@method_MethodParameters_flag_FH?$AA@ 000000018000f600     bands.obj
+ 0002:00001620       ??_C@_0BC@FOMHHMDO@method_attr_bands?$AA@ 000000018000f620     bands.obj
+ 0002:00001638       ??_C@_0P@DNMDIOJK@class_flags_hi?$AA@ 000000018000f638     bands.obj
+ 0002:00001648       ??_C@_0P@GMJAIBMA@class_flags_lo?$AA@ 000000018000f648     bands.obj
+ 0002:00001658       ??_C@_0BB@JELAOHEL@class_attr_count?$AA@ 000000018000f658     bands.obj
+ 0002:00001670       ??_C@_0BD@KFNGBOLA@class_attr_indexes?$AA@ 000000018000f670     bands.obj
+ 0002:00001688       ??_C@_0BB@EKFEADJG@class_attr_calls?$AA@ 000000018000f688     bands.obj
+ 0002:000016a0       ??_C@_0BF@MJNFEGEM@class_SourceFile_RUN?$AA@ 000000018000f6a0     bands.obj
+ 0002:000016b8       ??_C@_0BJ@CCGEELON@class_EnclosingMethod_RC?$AA@ 000000018000f6b8     bands.obj
+ 0002:000016d8       ??_C@_0BK@LFCMIOIA@class_EnclosingMethod_RDN?$AA@ 000000018000f6d8     bands.obj
+ 0002:000016f8       ??_C@_0BD@GCJMDPFC@class_Signature_RS?$AA@ 000000018000f6f8     bands.obj
+ 0002:00001710       ??_C@_0BF@PHIMHC@class_metadata_bands?$AA@ 000000018000f710     bands.obj
+ 0002:00001728       ??_C@_0BF@PGJMDHG@class_InnerClasses_N?$AA@ 000000018000f728     bands.obj
+ 0002:00001740       ??_C@_0BG@HHABPLBI@class_InnerClasses_RC?$AA@ 000000018000f740     bands.obj
+ 0002:00001758       ??_C@_0BF@MHLAEJHO@class_InnerClasses_F?$AA@ 000000018000f758     bands.obj
+ 0002:00001770       ??_C@_0BN@FANFKEPF@class_InnerClasses_outer_RCN?$AA@ 000000018000f770     bands.obj
+ 0002:00001790       ??_C@_0BM@CHKHAMMI@class_InnerClasses_name_RUN?$AA@ 000000018000f790     bands.obj
+ 0002:000017b0       ??_C@_0CA@LBNJCLO@class_ClassFile_version_minor_H?$AA@ 000000018000f7b0     bands.obj
+ 0002:000017d0       ??_C@_0CA@KDGDJOMP@class_ClassFile_version_major_H?$AA@ 000000018000f7d0     bands.obj
+ 0002:000017f0       ??_C@_0BB@CFBCEJAA@class_attr_bands?$AA@ 000000018000f7f0     bands.obj
+ 0002:00001808       ??_C@_0N@EJFJBMLJ@code_headers?$AA@ 000000018000f808     bands.obj
+ 0002:00001818       ??_C@_0P@DPBEANCA@code_max_stack?$AA@ 000000018000f818     bands.obj
+ 0002:00001828       ??_C@_0BD@OBGMDNFJ@code_max_na_locals?$AA@ 000000018000f828     bands.obj
+ 0002:00001840       ??_C@_0BD@OMMDBBC@code_handler_count?$AA@ 000000018000f840     bands.obj
+ 0002:00001858       ??_C@_0BF@NAEEIJON@code_handler_start_P?$AA@ 000000018000f858     bands.obj
+ 0002:00001870       ??_C@_0BE@GIJMHOG@code_handler_end_PO?$AA@ 000000018000f870     bands.obj
+ 0002:00001888       ??_C@_0BG@GJGNOMGM@code_handler_catch_PO?$AA@ 000000018000f888     bands.obj
+ 0002:000018a0       ??_C@_0BH@ECFPKFHF@code_handler_class_RCN?$AA@ 000000018000f8a0     bands.obj
+ 0002:000018b8       ??_C@_0O@PKFJGJJN@code_flags_hi?$AA@ 000000018000f8b8     bands.obj
+ 0002:000018c8       ??_C@_0O@KLAKGGMH@code_flags_lo?$AA@ 000000018000f8c8     bands.obj
+ 0002:000018d8       ??_C@_0BA@OFJPMBMN@code_attr_count?$AA@ 000000018000f8d8     bands.obj
+ 0002:000018e8       ??_C@_0BC@BKACNFKP@code_attr_indexes?$AA@ 000000018000f8e8     bands.obj
+ 0002:00001900       ??_C@_0BA@DLHLCFBA@code_attr_calls?$AA@ 000000018000f900     bands.obj
+ 0002:00001910       ??_C@_0BF@FNGGAIBD@code_StackMapTable_N?$AA@ 000000018000f910     bands.obj
+ 0002:00001928       ??_C@_0BL@IJLKAPMG@code_StackMapTable_frame_T?$AA@ 000000018000f928     bands.obj
+ 0002:00001948       ??_C@_0BL@FLGOBHFL@code_StackMapTable_local_N?$AA@ 000000018000f948     bands.obj
+ 0002:00001968       ??_C@_0BL@DBPDDGDK@code_StackMapTable_stack_N?$AA@ 000000018000f968     bands.obj
+ 0002:00001988       ??_C@_0BK@HMGLLHPP@code_StackMapTable_offset?$AA@ 000000018000f988     bands.obj
+ 0002:000019a8       ??_C@_0BF@ONELPCMI@code_StackMapTable_T?$AA@ 000000018000f9a8     bands.obj
+ 0002:000019c0       ??_C@_0BG@EKILGBAE@code_StackMapTable_RC?$AA@ 000000018000f9c0     bands.obj
+ 0002:000019d8       ??_C@_0BF@IJCHDHMM@code_StackMapTable_P?$AA@ 000000018000f9d8     bands.obj
+ 0002:000019f0       ??_C@_0BH@EMJOIADC@code_LineNumberTable_N?$AA@ 000000018000f9f0     bands.obj
+ 0002:00001a08       ??_C@_0BL@BODGMFAF@code_LineNumberTable_bci_P?$AA@ 000000018000fa08     bands.obj
+ 0002:00001a28       ??_C@_0BK@KMDHKKJP@code_LineNumberTable_line?$AA@ 000000018000fa28     bands.obj
+ 0002:00001a48       ??_C@_0BK@EAEINMEG@code_LocalVariableTable_N?$AA@ 000000018000fa48     bands.obj
+ 0002:00001a68       ??_C@_0BO@EBBJALKI@code_LocalVariableTable_bci_P?$AA@ 000000018000fa68     bands.obj
+ 0002:00001a88       ??_C@_0BP@JIPNBFGM@code_LocalVariableTable_span_O?$AA@ 000000018000fa88     bands.obj
+ 0002:00001aa8       ??_C@_0CA@LBKLALLO@code_LocalVariableTable_name_RU?$AA@ 000000018000faa8     bands.obj
+ 0002:00001ac8       ??_C@_0CA@OBPDECDH@code_LocalVariableTable_type_RS?$AA@ 000000018000fac8     bands.obj
+ 0002:00001ae8       ??_C@_0BN@BAELGOA@code_LocalVariableTable_slot?$AA@ 000000018000fae8     bands.obj
+ 0002:00001b08       ??_C@_0BO@HHCIFDPC@code_LocalVariableTypeTable_N?$AA@ 000000018000fb08     bands.obj
+ 0002:00001b28       ??_C@_0CC@OECAEAHA@code_LocalVariableTypeTable_bci_@ 000000018000fb28     bands.obj
+ 0002:00001b50       ??_C@_0CD@BAFAHGMB@code_LocalVariableTypeTable_span@ 000000018000fb50     bands.obj
+ 0002:00001b78       ??_C@_0CE@BJEEHJII@code_LocalVariableTypeTable_name@ 000000018000fb78     bands.obj
+ 0002:00001ba0       ??_C@_0CE@EJBMDAAB@code_LocalVariableTypeTable_type@ 000000018000fba0     bands.obj
+ 0002:00001bc8       ??_C@_0CB@DCPKAFMH@code_LocalVariableTypeTable_slot@ 000000018000fbc8     bands.obj
+ 0002:00001bf0       ??_C@_0BA@FEDNGPIG@code_attr_bands?$AA@ 000000018000fbf0     bands.obj
+ 0002:00001c00       ??_C@_08ILNCKCLH@bc_codes?$AA@ 000000018000fc00     bands.obj
+ 0002:00001c10       ??_C@_0O@NHDHOKJ@bc_case_count?$AA@ 000000018000fc10     bands.obj
+ 0002:00001c20       ??_C@_0O@IPODCEHE@bc_case_value?$AA@ 000000018000fc20     bands.obj
+ 0002:00001c30       ??_C@_07PBCCPPFP@bc_byte?$AA@ 000000018000fc30     bands.obj
+ 0002:00001c38       ??_C@_08LLANNIAP@bc_short?$AA@ 000000018000fc38     bands.obj
+ 0002:00001c48       ??_C@_08CNAAIOJJ@bc_local?$AA@ 000000018000fc48     bands.obj
+ 0002:00001c58       ??_C@_08CNIFPPEB@bc_label?$AA@ 000000018000fc58     bands.obj
+ 0002:00001c68       ??_C@_09LMIAJDCB@bc_intref?$AA@ 000000018000fc68     bands.obj
+ 0002:00001c78       ??_C@_0M@GHNOKACA@bc_floatref?$AA@ 000000018000fc78     bands.obj
+ 0002:00001c88       ??_C@_0L@FECALBEM@bc_longref?$AA@ 000000018000fc88     bands.obj
+ 0002:00001c98       ??_C@_0N@BLIIPDNE@bc_doubleref?$AA@ 000000018000fc98     bands.obj
+ 0002:00001ca8       ??_C@_0N@MPKFBKGB@bc_stringref?$AA@ 000000018000fca8     bands.obj
+ 0002:00001cb8       ??_C@_0BE@JPNLPCGD@bc_loadablevalueref?$AA@ 000000018000fcb8     bands.obj
+ 0002:00001cd0       ??_C@_0M@IBEIOBLC@bc_classref?$AA@ 000000018000fcd0     bands.obj
+ 0002:00001ce0       ??_C@_0M@FHDAHFFG@bc_fieldref?$AA@ 000000018000fce0     bands.obj
+ 0002:00001cf0       ??_C@_0N@KBJNFGEO@bc_methodref?$AA@ 000000018000fcf0     bands.obj
+ 0002:00001d00       ??_C@_0O@BOILABNA@bc_imethodref?$AA@ 000000018000fd00     bands.obj
+ 0002:00001d10       ??_C@_0L@MEPMLOBJ@bc_indyref?$AA@ 000000018000fd10     bands.obj
+ 0002:00001d20       ??_C@_0N@CGLIFEKH@bc_thisfield?$AA@ 000000018000fd20     bands.obj
+ 0002:00001d30       ??_C@_0O@NMPFAKNK@bc_superfield?$AA@ 000000018000fd30     bands.obj
+ 0002:00001d40       ??_C@_0O@OCHHHCLJ@bc_thismethod?$AA@ 000000018000fd40     bands.obj
+ 0002:00001d50       ??_C@_0P@MMDJDCGG@bc_supermethod?$AA@ 000000018000fd50     bands.obj
+ 0002:00001d60       ??_C@_0L@IAPCGJHG@bc_initref?$AA@ 000000018000fd60     bands.obj
+ 0002:00001d70       ??_C@_09BGKIKDIC@bc_escref?$AA@ 000000018000fd70     bands.obj
+ 0002:00001d80       ??_C@_0O@LHNEEOML@bc_escrefsize?$AA@ 000000018000fd80     bands.obj
+ 0002:00001d90       ??_C@_0L@HJKABJFB@bc_escsize?$AA@ 000000018000fd90     bands.obj
+ 0002:00001da0       ??_C@_0L@HOKHNNPG@bc_escbyte?$AA@ 000000018000fda0     bands.obj
+ 0002:00001db0       ??_C@_09GOEDCGAO@file_name?$AA@ 000000018000fdb0     bands.obj
+ 0002:00001dc0       ??_C@_0N@INICLDFG@file_size_hi?$AA@ 000000018000fdc0     bands.obj
+ 0002:00001dd0       ??_C@_0N@NMNBLMAM@file_size_lo?$AA@ 000000018000fdd0     bands.obj
+ 0002:00001de0       ??_C@_0N@JMABFCDG@file_modtime?$AA@ 000000018000fde0     bands.obj
+ 0002:00001df0       ??_C@_0N@OPKBLMJG@file_options?$AA@ 000000018000fdf0     bands.obj
+ 0002:00001e00       ??_C@_08FPGGDHDD@no?5index?$AA@ 000000018000fe00     bands.obj
+ 0002:00001e10       ??_C@_08CHILEFNK@null?5ref?$AA@ 000000018000fe10     bands.obj
+ 0002:00001e20       ??_C@_07MLPLAPLE@bad?5ref?$AA@ 000000018000fe20     bands.obj
+ 0002:00001e28       ??_C@_0BC@CJBOIHCG@overflow?5detected?$AA@ 000000018000fe28     bands.obj
+ 0002:00001e40       ??_C@_0BJ@CALEAGEE@Native?5allocation?5failed?$AA@ 000000018000fe40     bytes.obj
+ 0002:00001e78       ??_C@_0BA@MMOCMGFH@bad?5value?5count?$AA@ 000000018000fe78     coding.obj
+ 0002:00001e88       ??_C@_0L@FLIJCFOD@bad?5coding?$AA@ 000000018000fe88     coding.obj
+ 0002:00001e98       ??_C@_0BE@IIPOPKNG@illegal?5arb?4?5coding?$AA@ 000000018000fe98     coding.obj
+ 0002:00001eb0       ??_C@_0BF@OEPDPLDN@illegal?5run?5encoding?$AA@ 000000018000feb0     coding.obj
+ 0002:00001ec8       ??_C@_0BM@FJMGNNPG@illegal?5nested?5run?5encoding?$AA@ 000000018000fec8     coding.obj
+ 0002:00001ee8       ??_C@_0BF@JOAAKECG@illegal?5pop?5encoding?$AA@ 000000018000fee8     coding.obj
+ 0002:00001f00       ??_C@_0BM@CDDFICON@illegal?5nested?5pop?5encoding?$AA@ 000000018000ff00     coding.obj
+ 0002:00001f20       ??_C@_0BG@HLIJPJNL@pop?4L?5value?5too?5small?$AA@ 000000018000ff20     coding.obj
+ 0002:00001f38       ??_C@_0BH@OCEIAIEJ@pop?5token?5out?5of?5range?$AA@ 000000018000ff38     coding.obj
+ 0002:00001f50       ??_C@_0CA@HBCNKKJO@bad?5meta?9coding?5for?5empty?5pop?1U?$AA@ 000000018000ff50     coding.obj
+ 0002:00001f70       ??_C@_0BA@DAENMACF@bad?5meta?9coding?$AA@ 000000018000ff70     coding.obj
+ 0002:00001f80       ??_C@_0P@DHEBFDOP@Internal?5error?$AA@ 000000018000ff80     jni.obj
+ 0002:00001f90       ??_C@_01LELAEKIP@J?$AA@    000000018000ff90     jni.obj
+ 0002:00001f98       ??_C@_0M@ODCCEGO@unpackerPtr?$AA@ 000000018000ff98     jni.obj
+ 0002:00001fa8       ??_C@_0BK@MGOECGMC@cannot?5init?5class?5members?$AA@ 000000018000ffa8     jni.obj
+ 0002:00001fc8       ??_C@_0BF@LHBAMMHC@?$CI?$CJLjava?1lang?1Object?$DL?$AA@ 000000018000ffc8     jni.obj
+ 0002:00001fe0       ??_C@_0BA@HNJNGCPJ@currentInstance?$AA@ 000000018000ffe0     jni.obj
+ 0002:00001ff0       ??_C@_0BK@KNKPMLAB@?$CILjava?1nio?1ByteBuffer?$DLJ?$CJJ?$AA@ 000000018000fff0     jni.obj
+ 0002:00002010       ??_C@_0M@OOANKPPH@readInputFn?$AA@ 0000000180010010     jni.obj
+ 0002:0000201c       ??_C@_03IGDHHNNC@?$CI?$CJJ?$AA@ 000000018001001c     jni.obj
+ 0002:00002020       ??_C@_0P@BBAJIHLB@getUnpackerPtr?$AA@ 0000000180010020     jni.obj
+ 0002:00002068       ??_C@_02DPKJAMEF@?$CFd?$AA@ 0000000180010068     unpack.obj
+ 0002:00002070       ??_C@_0BC@DHBHLEDC@bad?5utf8?5encoding?$AA@ 0000000180010070     unpack.obj
+ 0002:00002088       ??_C@_08MPEBFEBH@bad?5data?$AA@ 0000000180010088     unpack.obj
+ 0002:00002098       ??_C@_0BI@MCADJHPK@missing?5class?5reference?$AA@ 0000000180010098     unpack.obj
+ 0002:000020b0       ??_C@_0BJ@DINDGABB@Internal?5buffer?5overflow?$AA@ 00000001800100b0     unpack.obj
+ 0002:000020d0       ??_C@_0BE@NBGJPKOJ@too?5much?5read?9ahead?$AA@ 00000001800100d0     unpack.obj
+ 0002:000020e8       ??_C@_0CB@MBENKFPE@EOF?5reading?5archive?5magic?5number@ 00000001800100e8     unpack.obj
+ 0002:00002110       ??_C@_0CF@INONBKGM@encountered?5a?5JAR?5header?5in?5unpa@ 0000000180010110     unpack.obj
+ 0002:00002140       ??_C@_0GN@MIAOKBBJ@?$EACorrupted?5pack?5file?3?5magic?1ver?5@ 0000000180010140     unpack.obj
+ 0002:000021b0       ??_C@_0DJ@EOFNCHGA@Format?5bits?5for?5Java?57?5must?5be?5z@ 00000001800101b0     unpack.obj
+ 0002:000021f0       ??_C@_0DH@PDJEDCEA@High?5archive?5option?5bits?5are?5res@ 00000001800101f0     unpack.obj
+ 0002:00002228       ??_C@_0BP@CKGMAJKP@EOF?5reading?5fixed?5input?5buffer?$AA@ 0000000180010228     unpack.obj
+ 0002:00002248       ??_C@_0BI@EDJMKDIH@impossible?5archive?5size?$AA@ 0000000180010248     unpack.obj
+ 0002:00002260       ??_C@_0DE@HNNKIDEL@cannot?5allocate?5large?5input?5buff@ 0000000180010260     unpack.obj
+ 0002:00002298       ??_C@_0BL@KOJPDLNM@EOF?5reading?5archive?5header?$AA@ 0000000180010298     unpack.obj
+ 0002:000022b8       ??_C@_0BJ@HODOOMDO@EOF?5reading?5band?5headers?$AA@ 00000001800102b8     unpack.obj
+ 0002:000022d8       ??_C@_0DB@HCOAOCOI@archive?5too?5large?3?5?5constant?5poo@ 00000001800102d8     unpack.obj
+ 0002:00002310       ??_C@_0BA@BMKLBFBL@bad?5utf8?5suffix?$AA@ 0000000180010310     unpack.obj
+ 0002:00002320       ??_C@_0BA@HHOGEFOO@bad?5utf8?5prefix?$AA@ 0000000180010320     unpack.obj
+ 0002:00002330       ??_C@_0BF@HNBIPEII@utf8?5prefix?5overflow?$AA@ 0000000180010330     unpack.obj
+ 0002:00002348       ??_C@_0BE@INMEHPDO@unexpected?5band?5?$CFs?6?$AA@ 0000000180010348     unpack.obj
+ 0002:00002360       ??_C@_0BKA@JMJPKLFN@01?$AASignature?$AADeprecated?$AARuntimeV@ 0000000180010360     unpack.obj
+ 0002:00002500       ??_C@_0BK@NOGBJPAL@attribute?5index?5too?5large?$AA@ 0000000180010500     unpack.obj
+ 0002:00002520       ??_C@_0BK@OFNJKMED@redefined?5attribute?5index?$AA@ 0000000180010520     unpack.obj
+ 0002:00002540       ??_C@_0BJ@OGDEGNBN@garbage?5at?5end?5of?5layout?$AA@ 0000000180010540     unpack.obj
+ 0002:00002560       ??_C@_0BN@NJCEKHIO@garbage?5mixed?5with?5callables?$AA@ 0000000180010560     unpack.obj
+ 0002:00002580       ??_C@_0BD@BJONMNHI@bad?5call?5in?5layout?$AA@ 0000000180010580     unpack.obj
+ 0002:00002598       ??_C@_0BD@EOHIHJFP@bad?5layout?5element?$AA@ 0000000180010598     unpack.obj
+ 0002:000025b0       ??_C@_0BK@CHPLBKBJ@missing?5numeral?5in?5layout?$AA@ 00000001800105b0     unpack.obj
+ 0002:000025ca       ??_C@_00CNPNBAHC@?$AA@     00000001800105ca     unpack.obj
+ 0002:000025d0       ??_C@_0BB@FJJKEHGJ@numeral?5overflow?$AA@ 00000001800105d0     unpack.obj
+ 0002:000025e8       ??_C@_0P@HDHNKEAB@bad?5union?5case?$AA@ 00000001800105e8     unpack.obj
+ 0002:000025f8       ??_C@_0DD@PGOJPNFL@bad?5range?5in?5union?5case?5label?5?$CIo@ 00000001800105f8     unpack.obj
+ 0002:00002630       ??_C@_0BO@JELFCPB@bad?5range?5in?5union?5case?5label?$AA@ 0000000180010630     unpack.obj
+ 0002:00002650       ??_C@_0P@KBKJHJBF@bad?5case?5label?$AA@ 0000000180010650     unpack.obj
+ 0002:00002660       ??_C@_0P@MNJPOPJO@bad?5call?5label?$AA@ 0000000180010660     unpack.obj
+ 0002:00002670       ??_C@_0BF@ILAEDGAO@bad?5reference?5layout?$AA@ 0000000180010670     unpack.obj
+ 0002:00002688       ??_C@_0BE@NGGDBALG@bad?5nested?5callable?$AA@ 0000000180010688     unpack.obj
+ 0002:000026a0       ??_C@_0L@FLEMDFJG@bad?5layout?$AA@ 00000001800106a0     unpack.obj
+ 0002:000026b0       ??_C@_0JK@BMMFGJDP@?$FLNB?$FL?$CI1?$CJ?$FN?$FN?$FLNH?$FL?$CI1?$CJ?$FN?$FN?$FLRSHNH?$FLRUH?$CI1?$CJ?$FN@ 00000001800106b0     unpack.obj
+ 0002:00002750       ??_C@_09MAEOCCFN@?$FLNB?$FL?$CI1?$CJ?$FN?$FN?$AA@ 0000000180010750     unpack.obj
+ 0002:00002760       ??_C@_0CC@PCCOCALL@?$FLNB?$FL?$CI1?$CJ?$FN?$FN?$FLNH?$FL?$CI1?$CJ?$FN?$FN?$FLRSHNH?$FLRUH?$CI1?$CJ?$FN@ 0000000180010760     unpack.obj
+ 0002:00002790       ??_C@_0BBL@GCIMMLOG@?$FLNH?$FL?$CI1?$CJ?$CI2?$CJ?$CI3?$CJ?$FN?$FN?$FLTB?$CI0?01?$CJ?$FLB?$FN?$CI16?$CJ?$FLF@ 0000000180010790     unpack.obj
+ 0002:000028b0       ??_C@_0BK@CIMGHPDJ@RuntimeVisibleAnnotations?$AA@ 00000001800108b0     unpack.obj
+ 0002:000028d0       ??_C@_0BM@BNNGFNMF@RuntimeInvisibleAnnotations?$AA@ 00000001800108d0     unpack.obj
+ 0002:000028f0       ??_C@_0CD@ONLIBICP@RuntimeVisibleParameterAnnotatio@ 00000001800108f0     unpack.obj
+ 0002:00002918       ??_C@_0CF@BFEAEHFK@RuntimeInvisibleParameterAnnotat@ 0000000180010918     unpack.obj
+ 0002:00002940       ??_C@_0BC@DAGIEPHG@AnnotationDefault?$AA@ 0000000180010940     unpack.obj
+ 0002:00002958       ??_C@_0BO@IJLELCEA@RuntimeVisibleTypeAnnotations?$AA@ 0000000180010958     unpack.obj
+ 0002:00002978       ??_C@_0CA@GCLMFPKD@RuntimeInvisibleTypeAnnotations?$AA@ 0000000180010978     unpack.obj
+ 0002:00002998       ??_C@_0BG@FDJMCAOP@identical?5inner?5class?$AA@ 0000000180010998     unpack.obj
+ 0002:000029b0       ??_C@_0BN@GFADPNEE@undefined?5attribute?5flag?5bit?$AA@ 00000001800109b0     unpack.obj
+ 0002:000029d0       ??_C@_0BO@CMGKNLIA@attribute?5index?5out?5of?5bounds?$AA@ 00000001800109d0     unpack.obj
+ 0002:000029f0       ??_C@_0DH@OHIKFIJI@undefined?5StackMapTable?5attribut@ 00000001800109f0     unpack.obj
+ 0002:00002a28       ??_C@_0CE@NENNCDNJ@putlayout?3?5unexpected?5NULL?5for?5b@ 0000000180010a28     unpack.obj
+ 0002:00002a50       ??_C@_0BB@HNCAJEIE@cp?5utf8?5overflow?$AA@ 0000000180010a50     unpack.obj
+ 0002:00002a68       ??_C@_0BC@IJJDHGHN@cp?5class?5overflow?$AA@ 0000000180010a68     unpack.obj
+ 0002:00002a80       ??_C@_0BE@DAFJFMML@unpack?4deflate?4hint?$AA@ 0000000180010a80     unpack.obj
+ 0002:00002a98       ??_C@_0DC@KGJOKPLE@com?4sun?4java?4util?4jar?4pack?4unpac@ 0000000180010a98     unpack.obj
+ 0002:00002ad0       ??_C@_0CD@CEMFBAGC@com?4sun?4java?4util?4jar?4pack?4verbo@ 0000000180010ad0     unpack.obj
+ 0002:00002af8       ??_C@_0DE@FNJPLIMN@com?4sun?4java?4util?4jar?4pack?4unpac@ 0000000180010af8     unpack.obj
+ 0002:00002b30       ??_C@_0CL@JFLJFCLE@com?4sun?4java?4util?4jar?4pack?4unpac@ 0000000180010b30     unpack.obj
+ 0002:00002b5c       ??_C@_04LKOEDJLC@keep?$AA@ 0000000180010b5c     unpack.obj
+ 0002:00002b68       ??_C@_0CJ@LFNCLCEP@com?4sun?4java?4util?4jar?4pack?4verbo@ 0000000180010b68     unpack.obj
+ 0002:00002b94       ??_C@_03CGLHMDPP@now?$AA@  0000000180010b94     unpack.obj
+ 0002:00002b98       ??_C@_01JOAMLHOP@?9?$AA@   0000000180010b98     unpack.obj
+ 0002:00002ba0       ??_C@_0BB@MNFIFPBF@bad?5KQ?5reference?$AA@ 0000000180010ba0     unpack.obj
+ 0002:00002bb8       ??_C@_0L@PDBBHOGB@bad?5bcimap?$AA@ 0000000180010bb8     unpack.obj
+ 0002:00002bc8       ??_C@_0BM@GPDDEOEP@too?5many?5InnerClasses?5attrs?$AA@ 0000000180010bc8     unpack.obj
+ 0002:00002be4       ??_C@_05PBJILJE@?4java?$AA@ 0000000180010be4     unpack.obj
+ 0002:00002bf0       ??_C@_0BB@MICPNADP@bad?5layout?5index?$AA@ 0000000180010bf0     unpack.obj
+ 0002:00002c08       ??_C@_0BE@BKLBLMJK@bad?5attribute?5index?$AA@ 0000000180010c08     unpack.obj
+ 0002:00002c20       ??_C@_0BN@CLDGGNCI@bad?5reference?5to?5inner?5class?$AA@ 0000000180010c20     unpack.obj
+ 0002:00002c40       ??_C@_0CC@IOEIADGN@archive?5header?5had?5incorrect?5siz@ 0000000180010c40     unpack.obj
+ 0002:00002c68       ??_C@_0BM@NDDMOHPH@class?5file?5size?5transmitted?$AA@ 0000000180010c68     unpack.obj
+ 0002:00002c84       ??_C@_06POIMOJKC@?4class?$AA@ 0000000180010c84     unpack.obj
+ 0002:00002c8c       ??_C@_02DPNLHKJD@a?$CL?$AA@ 0000000180010c8c     unpack.obj
+ 0002:00002c90       ??_C@_0BK@NDLGHGBM@Can?5not?5open?5log?5file?5?$CFs?6?$AA@ 0000000180010c90     unpack.obj
+ 0002:00002cb0       ??_C@_0BI@CELHNJPG@error?5unpacking?5archive?$AA@ 0000000180010cb0     unpack.obj
+ 0002:00002cd0       __xmm@00000000000000ab00000001000000aa 0000000180010cd0     unpack.obj
+ 0002:00002ce0       __xmm@00000001000000a00000000700000096 0000000180010ce0     unpack.obj
+ 0002:00002cf0       ??_C@_0CE@HLJAOJEP@corrupt?5pack?5file?5or?5internal?5er@ 0000000180010cf0     utils.obj
+ 0002:00002d18       ??_C@_0BF@JFFKOPFD@Error?3?5unpacker?3?5?$CFs?6?$AA@ 0000000180010d18     utils.obj
+ 0002:00002d30       ??_C@_0CG@HFNCMKIN@Error?3?5unpacker?3?5no?5current?5inst@ 0000000180010d30     utils.obj
+ 0002:00002d68       _pDefaultRawDllMain        0000000180010d68     MSVCRT:crtdll.obj
+ 0002:00002d68       _pRawDllMain               0000000180010d68     MSVCRT:crtdll.obj
+ 0002:00002d80       _load_config_used          0000000180010d80     MSVCRT:loadcfg.obj
+ 0002:00002e88       __rtc_iaa                  0000000180010e88     MSVCRT:initsect.obj
+ 0002:00002e90       __rtc_izz                  0000000180010e90     MSVCRT:initsect.obj
+ 0002:00002e98       __rtc_taa                  0000000180010e98     MSVCRT:initsect.obj
+ 0002:00002ea0       __rtc_tzz                  0000000180010ea0     MSVCRT:initsect.obj
+ 0002:00003538       __IMPORT_DESCRIPTOR_jvm    0000000180011538     jvm:jvm.dll
+ 0002:0000354c       __IMPORT_DESCRIPTOR_java   000000018001154c     java:java.dll
+ 0002:00003560       __IMPORT_DESCRIPTOR_MSVCR120 0000000180011560     MSVCRT:MSVCR120.dll
+ 0002:00003574       __IMPORT_DESCRIPTOR_KERNEL32 0000000180011574     kernel32:KERNEL32.dll
+ 0002:00003588       __NULL_IMPORT_DESCRIPTOR   0000000180011588     jvm:jvm.dll
+ 0003:00000000       ?basic_codings@@3PAUcoding@@A 0000000180012000     coding.obj
+ 0003:00000b00       __security_cookie          0000000180012b00     MSVCRT:gs_cookie.obj
+ 0003:00000b08       __security_cookie_complement 0000000180012b08     MSVCRT:gs_cookie.obj
+ 0003:00000b10       __native_dllmain_reason    0000000180012b10     MSVCRT:natstart.obj
+ 0003:000014f8       ?__type_info_root_node@@3U__type_info_node@@A 00000001800134f8     MSVCRT:tncleanup.obj
+ 0003:00001508       __native_startup_lock      0000000180013508     <common>
+ 0003:00001510       __native_startup_state     0000000180013510     <common>
+ 0003:00001518       __onexitend                0000000180013518     <common>
+ 0003:00001520       __onexitbegin              0000000180013520     <common>
+ 0003:00001528       __dyn_tls_init_callback    0000000180013528     <common>
+
+ entry point at        0001:0000bd9c
+
+ Static symbols
+
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     kernel32:KERNEL32.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     jvm:jvm.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     kernel32:KERNEL32.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     java:java.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     kernel32:KERNEL32.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     kernel32:KERNEL32.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     kernel32:KERNEL32.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     kernel32:KERNEL32.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     kernel32:KERNEL32.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     kernel32:KERNEL32.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     kernel32:KERNEL32.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0000:fffe9000       .debug$S                   0000000180000000     MSVCRT:MSVCR120.dll
+ 0001:00001b28       ?get_unpacker@@YAPEAUunpacker@@PEAUJNIEnv_@@PEAV_jobject@@_N@Z 0000000180002b28 f   jni.obj
+ 0001:00001bf4       ?get_unpacker@@YAPEAUunpacker@@XZ 0000000180002bf4 f   jni.obj
+ 0001:00001ca4       ?read_input_via_jni@@YA_JPEAUunpacker@@PEAX_J2@Z 0000000180002ca4 f   jni.obj
+ 0001:000027c8       ?compare_Utf8_chars@@YAHAEAUbytes@@0@Z 00000001800037c8 f   unpack.obj
+ 0001:000092b0       ?store_Utf8_char@@YAPEACPEACG@Z 000000018000a2b0 f   unpack.obj
+ 0001:0000ba30       $$000000                   000000018000ca30     MSVCRT:amdsecgs.obj
+ 0001:0000ba90       $$000000                   000000018000ca90     MSVCRT:chkstk.obj
+ 0001:0000baf0       pre_c_init                 000000018000caf0 f   MSVCRT:crtdll.obj
+ 0001:0000bddc       __DllMainCRTStartup        000000018000cddc f   MSVCRT:crtdll.obj
+ 0001:0000c3c0       __DllMainCRTStartup$filt$0 000000018000d3c0 f   MSVCRT:crtdll.obj
+ 0001:0000c3e5       __DllMainCRTStartup$fin$1  000000018000d3e5 f   MSVCRT:crtdll.obj
+ 0001:0000c400       _IsNonwritableInCurrentImage$filt$0 000000018000d400 f   MSVCRT:pesect.obj
+ 0001:0000c420       _onexit$fin$0              000000018000d420 f   MSVCRT:atonexit.obj
+ 0002:000001c0       pcinit                     000000018000e1c0     MSVCRT:crtdll.obj
+ 0002:000001c8       pinit                      000000018000e1c8     MSVCRT:atonexit.obj
+ 0002:00000220       all_band_inits             000000018000e220     bands.obj
+ 0002:00001e60       ERB                        000000018000fe60     coding.obj
+ 0002:00002030       TAG_ORDER                  0000000180010030     unpack.obj
+ 0002:00002048       str_tf                     0000000180010048     unpack.obj
+ 0002:00002058       TAGS_IN_ORDER              0000000180010058     unpack.obj
+ 0002:00002d58       jarmagic                   0000000180010d58     zip.obj
+ 0002:00002d60       marker_comment             0000000180010d60     zip.obj
+ 0002:00002d70       GS_ExceptionPointers       0000000180010d70     MSVCRT:gs_report.obj
+ 0002:00002ea8       $unwind$?readData@band@@QEAAXH@Z 0000000180010ea8     bands.obj
+ 0002:00002ec8       $unwind$?read_double_words@unpacker@@QEAAXAEAUband@@PEAUentry@@H@Z 0000000180010ec8     bands.obj
+ 0002:00002ec8       $unwind$Java_com_sun_java_util_jar_pack_NativeUnpack_start 0000000180010ec8     bands.obj
+ 0002:00002ec8       $unwind$?alloc_heap@unpacker@@QEAAPEAX_K_N1@Z 0000000180010ec8     bands.obj
+ 0002:00002ec8       $unwind$?buildBands@attr_definitions@unpacker@@QEAAPEAPEAUband@@PEAUlayout_definition@2@@Z 0000000180010ec8     bands.obj
+ 0002:00002ec8       $unwind$?getIntTotal@band@@QEAAHXZ 0000000180010ec8     bands.obj
+ 0002:00002ec8       $unwind$?ensure_input@unpacker@@QEAA_N_J@Z 0000000180010ec8     bands.obj
+ 0002:00002ec8       $unwind$?getIntCount@band@@QEAAHH@Z 0000000180010ec8     bands.obj
+ 0002:00002ec8       $unwind$?get_next_file@unpacker@@QEAAPEAUfile@1@XZ 0000000180010ec8     bands.obj
+ 0002:00002ec8       $unwind$?makeBands@band@@SAPEAU1@PEAUunpacker@@@Z 0000000180010ec8     bands.obj
+ 0002:00002ee0       $unwind$?grow@fillbytes@@QEAAPEAC_K@Z 0000000180010ee0     bytes.obj
+ 0002:00002ef4       $unwind$?init@coding@@QEAAPEAU1@XZ 0000000180010ef4     coding.obj
+ 0002:00002f08       $unwind$?parse@coding@@SAIAEAPEACHH@Z 0000000180010f08     coding.obj
+ 0002:00002f08       $unwind$?parse_lgH@coding@@SAIAEAPEACHHH@Z 0000000180010f08     coding.obj
+ 0002:00002f08       $unwind$?initLoadableValues@cpool@@QEAAHPEAPEAUentry@@@Z 0000000180010f08     coding.obj
+ 0002:00002f18       $unwind$?init@coding_method@@QEAAXAEAPEACPEAC0HPEAUcoding@@HPEAUintlist@@@Z 0000000180010f18     coding.obj
+ 0002:00002f30       $unwind$?CallStaticObjectMethod@JNIEnv_@@QEAAPEAV_jobject@@PEAV_jclass@@PEAU_jmethodID@@ZZ 0000000180010f30     jni.obj
+ 0002:00002f30       $unwind$?CallLongMethod@JNIEnv_@@QEAA_JPEAV_jobject@@PEAU_jmethodID@@ZZ 0000000180010f30     jni.obj
+ 0002:00002f38       $unwind$Java_com_sun_java_util_jar_pack_NativeUnpack_getUnusedInput 0000000180010f38     jni.obj
+ 0002:00002f38       $unwind$?abort@unpacker@@QEAAXPEBD@Z 0000000180010f38     jni.obj
+ 0002:00002f44       $unwind$?getRefCommon@band@@QEAAPEAUentry@@PEAUcpindex@@_N@Z 0000000180010f44     jni.obj
+ 0002:00002f44       $unwind$?read_files@unpacker@@QEAAXXZ 0000000180010f44     jni.obj
+ 0002:00002f44       $unwind$?readBandData@attr_definitions@unpacker@@QEAAXH@Z 0000000180010f44     jni.obj
+ 0002:00002f44       $unwind$Java_com_sun_java_util_jar_pack_NativeUnpack_finish 0000000180010f44     jni.obj
+ 0002:00002f44       $unwind$Java_com_sun_java_util_jar_pack_NativeUnpack_getOption 0000000180010f44     jni.obj
+ 0002:00002f44       $unwind$?saveTo@unpacker@@QEAAXAEAUbytes@@PEAC_K@Z 0000000180010f44     jni.obj
+ 0002:00002f44       $unwind$?requestOutputIndex@entry@@QEAAXAEAUcpool@@H@Z 0000000180010f44     jni.obj
+ 0002:00002f44       $unwind$?free@unpacker@@QEAAXXZ 0000000180010f44     jni.obj
+ 0002:00002f44       $unwind$?getInt@value_stream@@QEAAHXZ 0000000180010f44     jni.obj
+ 0002:00002f44       $unwind$Java_com_sun_java_util_jar_pack_NativeUnpack_getNextFile 0000000180010f44     jni.obj
+ 0002:00002f44       $unwind$?init@cpool@@QEAAXPEAUunpacker@@QEAH@Z 0000000180010f44     jni.obj
+ 0002:00002f44       $unwind$?get_unpacker@@YAPEAUunpacker@@PEAUJNIEnv_@@PEAV_jobject@@_N@Z 0000000180010f44     jni.obj
+ 0002:00002f58       $unwind$?read_input_via_jni@@YA_JPEAUunpacker@@PEAX_J2@Z 0000000180010f58     jni.obj
+ 0002:00002f68       $unwind$?get_unpacker@@YAPEAUunpacker@@XZ 0000000180010f68     jni.obj
+ 0002:00002f74       $unwind$?ensureUtf8@cpool@@QEAAPEAUentry@@AEAUbytes@@@Z 0000000180010f74     unpack.obj
+ 0002:00002f74       $unwind$?ensureClass@cpool@@QEAAPEAUentry@@AEAUbytes@@@Z 0000000180010f74     unpack.obj
+ 0002:00002f88       $unwind$?expandSignatures@cpool@@QEAAXXZ 0000000180010f88     unpack.obj
+ 0002:00002fa0       $unwind$?initMemberIndexes@cpool@@QEAAXXZ 0000000180010fa0     unpack.obj
+ 0002:00002fb8       $unwind$?defineLayout@attr_definitions@unpacker@@QEAAPEAUlayout_definition@2@HPEBD0@Z 0000000180010fb8     unpack.obj
+ 0002:00002fcc       $unwind$?parseLayout@attr_definitions@unpacker@@QEAAPEBDPEBDAEAPEAPEAUband@@H@Z 0000000180010fcc     unpack.obj
+ 0002:00002fdc       $unwind$?parseIntLayout@attr_definitions@unpacker@@QEAAPEBDPEBDAEAPEAUband@@C_N@Z 0000000180010fdc     unpack.obj
+ 0002:00002ff8       $unwind$?readBandData@attr_definitions@unpacker@@QEAAXPEAPEAUband@@I@Z 0000000180010ff8     unpack.obj
+ 0002:00003008       $unwind$?set_option@unpacker@@QEAA_NPEBD0@Z 0000000180011008     unpack.obj
+ 0002:0000301c       $unwind$?get_option@unpacker@@QEAAPEBDPEBD@Z 000000018001101c     unpack.obj
+ 0002:00003034       $unwind$?putref_index@unpacker@@QEAAHPEAUentry@@H@Z 0000000180011034     unpack.obj
+ 0002:00003034       $unwind$?computeOutputIndexes@cpool@@QEAAXXZ 0000000180011034     unpack.obj
+ 0002:00003034       $unwind$?put_label@unpacker@@QEAAXHH@Z 0000000180011034     unpack.obj
+ 0002:00003034       $unwind$?getLong@band@@QEAA_JAEAU1@_N@Z 0000000180011034     unpack.obj
+ 0002:00003034       $unwind$?freeAll@ptrlist@@QEAAXXZ 0000000180011034     unpack.obj
+ 0002:00003034       $unwind$?popBody@attr_definitions@unpacker@@QEAAPEAPEAUband@@H@Z 0000000180011034     unpack.obj
+ 0002:00003034       $unwind$?saveFrom@bytes@@QEAAXPEBX_K@Z 0000000180011034     unpack.obj
+ 0002:00003034       $unwind$?realloc@bytes@@QEAAX_K@Z 0000000180011034     unpack.obj
+ 0002:00003034       $unwind$_DllMainCRTStartup 0000000180011034     unpack.obj
+ 0002:00003034       $unwind$?initGroupIndexes@cpool@@QEAAXXZ 0000000180011034     unpack.obj
+ 0002:00003034       $unwind$?redirect_stdio@unpacker@@QEAAXXZ 0000000180011034     unpack.obj
+ 0002:00003034       $unwind$?read_classes@unpacker@@QEAAXXZ 0000000180011034     unpack.obj
+ 0002:00003034       $unwind$?ensure_put_space@unpacker@@QEAAX_K@Z 0000000180011034     unpack.obj
+ 0002:00003044       $unwind$?checkLegacy@unpacker@@QEAAXPEBD@Z 0000000180011044     unpack.obj
+ 0002:00003058       $unwind$?putlayout@unpacker@@QEAAXPEAPEAUband@@@Z 0000000180011058     unpack.obj
+ 0002:00003068       $unwind$?get_code_header@unpacker@@QEAAXAEAH000@Z 0000000180011068     unpack.obj
+ 0002:00003074       $unwind$?write_code@unpacker@@QEAAXXZ 0000000180011074     unpack.obj
+ 0002:00003084       $unwind$?write_bc_ops@unpacker@@QEAAXXZ 0000000180011084     unpack.obj
+ 0002:0000309c       $unwind$?write_members@unpacker@@QEAAXHH@Z 000000018001109c     unpack.obj
+ 0002:000030b4       $unwind$?write_attrs@unpacker@@QEAAHH_K@Z 00000001800110b4     unpack.obj
+ 0002:000030d8       $unwind$?write_ics@unpacker@@QEAAHHH@Z 00000001800110d8     unpack.obj
+ 0002:000030f4       $unwind$?write_bsms@unpacker@@QEAAHHH@Z 00000001800110f4     unpack.obj
+ 0002:00003110       $unwind$?read_file_header@unpacker@@QEAAXXZ 0000000180011110     unpack.obj
+ 0002:00003138       $unwind$?read_cp@unpacker@@QEAAXXZ 0000000180011138     unpack.obj
+ 0002:00003150       $unwind$?read_ics@unpacker@@QEAAXXZ 0000000180011150     unpack.obj
+ 0002:00003170       $unwind$?read_attrs@unpacker@@QEAAXHH@Z 0000000180011170     unpack.obj
+ 0002:00003188       $unwind$?read_code_headers@unpacker@@QEAAXXZ 0000000180011188     unpack.obj
+ 0002:00003198       $unwind$?read_bcs@unpacker@@QEAAXXZ 0000000180011198     unpack.obj
+ 0002:000031b0       $unwind$?read_Utf8_values@unpacker@@QEAAXPEAUentry@@H@Z 00000001800111b0     unpack.obj
+ 0002:000031c8       $unwind$?read_single_refs@unpacker@@QEAAXAEAUband@@CPEAUentry@@H@Z 00000001800111c8     unpack.obj
+ 0002:000031e4       $unwind$?write_classfile_head@unpacker@@QEAAXXZ 00000001800111e4     unpack.obj
+ 0002:000031e4       $unwind$?read_attr_defs@unpacker@@QEAAXXZ 00000001800111e4     unpack.obj
+ 0002:000031e4       $unwind$Java_com_sun_java_util_jar_pack_NativeUnpack_setOption 00000001800111e4     unpack.obj
+ 0002:000031e4       $unwind$?read_double_refs@unpacker@@QEAAXAEAUband@@CCPEAUentry@@H@Z 00000001800111e4     unpack.obj
+ 0002:000031e4       $unwind$?read_method_type@unpacker@@QEAAXPEAUentry@@H@Z 00000001800111e4     unpack.obj
+ 0002:000031e4       $unwind$?read_method_handle@unpacker@@QEAAXPEAUentry@@H@Z 00000001800111e4     unpack.obj
+ 0002:000031e4       $unwind$?write_classfile_tail@unpacker@@QEAAXXZ 00000001800111e4     unpack.obj
+ 0002:000031fc       $unwind$?read_signature_values@unpacker@@QEAAXPEAUentry@@H@Z 00000001800111fc     unpack.obj
+ 0002:00003218       $unwind$?hashTabRef@cpool@@QEAAAEAPEAUentry@@CAEAUbytes@@@Z 0000000180011218     unpack.obj
+ 0002:00003218       $unwind$?read_bootstrap_methods@unpacker@@QEAAXPEAUentry@@H@Z 0000000180011218     unpack.obj
+ 0002:00003234       $unwind$?compare_Utf8_chars@@YAHAEAUbytes@@0@Z 0000000180011234     unpack.obj
+ 0002:00003250       $unwind$?writeTo@bytes@@QEAAPEACPEAC@Z 0000000180011250     zip.obj
+ 0002:00003250       $unwind$?ensureSize@fillbytes@@QEAAX_K@Z 0000000180011250     zip.obj
+ 0002:00003250       $unwind$_RTC_Initialize    0000000180011250     zip.obj
+ 0002:00003250       $unwind$?must_malloc@@YAPEAX_K@Z 0000000180011250     zip.obj
+ 0002:00003250       $unwind$?compareTo@bytes@@QEAAHAEAU1@@Z 0000000180011250     zip.obj
+ 0002:00003250       $unwind$?putref@unpacker@@QEAAXPEAUentry@@@Z 0000000180011250     zip.obj
+ 0002:00003250       $unwind$?put_space@unpacker@@QEAAPEAC_K@Z 0000000180011250     zip.obj
+ 0002:00003250       $unwind$?init@jar@@QEAAXPEAUunpacker@@@Z 0000000180011250     zip.obj
+ 0002:00003250       $unwind$?put_stackmap_type@unpacker@@QEAAXXZ 0000000180011250     zip.obj
+ 0002:00003250       $unwind$Java_com_sun_java_util_jar_pack_NativeUnpack_initIDs 0000000180011250     zip.obj
+ 0002:00003250       $unwind$_RTC_Terminate     0000000180011250     zip.obj
+ 0002:00003250       $unwind$?init@unpacker@@QEAAXP6A_JPEAU1@PEAX_J2@Z@Z 0000000180011250     zip.obj
+ 0002:00003250       $unwind$?putu1ref@unpacker@@QEAAXPEAUentry@@@Z 0000000180011250     zip.obj
+ 0002:00003250       $unwind$?findBySpec@coding@@SAPEAU1@H@Z 0000000180011250     zip.obj
+ 0002:00003250       $unwind$?getKQIndex@cpool@@QEAAPEAUcpindex@@XZ 0000000180011250     zip.obj
+ 0002:00003250       $unwind$?free@attr_definitions@unpacker@@QEAAXXZ 0000000180011250     zip.obj
+ 0002:00003260       $xdatasym                  0000000180011260     MSVCRT:amdsecgs.obj
+ 0002:00003268       $xdatasym                  0000000180011268     MSVCRT:chkstk.obj
+ 0002:00003270       $unwind$_CRT_INIT          0000000180011270     MSVCRT:crtdll.obj
+ 0002:0000328c       $unwind$?putu2@unpacker@@QEAAXH@Z 000000018001128c     MSVCRT:crtdll.obj
+ 0002:0000328c       $unwind$?parseNumeral@attr_definitions@unpacker@@QEAAPEBDPEBDAEAH@Z 000000018001128c     MSVCRT:crtdll.obj
+ 0002:0000328c       $unwind$?putu8@unpacker@@QEAAX_J@Z 000000018001128c     MSVCRT:crtdll.obj
+ 0002:0000328c       $unwind$pre_c_init         000000018001128c     MSVCRT:crtdll.obj
+ 0002:0000328c       $unwind$__atonexitinit     000000018001128c     MSVCRT:crtdll.obj
+ 0002:0000328c       $unwind$?putu4@unpacker@@QEAAXH@Z 000000018001128c     MSVCRT:crtdll.obj
+ 0002:0000328c       $unwind$__GSHandlerCheckCommon 000000018001128c     MSVCRT:crtdll.obj
+ 0002:0000328c       $unwind$?parseMultiple@coding@@SAXAEAPEACHPEACHH@Z 000000018001128c     MSVCRT:crtdll.obj
+ 0002:0000328c       $unwind$?reset_cur_classfile@unpacker@@QEAAXXZ 000000018001128c     MSVCRT:crtdll.obj
+ 0002:0000328c       $unwind$__raise_securityfailure 000000018001128c     MSVCRT:crtdll.obj
+ 0002:0000328c       $unwind$?unpack_abort@@YAXPEBDPEAUunpacker@@@Z 000000018001128c     MSVCRT:crtdll.obj
+ 0002:0000328c       $unwind$?setCoding@value_stream@@QEAAXPEAUcoding@@@Z 000000018001128c     MSVCRT:crtdll.obj
+ 0002:0000328c       $unwind$?read_bands@unpacker@@QEAAXXZ 000000018001128c     MSVCRT:crtdll.obj
+ 0002:0000328c       $unwind$?malloc@bytes@@QEAAX_K@Z 000000018001128c     MSVCRT:crtdll.obj
+ 0002:0000328c       $unwind$?free@bytes@@QEAAXXZ 000000018001128c     MSVCRT:crtdll.obj
+ 0002:0000328c       $unwind$?typeSize@entry@@QEAAHXZ 000000018001128c     MSVCRT:crtdll.obj
+ 0002:0000328c       $unwind$?unpack_aborting@@YA_NPEAUunpacker@@@Z 000000018001128c     MSVCRT:crtdll.obj
+ 0002:00003294       $unwind$__DllMainCRTStartup 0000000180011294     MSVCRT:crtdll.obj
+ 0002:000032d0       $unwind$__report_gsfailure 00000001800112d0     MSVCRT:gs_report.obj
+ 0002:000032d8       $unwind$_IsNonwritableInCurrentImage 00000001800112d8     MSVCRT:pesect.obj
+ 0002:000032fc       $unwind$_onexit$fin$0      00000001800112fc     MSVCRT:pesect.obj
+ 0002:000032fc       $unwind$__DllMainCRTStartup$fin$1 00000001800112fc     MSVCRT:pesect.obj
+ 0002:000032fc       $unwind$__DllMainCRTStartup$filt$0 00000001800112fc     MSVCRT:pesect.obj
+ 0002:000032fc       $unwind$_IsNonwritableInCurrentImage$filt$0 00000001800112fc     MSVCRT:pesect.obj
+ 0002:00003304       $unwind$__GSHandlerCheck   0000000180011304     MSVCRT:atonexit.obj
+ 0002:00003304       $unwind$?to_bci@unpacker@@QEAAII@Z 0000000180011304     MSVCRT:atonexit.obj
+ 0002:00003304       $unwind$atexit             0000000180011304     MSVCRT:atonexit.obj
+ 0002:00003304       $unwind$?start@unpacker@@QEAAXPEAX_K@Z 0000000180011304     MSVCRT:atonexit.obj
+ 0002:00003304       $unwind$DllMain            0000000180011304     MSVCRT:atonexit.obj
+ 0002:0000330c       $unwind$_onexit            000000018001130c     MSVCRT:atonexit.obj
+ 0002:0000332c       $unwind$__security_init_cookie 000000018001132c     MSVCRT:gs_support.obj
+ 0002:00003340       .edata                     0000000180011340     unpack.exp
+ 0002:00003368       rgpv                       0000000180011368     unpack.exp
+ 0002:00003384       rgszName                   0000000180011384     unpack.exp
+ 0002:000033a0       rgwOrd                     00000001800113a0     unpack.exp
+ 0002:000033ae       szName                     00000001800113ae     unpack.exp
+ 0002:000033b9       $N00001                    00000001800113b9     unpack.exp
+ 0002:000033ed       $N00002                    00000001800113ed     unpack.exp
+ 0002:00003426       $N00003                    0000000180011426     unpack.exp
+ 0002:0000345d       $N00004                    000000018001145d     unpack.exp
+ 0002:00003499       $N00005                    0000000180011499     unpack.exp
+ 0002:000034ce       $N00006                    00000001800114ce     unpack.exp
+ 0002:00003505       $N00007                    0000000180011505     unpack.exp
+ 0002:00003760       .idata$6                   0000000180011760     jvm:jvm.dll
+ 0002:00003780       .idata$6                   0000000180011780     java:java.dll
+ 0002:00003870       .idata$6                   0000000180011870     MSVCRT:MSVCR120.dll
+ 0002:00003a6c       .idata$6                   0000000180011a6c     kernel32:KERNEL32.dll
+ 0003:00000b20       dummy                      0000000180012b20     bytes.obj
+ 0003:00000f20       no_meta                    0000000180012f20     coding.obj
+ 0003:00000f28       dbg                        0000000180012f28     jni.obj
+ 0003:00000f30       unpackerPtrFID             0000000180012f30     jni.obj
+ 0003:00000f38       currentInstMID             0000000180012f38     jni.obj
+ 0003:00000f40       readInputMID               0000000180012f40     jni.obj
+ 0003:00000f48       NIclazz                    0000000180012f48     jni.obj
+ 0003:00000f50       getUnpackerPtrMID          0000000180012f50     jni.obj
+ 0003:00000f58       no_bands                   0000000180012f58     unpack.obj
+ 0003:00000f60       total_cp_size              0000000180012f60     unpack.obj
+ 0003:00000f68       largest_cp_ref             0000000180012f68     unpack.obj
+ 0003:00000f70       hash_probes                0000000180012f70     unpack.obj
+ 0003:00000f78       __proc_attached            0000000180012f78     MSVCRT:crtdll.obj
+ 0003:00000f80       GS_ExceptionRecord         0000000180012f80     MSVCRT:gs_report.obj
+ 0003:00001020       GS_ContextRecord           0000000180013020     MSVCRT:gs_report.obj
+ 0003:000014f0       DebuggerWasPresent         00000001800134f0     MSVCRT:gs_report.obj
+ 0004:00000000       $pdata$?getIntCount@band@@QEAAHH@Z 0000000180014000     bands.obj
+ 0004:0000000c       $pdata$?getIntTotal@band@@QEAAHXZ 000000018001400c     bands.obj
+ 0004:00000018       $pdata$?getLong@band@@QEAA_JAEAU1@_N@Z 0000000180014018     bands.obj
+ 0004:00000024       $pdata$?getRefCommon@band@@QEAAPEAUentry@@PEAUcpindex@@_N@Z 0000000180014024     bands.obj
+ 0004:00000030       $pdata$?makeBands@band@@SAPEAU1@PEAUunpacker@@@Z 0000000180014030     bands.obj
+ 0004:0000003c       $pdata$?readData@band@@QEAAXH@Z 000000018001403c     bands.obj
+ 0004:00000048       $pdata$?compareTo@bytes@@QEAAHAEAU1@@Z 0000000180014048     bytes.obj
+ 0004:00000054       $pdata$?ensureSize@fillbytes@@QEAAX_K@Z 0000000180014054     bytes.obj
+ 0004:00000060       $pdata$?free@bytes@@QEAAXXZ 0000000180014060     bytes.obj
+ 0004:0000006c       $pdata$?freeAll@ptrlist@@QEAAXXZ 000000018001406c     bytes.obj
+ 0004:00000078       $pdata$?grow@fillbytes@@QEAAPEAC_K@Z 0000000180014078     bytes.obj
+ 0004:00000084       $pdata$?malloc@bytes@@QEAAX_K@Z 0000000180014084     bytes.obj
+ 0004:00000090       $pdata$?realloc@bytes@@QEAAX_K@Z 0000000180014090     bytes.obj
+ 0004:0000009c       $pdata$?saveFrom@bytes@@QEAAXPEBX_K@Z 000000018001409c     bytes.obj
+ 0004:000000a8       $pdata$?writeTo@bytes@@QEAAPEACPEAC@Z 00000001800140a8     bytes.obj
+ 0004:000000b4       $pdata$?findBySpec@coding@@SAPEAU1@H@Z 00000001800140b4     coding.obj
+ 0004:000000c0       $pdata$?getInt@value_stream@@QEAAHXZ 00000001800140c0     coding.obj
+ 0004:000000cc       $pdata$?init@coding@@QEAAPEAU1@XZ 00000001800140cc     coding.obj
+ 0004:000000d8       $pdata$?init@coding_method@@QEAAXAEAPEACPEAC0HPEAUcoding@@HPEAUintlist@@@Z 00000001800140d8     coding.obj
+ 0004:000000e4       $pdata$?parse@coding@@SAIAEAPEACHH@Z 00000001800140e4     coding.obj
+ 0004:000000f0       $pdata$?parseMultiple@coding@@SAXAEAPEACHPEACHH@Z 00000001800140f0     coding.obj
+ 0004:000000fc       $pdata$?parse_lgH@coding@@SAIAEAPEACHHH@Z 00000001800140fc     coding.obj
+ 0004:00000108       $pdata$?setCoding@value_stream@@QEAAXPEAUcoding@@@Z 0000000180014108     coding.obj
+ 0004:00000114       $pdata$?CallLongMethod@JNIEnv_@@QEAA_JPEAV_jobject@@PEAU_jmethodID@@ZZ 0000000180014114     jni.obj
+ 0004:00000120       $pdata$?CallStaticObjectMethod@JNIEnv_@@QEAAPEAV_jobject@@PEAV_jclass@@PEAU_jmethodID@@ZZ 0000000180014120     jni.obj
+ 0004:0000012c       $pdata$?get_unpacker@@YAPEAUunpacker@@PEAUJNIEnv_@@PEAV_jobject@@_N@Z 000000018001412c     jni.obj
+ 0004:00000138       $pdata$?get_unpacker@@YAPEAUunpacker@@XZ 0000000180014138     jni.obj
+ 0004:00000144       $pdata$?read_input_via_jni@@YA_JPEAUunpacker@@PEAX_J2@Z 0000000180014144     jni.obj
+ 0004:00000150       $pdata$Java_com_sun_java_util_jar_pack_NativeUnpack_finish 0000000180014150     jni.obj
+ 0004:0000015c       $pdata$Java_com_sun_java_util_jar_pack_NativeUnpack_getNextFile 000000018001415c     jni.obj
+ 0004:00000168       $pdata$Java_com_sun_java_util_jar_pack_NativeUnpack_getOption 0000000180014168     jni.obj
+ 0004:00000174       $pdata$Java_com_sun_java_util_jar_pack_NativeUnpack_getUnusedInput 0000000180014174     jni.obj
+ 0004:00000180       $pdata$Java_com_sun_java_util_jar_pack_NativeUnpack_initIDs 0000000180014180     jni.obj
+ 0004:0000018c       $pdata$Java_com_sun_java_util_jar_pack_NativeUnpack_setOption 000000018001418c     jni.obj
+ 0004:00000198       $pdata$Java_com_sun_java_util_jar_pack_NativeUnpack_start 0000000180014198     jni.obj
+ 0004:000001a4       $pdata$?abort@unpacker@@QEAAXPEBD@Z 00000001800141a4     unpack.obj
+ 0004:000001b0       $pdata$?alloc_heap@unpacker@@QEAAPEAX_K_N1@Z 00000001800141b0     unpack.obj
+ 0004:000001bc       $pdata$?buildBands@attr_definitions@unpacker@@QEAAPEAPEAUband@@PEAUlayout_definition@2@@Z 00000001800141bc     unpack.obj
+ 0004:000001c8       $pdata$?checkLegacy@unpacker@@QEAAXPEBD@Z 00000001800141c8     unpack.obj
+ 0004:000001d4       $pdata$?compare_Utf8_chars@@YAHAEAUbytes@@0@Z 00000001800141d4     unpack.obj
+ 0004:000001e0       $pdata$?computeOutputIndexes@cpool@@QEAAXXZ 00000001800141e0     unpack.obj
+ 0004:000001ec       $pdata$?defineLayout@attr_definitions@unpacker@@QEAAPEAUlayout_definition@2@HPEBD0@Z 00000001800141ec     unpack.obj
+ 0004:000001f8       $pdata$?ensureClass@cpool@@QEAAPEAUentry@@AEAUbytes@@@Z 00000001800141f8     unpack.obj
+ 0004:00000204       $pdata$?ensureUtf8@cpool@@QEAAPEAUentry@@AEAUbytes@@@Z 0000000180014204     unpack.obj
+ 0004:00000210       $pdata$?ensure_input@unpacker@@QEAA_N_J@Z 0000000180014210     unpack.obj
+ 0004:0000021c       $pdata$?ensure_put_space@unpacker@@QEAAX_K@Z 000000018001421c     unpack.obj
+ 0004:00000228       $pdata$?expandSignatures@cpool@@QEAAXXZ 0000000180014228     unpack.obj
+ 0004:00000234       $pdata$?free@attr_definitions@unpacker@@QEAAXXZ 0000000180014234     unpack.obj
+ 0004:00000240       $pdata$?free@unpacker@@QEAAXXZ 0000000180014240     unpack.obj
+ 0004:0000024c       $pdata$?getKQIndex@cpool@@QEAAPEAUcpindex@@XZ 000000018001424c     unpack.obj
+ 0004:00000258       $pdata$?get_code_header@unpacker@@QEAAXAEAH000@Z 0000000180014258     unpack.obj
+ 0004:00000264       $pdata$?get_next_file@unpacker@@QEAAPEAUfile@1@XZ 0000000180014264     unpack.obj
+ 0004:00000270       $pdata$?get_option@unpacker@@QEAAPEBDPEBD@Z 0000000180014270     unpack.obj
+ 0004:0000027c       $pdata$?hashTabRef@cpool@@QEAAAEAPEAUentry@@CAEAUbytes@@@Z 000000018001427c     unpack.obj
+ 0004:00000288       $pdata$?init@cpool@@QEAAXPEAUunpacker@@QEAH@Z 0000000180014288     unpack.obj
+ 0004:00000294       $pdata$?init@unpacker@@QEAAXP6A_JPEAU1@PEAX_J2@Z@Z 0000000180014294     unpack.obj
+ 0004:000002a0       $pdata$?initGroupIndexes@cpool@@QEAAXXZ 00000001800142a0     unpack.obj
+ 0004:000002ac       $pdata$?initLoadableValues@cpool@@QEAAHPEAPEAUentry@@@Z 00000001800142ac     unpack.obj
+ 0004:000002b8       $pdata$?initMemberIndexes@cpool@@QEAAXXZ 00000001800142b8     unpack.obj
+ 0004:000002c4       $pdata$?parseIntLayout@attr_definitions@unpacker@@QEAAPEBDPEBDAEAPEAUband@@C_N@Z 00000001800142c4     unpack.obj
+ 0004:000002d0       $pdata$?parseLayout@attr_definitions@unpacker@@QEAAPEBDPEBDAEAPEAPEAUband@@H@Z 00000001800142d0     unpack.obj
+ 0004:000002dc       $pdata$?parseNumeral@attr_definitions@unpacker@@QEAAPEBDPEBDAEAH@Z 00000001800142dc     unpack.obj
+ 0004:000002e8       $pdata$?popBody@attr_definitions@unpacker@@QEAAPEAPEAUband@@H@Z 00000001800142e8     unpack.obj
+ 0004:000002f4       $pdata$?put_label@unpacker@@QEAAXHH@Z 00000001800142f4     unpack.obj
+ 0004:00000300       $pdata$?put_space@unpacker@@QEAAPEAC_K@Z 0000000180014300     unpack.obj
+ 0004:0000030c       $pdata$?put_stackmap_type@unpacker@@QEAAXXZ 000000018001430c     unpack.obj
+ 0004:00000318       $pdata$?putlayout@unpacker@@QEAAXPEAPEAUband@@@Z 0000000180014318     unpack.obj
+ 0004:00000324       $pdata$?putref@unpacker@@QEAAXPEAUentry@@@Z 0000000180014324     unpack.obj
+ 0004:00000330       $pdata$?putref_index@unpacker@@QEAAHPEAUentry@@H@Z 0000000180014330     unpack.obj
+ 0004:0000033c       $pdata$?putu1ref@unpacker@@QEAAXPEAUentry@@@Z 000000018001433c     unpack.obj
+ 0004:00000348       $pdata$?putu2@unpacker@@QEAAXH@Z 0000000180014348     unpack.obj
+ 0004:00000354       $pdata$?putu4@unpacker@@QEAAXH@Z 0000000180014354     unpack.obj
+ 0004:00000360       $pdata$?putu8@unpacker@@QEAAX_J@Z 0000000180014360     unpack.obj
+ 0004:0000036c       $pdata$?readBandData@attr_definitions@unpacker@@QEAAXH@Z 000000018001436c     unpack.obj
+ 0004:00000378       $pdata$?readBandData@attr_definitions@unpacker@@QEAAXPEAPEAUband@@I@Z 0000000180014378     unpack.obj
+ 0004:00000384       $pdata$?read_Utf8_values@unpacker@@QEAAXPEAUentry@@H@Z 0000000180014384     unpack.obj
+ 0004:00000390       $pdata$?read_attr_defs@unpacker@@QEAAXXZ 0000000180014390     unpack.obj
+ 0004:0000039c       $pdata$?read_attrs@unpacker@@QEAAXHH@Z 000000018001439c     unpack.obj
+ 0004:000003a8       $pdata$?read_bands@unpacker@@QEAAXXZ 00000001800143a8     unpack.obj
+ 0004:000003b4       $pdata$?read_bcs@unpacker@@QEAAXXZ 00000001800143b4     unpack.obj
+ 0004:000003c0       $pdata$?read_bootstrap_methods@unpacker@@QEAAXPEAUentry@@H@Z 00000001800143c0     unpack.obj
+ 0004:000003cc       $pdata$?read_classes@unpacker@@QEAAXXZ 00000001800143cc     unpack.obj
+ 0004:000003d8       $pdata$?read_code_headers@unpacker@@QEAAXXZ 00000001800143d8     unpack.obj
+ 0004:000003e4       $pdata$?read_cp@unpacker@@QEAAXXZ 00000001800143e4     unpack.obj
+ 0004:000003f0       $pdata$?read_double_refs@unpacker@@QEAAXAEAUband@@CCPEAUentry@@H@Z 00000001800143f0     unpack.obj
+ 0004:000003fc       $pdata$?read_double_words@unpacker@@QEAAXAEAUband@@PEAUentry@@H@Z 00000001800143fc     unpack.obj
+ 0004:00000408       $pdata$?read_file_header@unpacker@@QEAAXXZ 0000000180014408     unpack.obj
+ 0004:00000414       $pdata$?read_files@unpacker@@QEAAXXZ 0000000180014414     unpack.obj
+ 0004:00000420       $pdata$?read_ics@unpacker@@QEAAXXZ 0000000180014420     unpack.obj
+ 0004:0000042c       $pdata$?read_method_handle@unpacker@@QEAAXPEAUentry@@H@Z 000000018001442c     unpack.obj
+ 0004:00000438       $pdata$?read_method_type@unpacker@@QEAAXPEAUentry@@H@Z 0000000180014438     unpack.obj
+ 0004:00000444       $pdata$?read_signature_values@unpacker@@QEAAXPEAUentry@@H@Z 0000000180014444     unpack.obj
+ 0004:00000450       $pdata$?read_single_refs@unpacker@@QEAAXAEAUband@@CPEAUentry@@H@Z 0000000180014450     unpack.obj
+ 0004:0000045c       $pdata$?redirect_stdio@unpacker@@QEAAXXZ 000000018001445c     unpack.obj
+ 0004:00000468       $pdata$?requestOutputIndex@entry@@QEAAXAEAUcpool@@H@Z 0000000180014468     unpack.obj
+ 0004:00000474       $pdata$?reset_cur_classfile@unpacker@@QEAAXXZ 0000000180014474     unpack.obj
+ 0004:00000480       $pdata$?saveTo@unpacker@@QEAAXAEAUbytes@@PEAC_K@Z 0000000180014480     unpack.obj
+ 0004:0000048c       $pdata$?set_option@unpacker@@QEAA_NPEBD0@Z 000000018001448c     unpack.obj
+ 0004:00000498       $pdata$?start@unpacker@@QEAAXPEAX_K@Z 0000000180014498     unpack.obj
+ 0004:000004a4       $pdata$?to_bci@unpacker@@QEAAII@Z 00000001800144a4     unpack.obj
+ 0004:000004b0       $pdata$?typeSize@entry@@QEAAHXZ 00000001800144b0     unpack.obj
+ 0004:000004bc       $pdata$?write_attrs@unpacker@@QEAAHH_K@Z 00000001800144bc     unpack.obj
+ 0004:000004c8       $pdata$?write_bc_ops@unpacker@@QEAAXXZ 00000001800144c8     unpack.obj
+ 0004:000004d4       $pdata$?write_bsms@unpacker@@QEAAHHH@Z 00000001800144d4     unpack.obj
+ 0004:000004e0       $pdata$?write_classfile_head@unpacker@@QEAAXXZ 00000001800144e0     unpack.obj
+ 0004:000004ec       $pdata$?write_classfile_tail@unpacker@@QEAAXXZ 00000001800144ec     unpack.obj
+ 0004:000004f8       $pdata$?write_code@unpacker@@QEAAXXZ 00000001800144f8     unpack.obj
+ 0004:00000504       $pdata$?write_ics@unpacker@@QEAAHHH@Z 0000000180014504     unpack.obj
+ 0004:00000510       $pdata$?write_members@unpacker@@QEAAXHH@Z 0000000180014510     unpack.obj
+ 0004:0000051c       $pdata$?must_malloc@@YAPEAX_K@Z 000000018001451c     utils.obj
+ 0004:00000528       $pdata$?unpack_abort@@YAXPEBDPEAUunpacker@@@Z 0000000180014528     utils.obj
+ 0004:00000534       $pdata$?unpack_aborting@@YA_NPEAUunpacker@@@Z 0000000180014534     utils.obj
+ 0004:00000540       $pdata$?init@jar@@QEAAXPEAUunpacker@@@Z 0000000180014540     zip.obj
+ 0004:0000054c       $pdata$__GSHandlerCheck    000000018001454c     MSVCRT:gshandler.obj
+ 0004:00000558       $pdata$__GSHandlerCheckCommon 0000000180014558     MSVCRT:gshandler.obj
+ 0004:0000057c       $pdata$pre_c_init          000000018001457c     MSVCRT:crtdll.obj
+ 0004:00000588       $pdata$_CRT_INIT           0000000180014588     MSVCRT:crtdll.obj
+ 0004:00000594       $pdata$_DllMainCRTStartup  0000000180014594     MSVCRT:crtdll.obj
+ 0004:000005a0       $pdata$__DllMainCRTStartup 00000001800145a0     MSVCRT:crtdll.obj
+ 0004:000005ac       $pdata$__raise_securityfailure 00000001800145ac     MSVCRT:gs_report.obj
+ 0004:000005b8       $pdata$__report_gsfailure  00000001800145b8     MSVCRT:gs_report.obj
+ 0004:000005c4       $pdata$_IsNonwritableInCurrentImage 00000001800145c4     MSVCRT:pesect.obj
+ 0004:000005d0       $pdata$__atonexitinit      00000001800145d0     MSVCRT:atonexit.obj
+ 0004:000005dc       $pdata$_onexit             00000001800145dc     MSVCRT:atonexit.obj
+ 0004:000005e8       $pdata$atexit              00000001800145e8     MSVCRT:atonexit.obj
+ 0004:000005f4       $pdata$__security_init_cookie 00000001800145f4     MSVCRT:gs_support.obj
+ 0004:00000600       $pdata$DllMain             0000000180014600     MSVCRT:dllmain.obj
+ 0004:0000060c       $pdata$_RTC_Initialize     000000018001460c     MSVCRT:initsect.obj
+ 0004:00000618       $pdata$_RTC_Terminate      0000000180014618     MSVCRT:initsect.obj
+ 0004:00000624       $pdata$__DllMainCRTStartup$filt$0 0000000180014624     MSVCRT:crtdll.obj
+ 0004:00000630       $pdata$__DllMainCRTStartup$fin$1 0000000180014630     MSVCRT:crtdll.obj
+ 0004:0000063c       $pdata$_IsNonwritableInCurrentImage$filt$0 000000018001463c     MSVCRT:pesect.obj
+ 0004:00000648       $pdata$_onexit$fin$0       0000000180014648     MSVCRT:atonexit.obj
+ 0005:00000060       $R000000                   0000000180015060     unpack.dll.res

@@ -1,0 +1,10 @@
+splashscreen_stubs.c
+メモ: インクルード ファイル:  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\stdio.h
+メモ: インクルード ファイル:   C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\sal.h
+メモ: インクルード ファイル:     C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\ConcurrencySal.h
+メモ: インクルード ファイル:    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\vadefs.h
+メモ: インクルード ファイル:   C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\swprintf.inl
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\bin\splashscreen.h
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/bin/splashscreen_stubs.c(64) : warning C4047: 'return' : 間接参照のレベルが 'int' と 'void *' で異なっています。
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/bin/splashscreen_stubs.c(68) : warning C4047: 'return' : 間接参照のレベルが 'int' と 'void *' で異なっています。

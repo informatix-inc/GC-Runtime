@@ -1,0 +1,23 @@
+mpi.c
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\security\ec\impl\mpi-priv.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\security\ec\impl\mpi.h
+メモ: インクルード ファイル:    c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\security\ec\impl\mpi-config.h
+メモ: インクルード ファイル:    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\limits.h
+メモ: インクルード ファイル:     C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:      C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\sal.h
+メモ: インクルード ファイル:       C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\ConcurrencySal.h
+メモ: インクルード ファイル:      C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\vadefs.h
+メモ: インクルード ファイル:    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\sys/types.h
+メモ: インクルード ファイル:   C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\stdlib.h
+メモ: インクルード ファイル:    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:   C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\string.h
+メモ: インクルード ファイル:    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:   C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\ctype.h
+メモ: インクルード ファイル:    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\security\ec\impl\logtab.h
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/sun/security/ec/impl/mpi.c(2981) : warning C4018: '<' : signed と unsigned の数値を比較しようとしました。
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/sun/security/ec/impl/mpi.c(3010) : warning C4244: '関数' : 'mp_digit' から 'mp_size' への変換です。データが失われる可能性があります。
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/sun/security/ec/impl/mpi.c(3013) : warning C4244: '関数' : 'mp_digit' から 'mp_size' への変換です。データが失われる可能性があります。
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/sun/security/ec/impl/mpi.c(3131) : warning C4244: '初期化中' : 'mp_digit' から 'mp_size' への変換です。データが失われる可能性があります。
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/sun/security/ec/impl/mpi.c(3164) : warning C4244: '関数' : 'mp_digit' から 'mp_size' への変換です。データが失われる可能性があります。
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/sun/security/ec/impl/mpi.c(4351) : warning C4244: '=' : 'mp_digit' から 'mp_size' への変換です。データが失われる可能性があります。

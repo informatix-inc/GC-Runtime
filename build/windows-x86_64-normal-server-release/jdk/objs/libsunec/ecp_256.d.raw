@@ -1,0 +1,36 @@
+ecp_256.c
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\security\ec\impl\ecp.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\security\ec\impl\ecl-priv.h
+メモ: インクルード ファイル:    c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\security\ec\impl\ecl.h
+メモ: インクルード ファイル:     c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\security\ec\impl\ecl-exp.h
+メモ: インクルード ファイル:     c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\security\ec\impl\mpi.h
+メモ: インクルード ファイル:      c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\security\ec\impl\mpi-config.h
+メモ: インクルード ファイル:      C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\limits.h
+メモ: インクルード ファイル:       C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:        C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\sal.h
+メモ: インクルード ファイル:         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\ConcurrencySal.h
+メモ: インクルード ファイル:        C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\vadefs.h
+メモ: インクルード ファイル:      C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\sys/types.h
+メモ: インクルード ファイル:    c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\security\ec\impl\mplogic.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\security\ec\impl\mpi-priv.h
+メモ: インクルード ファイル:   C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\stdlib.h
+メモ: インクルード ファイル:    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:   C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\string.h
+メモ: インクルード ファイル:    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:   C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\ctype.h
+メモ: インクルード ファイル:    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/sun/security/ec/impl/ecp_256.c(288) : warning C4244: '=' : 'mp_digit' から 'int' への変換です。データが失われる可能性があります。
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/sun/security/ec/impl/ecp_256.c(292) : warning C4244: '+=' : 'mp_digit' から 'int' への変換です。データが失われる可能性があります。
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/sun/security/ec/impl/ecp_256.c(297) : warning C4244: '+=' : 'mp_digit' から 'int' への変換です。データが失われる可能性があります。
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/sun/security/ec/impl/ecp_256.c(301) : warning C4244: '+=' : 'mp_digit' から 'int' への変換です。データが失われる可能性があります。
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/sun/security/ec/impl/ecp_256.c(308) : warning C4244: '+=' : 'mp_digit' から 'int' への変換です。データが失われる可能性があります。
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/sun/security/ec/impl/ecp_256.c(314) : warning C4244: '+=' : 'mp_digit' から 'int' への変換です。データが失われる可能性があります。
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/sun/security/ec/impl/ecp_256.c(320) : warning C4244: '-=' : 'mp_digit' から 'int' への変換です。データが失われる可能性があります。
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/sun/security/ec/impl/ecp_256.c(326) : warning C4244: '-=' : 'mp_digit' から 'int' への変換です。データが失われる可能性があります。
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/sun/security/ec/impl/ecp_256.c(332) : warning C4244: '-=' : 'mp_digit' から 'int' への変換です。データが失われる可能性があります。
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/sun/security/ec/impl/ecp_256.c(338) : warning C4244: '-=' : 'mp_digit' から 'int' への変換です。データが失われる可能性があります。
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/sun/security/ec/impl/ecp_256.c(345) : warning C4146: 符号付きの値を代入する変数は、符号付き型にキャストしなければなりません。
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/sun/security/ec/impl/ecp_256.c(348) : warning C4244: '=' : 'mp_digit' から 'int' への変換です。データが失われる可能性があります。
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/sun/security/ec/impl/ecp_256.c(356) : warning C4146: 符号付きの値を代入する変数は、符号付き型にキャストしなければなりません。
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/sun/security/ec/impl/ecp_256.c(359) : warning C4146: 符号付きの値を代入する変数は、符号付き型にキャストしなければなりません。
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/sun/security/ec/impl/ecp_256.c(359) : warning C4244: '=' : 'mp_digit' から 'int' への変換です。データが失われる可能性があります。

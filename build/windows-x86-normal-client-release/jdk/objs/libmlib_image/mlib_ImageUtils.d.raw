@@ -1,0 +1,22 @@
+mlib_ImageUtils.c
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\awt\medialib\mlib_image.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\awt\medialib\mlib_types.h
+メモ: インクルード ファイル:    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\limits.h
+メモ: インクルード ファイル:     C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:      C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\sal.h
+メモ: インクルード ファイル:       C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\ConcurrencySal.h
+メモ: インクルード ファイル:      C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\vadefs.h
+メモ: インクルード ファイル:    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\float.h
+メモ: インクルード ファイル:     C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:     C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtwrn.h
+メモ: インクルード ファイル:      C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\stddef.h
+メモ: インクルード ファイル:     C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\awt\medialib\mlib_status.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\awt\medialib\mlib_sys.h
+メモ: インクルード ファイル:    c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\awt\medialib\mlib_sys_proto.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\awt\medialib\mlib_image_types.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\awt\medialib\mlib_image_proto.h
+メモ: インクルード ファイル:    c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\awt\medialib\j2d_names.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\awt\medialib\mlib_image_blend_proto.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\awt\medialib\mlib_image_get.h

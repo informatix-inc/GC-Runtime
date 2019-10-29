@@ -1,0 +1,36 @@
+TrimmedArrayProcessor2.cpp
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\LETypes.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\LEStandalone.h
+メモ: インクルード ファイル:    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\stdlib.h
+メモ: インクルード ファイル:     C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:      C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\sal.h
+メモ: インクルード ファイル:       C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\ConcurrencySal.h
+メモ: インクルード ファイル:      C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\vadefs.h
+メモ: インクルード ファイル:     C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\limits.h
+メモ: インクルード ファイル:      C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\string.h
+メモ: インクルード ファイル:     C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\MorphTables.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\LayoutTables.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\LETableReference.h
+メモ: インクルード ファイル:    c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\LEFontInstance.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\SubtableProcessor2.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\NonContextualGlyphSubst.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\LookupTables.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\NonContextualGlyphSubstProc2.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\TrimmedArrayProcessor2.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\LEGlyphStorage.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\LEInsertionList.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\LESwaps.h
+c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\LETableReference.h(452) : warning C4267: '=' : 'size_t' から 'le_uint32' に変換しました。データが失われているかもしれません。
+        c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\LETableReference.h(447): クラス テンプレート のメンバー関数 'LEReferenceToArrayOf<LookupValue>::LEReferenceToArrayOf(const LETableReference &,LEErrorCode &,const T *,le_uint32)' のコンパイル中
+        with
+        [
+            T=LookupValue
+        ]
+        c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/sun/font/layout/TrimmedArrayProcessor2.cpp(57) : コンパイルされたクラスの テンプレート のインスタンス化 'LEReferenceToArrayOf<LookupValue>::LEReferenceToArrayOf(const LETableReference &,LEErrorCode &,const T *,le_uint32)' の参照を確認してください
+        with
+        [
+            T=LookupValue
+        ]
+        c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\sun\font\layout\TrimmedArrayProcessor2.h(80) : コンパイルされたクラスの テンプレート のインスタンス化 'LEReferenceToArrayOf<LookupValue>' の参照を確認してください
