@@ -1,0 +1,4 @@
+s_expm1.c
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\java\lang\fdlibm\include\fdlibm.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\native\java\lang\fdlibm\include\jfdlibm.h
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/native/java/lang/fdlibm/src/s_expm1.c(183) : warning C4244: '=' : 'double' から 'int' への変換です。データが失われる可能性があります。

@@ -1,0 +1,26 @@
+Agent.cpp
+メモ: インクルード ファイル:  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\stdio.h
+メモ: インクルード ファイル:   C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\sal.h
+メモ: インクルード ファイル:     C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\ConcurrencySal.h
+メモ: インクルード ファイル:    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\vadefs.h
+メモ: インクルード ファイル:   C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\swprintf.inl
+メモ: インクルード ファイル:  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\stdlib.h
+メモ: インクルード ファイル:   C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:   C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\limits.h
+メモ: インクルード ファイル:    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\string.h
+メモ: インクルード ファイル:   C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\stddef.h
+メモ: インクルード ファイル:   C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\build\windows-x86-normal-client-release\jdk\include\jni.h
+メモ: インクルード ファイル:   C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\stdarg.h
+メモ: インクルード ファイル:    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\INCLUDE\crtdefs.h
+メモ: インクルード ファイル:   c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\windows\javavm\export\jni_md.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\build\windows-x86-normal-client-release\jdk\include\jvmti.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\demo\jvmti\agent_util\agent_util.h
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\demo\jvmti\waiters\Monitor.hpp
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\demo\jvmti\waiters\Thread.hpp
+メモ: インクルード ファイル:  c:\cygwin64\home\fujimoto\openjdk-jdk8u\jdk\src\share\demo\jvmti\waiters\Agent.hpp
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/demo/jvmti/waiters/Agent.cpp(114) : warning C4101: 'err' : ローカル変数は 1 度も使われていません。
+c:/cygwin64/home/fujimoto/openjdk-jdk8u/jdk/src/share/demo/jvmti/waiters/Agent.cpp(132) : warning C4101: 'err' : ローカル変数は 1 度も使われていません。
