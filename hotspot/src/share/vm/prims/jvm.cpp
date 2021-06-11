@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997, 2020, Oracle and/or its affiliates. All rights reserved
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -37,6 +37,7 @@
 #include "classfile/vmSymbols.hpp"
 #include "gc_interface/collectedHeap.inline.hpp"
 #include "interpreter/bytecode.hpp"
+#include "jfr/jfrEvents.hpp"
 #include "memory/oopFactory.hpp"
 #include "memory/referenceType.hpp"
 #include "memory/universe.inline.hpp"
@@ -67,7 +68,6 @@
 #include "services/attachListener.hpp"
 #include "services/management.hpp"
 #include "services/threadService.hpp"
-#include "trace/tracing.hpp"
 #include "utilities/copy.hpp"
 #include "utilities/defaultStream.hpp"
 #include "utilities/dtrace.hpp"
@@ -443,6 +443,16 @@ JVM_ENTRY_NO_ENV(void, JVM_Exit(jint code))
 JVM_END
 
 
+JVM_ENTRY_NO_ENV(void, JVM_BeforeHalt())
+  JVMWrapper("JVM_BeforeHalt");
+  EventShutdown event;
+  if (event.should_commit()) {
+    event.set_reason("Shutdown requested from Java");
+    event.commit();
+  }
+JVM_END
+
+
 JVM_ENTRY_NO_ENV(void, JVM_Halt(jint code))
   before_exit(thread);
   vm_exit(code);
@@ -512,6 +522,17 @@ JVM_END
 JVM_ENTRY_NO_ENV(jint, JVM_ActiveProcessorCount(void))
   JVMWrapper("JVM_ActiveProcessorCount");
   return os::active_processor_count();
+JVM_END
+
+
+JVM_ENTRY_NO_ENV(jboolean, JVM_IsUseContainerSupport(void))
+  JVMWrapper("JVM_IsUseContainerSupport");
+#ifdef TARGET_OS_FAMILY_linux
+  if (UseContainerSupport) {
+      return JNI_TRUE;
+  }
+#endif
+  return JNI_FALSE;
 JVM_END
 
 
@@ -908,7 +929,7 @@ JVM_END
 JVM_ENTRY(jboolean, JVM_KnownToNotExist(JNIEnv *env, jobject loader, const char *classname))
   JVMWrapper("JVM_KnownToNotExist");
 #if INCLUDE_CDS
-  return ClassLoaderExt::known_to_not_exist(env, loader, classname, CHECK_(false));
+  return ClassLoaderExt::known_to_not_exist(env, loader, classname, THREAD);
 #else
   return false;
 #endif
@@ -918,7 +939,7 @@ JVM_END
 JVM_ENTRY(jobjectArray, JVM_GetResourceLookupCacheURLs(JNIEnv *env, jobject loader))
   JVMWrapper("JVM_GetResourceLookupCacheURLs");
 #if INCLUDE_CDS
-  return ClassLoaderExt::get_lookup_cache_urls(env, loader, CHECK_NULL);
+  return ClassLoaderExt::get_lookup_cache_urls(env, loader, THREAD);
 #else
   return NULL;
 #endif
@@ -928,7 +949,7 @@ JVM_END
 JVM_ENTRY(jintArray, JVM_GetResourceLookupCache(JNIEnv *env, jobject loader, const char *resource_name))
   JVMWrapper("JVM_GetResourceLookupCache");
 #if INCLUDE_CDS
-  return ClassLoaderExt::get_lookup_cache(env, loader, resource_name, CHECK_NULL);
+  return ClassLoaderExt::get_lookup_cache(env, loader, resource_name, THREAD);
 #else
   return NULL;
 #endif
@@ -3276,6 +3297,12 @@ JVM_ENTRY(void, JVM_Yield(JNIEnv *env, jclass threadClass))
   }
 JVM_END
 
+static void post_thread_sleep_event(EventThreadSleep* event, jlong millis) {
+  assert(event != NULL, "invariant");
+  assert(event->should_commit(), "invariant");
+  event->set_time(millis);
+  event->commit();
+}
 
 JVM_ENTRY(void, JVM_Sleep(JNIEnv* env, jclass threadClass, jlong millis))
   JVMWrapper("JVM_Sleep");
@@ -3322,8 +3349,7 @@ JVM_ENTRY(void, JVM_Sleep(JNIEnv* env, jclass threadClass, jlong millis))
       // us while we were sleeping. We do not overwrite those.
       if (!HAS_PENDING_EXCEPTION) {
         if (event.should_commit()) {
-          event.set_time(millis);
-          event.commit();
+          post_thread_sleep_event(&event, millis);
         }
 #ifndef USDT2
         HS_DTRACE_PROBE1(hotspot, thread__sleep__end,1);
@@ -3339,8 +3365,7 @@ JVM_ENTRY(void, JVM_Sleep(JNIEnv* env, jclass threadClass, jlong millis))
     thread->osthread()->set_state(old_state);
   }
   if (event.should_commit()) {
-    event.set_time(millis);
-    event.commit();
+    post_thread_sleep_event(&event, millis);
   }
 #ifndef USDT2
   HS_DTRACE_PROBE1(hotspot, thread__sleep__end,0);
@@ -4343,7 +4368,7 @@ JVM_ENTRY(jlong,JVM_DTraceActivate(
     JVM_DTraceProvider* providers))
   JVMWrapper("JVM_DTraceActivate");
   return DTraceJSDT::activate(
-    version, module_name, providers_count, providers, CHECK_0);
+    version, module_name, providers_count, providers, THREAD);
 JVM_END
 
 JVM_ENTRY(jboolean,JVM_DTraceIsProbeEnabled(JNIEnv* env, jmethodID method))

@@ -38,7 +38,9 @@
 #include "utilities/accessFlags.hpp"
 #include "utilities/bitMap.inline.hpp"
 #include "utilities/macros.hpp"
-#include "trace/traceMacros.hpp"
+#if INCLUDE_JFR
+#include "jfr/support/jfrKlassExtension.hpp"
+#endif
 
 // An InstanceKlass is the VM level representation of a Java class.
 // It contains all information needed for at class at execution runtime.
@@ -241,7 +243,7 @@ class InstanceKlass: public Klass {
   u2              _misc_flags;
   u2              _minor_version;        // minor version number of class file
   u2              _major_version;        // major version number of class file
-  Thread*         _init_thread;          // Pointer to current thread doing initialization (to handle recusive initialization)
+  Thread*         _init_thread;          // Pointer to current thread doing initialization (to handle recursive initialization)
   int             _vtable_len;           // length of Java vtable (in words)
   int             _itable_len;           // length of Java itable (in words)
   OopMapCache*    volatile _oop_map_cache;   // OopMapCache for all methods in the klass (allocated lazily)
@@ -524,8 +526,11 @@ class InstanceKlass: public Klass {
   static Method* find_method(Array<Method*>* methods, Symbol* name, Symbol* signature);
 
   // find a local method, but skip static methods
-  Method* find_instance_method(Symbol* name, Symbol* signature);
-  static Method* find_instance_method(Array<Method*>* methods, Symbol* name, Symbol* signature);
+  Method* find_instance_method(Symbol* name, Symbol* signature,
+                               PrivateLookupMode private_mode);
+  static Method* find_instance_method(Array<Method*>* methods,
+                                      Symbol* name, Symbol* signature,
+                                      PrivateLookupMode private_mode);
 
   // find a local method (returns NULL if not found)
   Method* find_local_method(Symbol* name, Symbol* signature,
@@ -838,7 +843,7 @@ class InstanceKlass: public Klass {
 
   // support for stub routines
   static ByteSize init_state_offset()  { return in_ByteSize(offset_of(InstanceKlass, _init_state)); }
-  TRACE_DEFINE_OFFSET;
+  JFR_ONLY(DEFINE_KLASS_TRACE_ID_OFFSET;)
   static ByteSize init_thread_offset() { return in_ByteSize(offset_of(InstanceKlass, _init_thread)); }
 
   // subclass/subinterface checks

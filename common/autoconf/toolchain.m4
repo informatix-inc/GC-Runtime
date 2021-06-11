@@ -249,7 +249,7 @@ AC_DEFUN_ONCE([TOOLCHAIN_PRE_DETECTION],
     AC_MSG_CHECKING([Determining if we need to set DEVELOPER_DIR])
     if test -n "$DEVELOPER_DIR"; then
       if test ! -d "$DEVELOPER_DIR"; then
-        AC_MSG_ERROR([Xcode Developer path does not exist: $DEVELOPER_DIR, please provide a path to the Xcode 4 application bundle using --with-xcode-path])
+        AC_MSG_ERROR([Xcode Developer path does not exist: $DEVELOPER_DIR, please provide a path to the Xcode application bundle using --with-xcode-path])
       fi
       if test ! -f "$DEVELOPER_DIR"/usr/bin/xcodebuild; then
         AC_MSG_ERROR([Xcode Developer path is not valid: $DEVELOPER_DIR, it must point to Contents/Developer inside an Xcode application bundle])
@@ -271,8 +271,8 @@ AC_DEFUN_ONCE([TOOLCHAIN_PRE_DETECTION],
     # Fail-fast: verify we're building on Xcode 4, we cannot build with Xcode 5 or later
     XCODE_VERSION=`$XCODEBUILD -version | grep '^Xcode ' | sed 's/Xcode //'`
     XC_VERSION_PARTS=( ${XCODE_VERSION//./ } )
-    if test ! "${XC_VERSION_PARTS[[0]]}" = "4"; then
-      AC_MSG_ERROR([Xcode 4 is required to build JDK 8, the version found was $XCODE_VERSION. Use --with-xcode-path to specify the location of Xcode 4 or make Xcode 4 active by using xcode-select.])
+    if test "${XC_VERSION_PARTS[[0]]}" != "4" -a "${XC_VERSION_PARTS[[0]]}" != "9" -a "${XC_VERSION_PARTS[[0]]}" != "10" -a "${XC_VERSION_PARTS[[0]]}" != "11" ; then
+      AC_MSG_ERROR([Xcode 4, 9, 10 or 11 is required to build JDK 8, the version found was $XCODE_VERSION. Use --with-xcode-path to specify the location of Xcode or make Xcode active by using xcode-select.])
     fi
 
     # Some versions of Xcode 5 command line tools install gcc and g++ as symlinks to
@@ -433,7 +433,7 @@ AC_DEFUN([TOOLCHAIN_EXTRACT_COMPILER_VERSION],
     COMPILER_VERSION_STRING=`$ECHO $COMPILER_VERSION_OUTPUT | \
         $SED -e 's/ *Copyright .*//'`
     COMPILER_VERSION_NUMBER=`$ECHO $COMPILER_VERSION_OUTPUT | \
-        $SED -e 's/^.* \(@<:@1-9@:>@\.@<:@0-9.@:>@*\) .*$/\1/'`
+        $SED -e 's/^.* \(@<:@1-9@:>@@<:@0-9@:>@*\.@<:@0-9.@:>@*\) .*$/\1/'`
   elif test  "x$TOOLCHAIN_TYPE" = xclang; then
     # clang --version output typically looks like
     #    Apple LLVM version 5.0 (clang-500.2.79) (based on LLVM 3.3svn)

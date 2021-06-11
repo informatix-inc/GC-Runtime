@@ -35,6 +35,7 @@
 #include "memory/space.inline.hpp"
 #include "memory/watermark.hpp"
 #include "utilities/macros.hpp"
+#include "gc_implementation/g1/g1HeapRegionTraceType.hpp"
 
 // A HeapRegion is the smallest piece of a G1CollectedHeap that
 // can be collected independently.
@@ -210,6 +211,8 @@ class HeapRegion: public G1OffsetTableContigSpace {
   HeapRegionRemSet* _rem_set;
 
   G1BlockOffsetArrayContigSpace* offsets() { return &_offsets; }
+
+  void report_region_type_change(G1HeapRegionTraceType::Type to);
 
  protected:
   // The index of this region in the heap region sequence.
@@ -405,6 +408,7 @@ class HeapRegion: public G1OffsetTableContigSpace {
 
   const char* get_type_str() const { return _type.get_str(); }
   const char* get_short_type_str() const { return _type.get_short_str(); }
+  G1HeapRegionTraceType::Type get_trace_type() { return _type.get_trace_type(); }
 
   bool is_free() const { return _type.is_free(); }
 
@@ -667,13 +671,13 @@ class HeapRegion: public G1OffsetTableContigSpace {
     }
   }
 
-  void set_free() { _type.set_free(); }
+  void set_free();
 
-  void set_eden()        { _type.set_eden();        }
-  void set_eden_pre_gc() { _type.set_eden_pre_gc(); }
-  void set_survivor()    { _type.set_survivor();    }
+  void set_eden();
+  void set_eden_pre_gc();
+  void set_survivor();
 
-  void set_old() { _type.set_old(); }
+  void set_old();
 
   // Determine if an object has been allocated since the last
   // mark performed by the collector. This returns true iff the object
@@ -714,16 +718,17 @@ class HeapRegion: public G1OffsetTableContigSpace {
   HeapWord*
   object_iterate_mem_careful(MemRegion mr, ObjectClosure* cl);
 
-  // filter_young: if true and the region is a young region then we
-  // skip the iteration.
-  // card_ptr: if not NULL, and we decide that the card is not young
-  // and we iterate over it, we'll clean the card before we start the
-  // iteration.
-  HeapWord*
-  oops_on_card_seq_iterate_careful(MemRegion mr,
-                                   FilterOutOfRegionClosure* cl,
-                                   bool filter_young,
-                                   jbyte* card_ptr);
+  // Iterate over the card in the card designated by card_ptr,
+  // applying cl to all references in the region.
+  // mr: the memory region covered by the card.
+  // card_ptr: if we decide that the card is not young and we iterate
+  // over it, we'll clean the card before we start the iteration.
+  // Returns true if the card was successfully processed, false if an
+  // unparsable part of the heap was encountered, which should only
+  // happen when invoked concurrently with the mutator.
+  bool oops_on_card_seq_iterate_careful(MemRegion mr,
+                                        FilterOutOfRegionClosure* cl,
+                                        jbyte* card_ptr);
 
   size_t recorded_rs_length() const        { return _recorded_rs_length; }
   double predicted_elapsed_time_ms() const { return _predicted_elapsed_time_ms; }

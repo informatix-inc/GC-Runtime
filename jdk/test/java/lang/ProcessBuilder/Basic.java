@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003, 2013, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2003, 2014, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -27,6 +27,7 @@
  *      5026830 5023243 5070673 4052517 4811767 6192449 6397034 6413313
  *      6464154 6523983 6206031 4960438 6631352 6631966 6850957 6850958
  *      4947220 7018606 7034570 4244896 5049299
+ *      8067796
  * @summary Basic tests for Process and Environment Variable code
  * @run main/othervm/timeout=300 Basic
  * @run main/othervm/timeout=300 -Djdk.lang.Process.launchMechanism=fork Basic
@@ -60,6 +61,15 @@ public class Basic {
 
     /* used for AIX only */
     static final String libpath = System.getenv("LIBPATH");
+
+    /**
+     * Returns the number of milliseconds since time given by
+     * startNanoTime, which must have been previously returned from a
+     * call to {@link System.nanoTime()}.
+     */
+    private static long millisElapsedSince(long startNanoTime) {
+        return TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNanoTime);
+    }
 
     private static String commandOutput(Reader r) throws Throwable {
         StringBuilder sb = new StringBuilder();
@@ -934,18 +944,13 @@ public class Basic {
         equal(pb.redirectError(), Redirect.to(efile));
 
         THROWS(IllegalArgumentException.class,
-            new Fun(){void f() {
-                pb.redirectInput(Redirect.to(ofile)); }},
-            new Fun(){void f() {
-                pb.redirectInput(Redirect.appendTo(ofile)); }},
-            new Fun(){void f() {
-                pb.redirectOutput(Redirect.from(ifile)); }},
-            new Fun(){void f() {
-                pb.redirectError(Redirect.from(ifile)); }});
+               () -> pb.redirectInput(Redirect.to(ofile)),
+               () -> pb.redirectOutput(Redirect.from(ifile)),
+               () -> pb.redirectError(Redirect.from(ifile)));
 
         THROWS(IOException.class,
                // Input file does not exist
-               new Fun(){void f() throws Throwable { pb.start(); }});
+               () -> pb.start());
         setFileContents(ifile, "standard input");
 
         //----------------------------------------------------------------
@@ -1081,18 +1086,15 @@ public class Basic {
                 = new FilePermission("<<ALL FILES>>", "read,write,execute");
 
             THROWS(SecurityException.class,
-               new Fun() { void f() throws IOException {
-                   policy.setPermissions(xPermission);
-                   redirectIO(pb, from(tmpFile), PIPE, PIPE);
-                   pb.start();}},
-               new Fun() { void f() throws IOException {
-                   policy.setPermissions(rxPermission);
-                   redirectIO(pb, PIPE, to(ofile), PIPE);
-                   pb.start();}},
-               new Fun() { void f() throws IOException {
-                   policy.setPermissions(rxPermission);
-                   redirectIO(pb, PIPE, PIPE, to(efile));
-                   pb.start();}});
+                   () -> { policy.setPermissions(xPermission);
+                           redirectIO(pb, from(tmpFile), PIPE, PIPE);
+                           pb.start();},
+                   () -> { policy.setPermissions(rxPermission);
+                           redirectIO(pb, PIPE, to(ofile), PIPE);
+                           pb.start();},
+                   () -> { policy.setPermissions(rxPermission);
+                           redirectIO(pb, PIPE, PIPE, to(efile));
+                           pb.start();});
 
             {
                 policy.setPermissions(rxPermission);
@@ -1203,10 +1205,10 @@ public class Basic {
         // System.getenv() is read-only.
         //----------------------------------------------------------------
         THROWS(UnsupportedOperationException.class,
-            new Fun(){void f(){ getenv().put("FOO","BAR");}},
-            new Fun(){void f(){ getenv().remove("PATH");}},
-            new Fun(){void f(){ getenv().keySet().remove("PATH");}},
-            new Fun(){void f(){ getenv().values().remove("someValue");}});
+               () -> getenv().put("FOO","BAR"),
+               () -> getenv().remove("PATH"),
+               () -> getenv().keySet().remove("PATH"),
+               () -> getenv().values().remove("someValue"));
 
         try {
             Collection<Map.Entry<String,String>> c = getenv().entrySet();
@@ -1231,19 +1233,17 @@ public class Basic {
         {
             final Map<String,String> m = new ProcessBuilder().environment();
             THROWS(IllegalArgumentException.class,
-                new Fun(){void f(){ m.put("FOO=","BAR");}},
-                new Fun(){void f(){ m.put("FOO\u0000","BAR");}},
-                new Fun(){void f(){ m.put("FOO","BAR\u0000");}});
+                   () -> m.put("FOO=","BAR"),
+                   () -> m.put("FOO\u0000","BAR"),
+                   () -> m.put("FOO","BAR\u0000"));
         }
 
         //----------------------------------------------------------------
         // Commands must never be null.
         //----------------------------------------------------------------
         THROWS(NullPointerException.class,
-               new Fun(){void f(){
-                   new ProcessBuilder((List<String>)null);}},
-               new Fun(){void f(){
-                   new ProcessBuilder().command((List<String>)null);}});
+               () -> new ProcessBuilder((List<String>)null),
+               () -> new ProcessBuilder().command((List<String>)null));
 
         //----------------------------------------------------------------
         // Put in a command; get the same one back out.
@@ -1268,25 +1268,18 @@ public class Basic {
         // Commands must contain at least one element.
         //----------------------------------------------------------------
         THROWS(IndexOutOfBoundsException.class,
-            new Fun() { void f() throws IOException {
-                new ProcessBuilder().start();}},
-            new Fun() { void f() throws IOException {
-                new ProcessBuilder(new ArrayList<String>()).start();}},
-            new Fun() { void f() throws IOException {
-                Runtime.getRuntime().exec(new String[]{});}});
+               () -> new ProcessBuilder().start(),
+               () -> new ProcessBuilder(new ArrayList<String>()).start(),
+               () -> Runtime.getRuntime().exec(new String[]{}));
 
         //----------------------------------------------------------------
         // Commands must not contain null elements at start() time.
         //----------------------------------------------------------------
         THROWS(NullPointerException.class,
-            new Fun() { void f() throws IOException {
-                new ProcessBuilder("foo",null,"bar").start();}},
-            new Fun() { void f() throws IOException {
-                new ProcessBuilder((String)null).start();}},
-            new Fun() { void f() throws IOException {
-                new ProcessBuilder(new String[]{null}).start();}},
-            new Fun() { void f() throws IOException {
-                new ProcessBuilder(new String[]{"foo",null,"bar"}).start();}});
+               () -> new ProcessBuilder("foo",null,"bar").start(),
+               () -> new ProcessBuilder((String)null).start(),
+               () -> new ProcessBuilder(new String[]{null}).start(),
+               () -> new ProcessBuilder(new String[]{"foo",null,"bar"}).start());
 
         //----------------------------------------------------------------
         // Command lists are growable.
@@ -1303,15 +1296,13 @@ public class Basic {
         try {
             final Map<String,String> env = new ProcessBuilder().environment();
             THROWS(NullPointerException.class,
-                new Fun(){void f(){ env.put("foo",null);}},
-                new Fun(){void f(){ env.put(null,"foo");}},
-                new Fun(){void f(){ env.remove(null);}},
-                new Fun(){void f(){
-                    for (Map.Entry<String,String> e : env.entrySet())
-                        e.setValue(null);}},
-                new Fun() { void f() throws IOException {
-                    Runtime.getRuntime().exec(new String[]{"foo"},
-                                              new String[]{null});}});
+                   () -> env.put("foo",null),
+                   () -> env.put(null,"foo"),
+                   () -> env.remove(null),
+                   () -> { for (Map.Entry<String,String> e : env.entrySet())
+                               e.setValue(null);},
+                   () -> Runtime.getRuntime().exec(new String[]{"foo"},
+                                                   new String[]{null}));
         } catch (Throwable t) { unexpected(t); }
 
         //----------------------------------------------------------------
@@ -1320,10 +1311,10 @@ public class Basic {
         try {
             final Map<String,String> env = new ProcessBuilder().environment();
             THROWS(ClassCastException.class,
-                new Fun(){void f(){ env.remove(TRUE);}},
-                new Fun(){void f(){ env.keySet().remove(TRUE);}},
-                new Fun(){void f(){ env.values().remove(TRUE);}},
-                new Fun(){void f(){ env.entrySet().remove(TRUE);}});
+                   () -> env.remove(TRUE),
+                   () -> env.keySet().remove(TRUE),
+                   () -> env.values().remove(TRUE),
+                   () -> env.entrySet().remove(TRUE));
         } catch (Throwable t) { unexpected(t); }
 
         //----------------------------------------------------------------
@@ -1339,22 +1330,22 @@ public class Basic {
                 // Nulls in environment queries are forbidden.
                 //----------------------------------------------------------------
                 THROWS(NullPointerException.class,
-                    new Fun(){void f(){ getenv(null);}},
-                    new Fun(){void f(){ env.get(null);}},
-                    new Fun(){void f(){ env.containsKey(null);}},
-                    new Fun(){void f(){ env.containsValue(null);}},
-                    new Fun(){void f(){ env.keySet().contains(null);}},
-                    new Fun(){void f(){ env.values().contains(null);}});
+                       () -> getenv(null),
+                       () -> env.get(null),
+                       () -> env.containsKey(null),
+                       () -> env.containsValue(null),
+                       () -> env.keySet().contains(null),
+                       () -> env.values().contains(null));
 
                 //----------------------------------------------------------------
                 // Non-String types in environment queries are forbidden.
                 //----------------------------------------------------------------
                 THROWS(ClassCastException.class,
-                    new Fun(){void f(){ env.get(TRUE);}},
-                    new Fun(){void f(){ env.containsKey(TRUE);}},
-                    new Fun(){void f(){ env.containsValue(TRUE);}},
-                    new Fun(){void f(){ env.keySet().contains(TRUE);}},
-                    new Fun(){void f(){ env.values().contains(TRUE);}});
+                       () -> env.get(TRUE),
+                       () -> env.containsKey(TRUE),
+                       () -> env.containsValue(TRUE),
+                       () -> env.keySet().contains(TRUE),
+                       () -> env.values().contains(TRUE));
 
                 //----------------------------------------------------------------
                 // Illegal String values in environment queries are (grumble) OK
@@ -1372,12 +1363,11 @@ public class Basic {
             final Set<Map.Entry<String,String>> entrySet =
                 new ProcessBuilder().environment().entrySet();
             THROWS(NullPointerException.class,
-                   new Fun(){void f(){ entrySet.contains(null);}});
+                   () -> entrySet.contains(null));
             THROWS(ClassCastException.class,
-                new Fun(){void f(){ entrySet.contains(TRUE);}},
-                new Fun(){void f(){
-                    entrySet.contains(
-                        new SimpleImmutableEntry<Boolean,String>(TRUE,""));}});
+                   () -> entrySet.contains(TRUE),
+                   () -> entrySet.contains(
+                             new SimpleImmutableEntry<Boolean,String>(TRUE,"")));
 
             check(! entrySet.contains
                   (new SimpleImmutableEntry<String,String>("", "")));
@@ -1847,8 +1837,7 @@ public class Basic {
                 final ProcessBuilder pb =
                     new ProcessBuilder(new String[]{"unliKely"});
                 pb.environment().put("PATH", "suBdiR");
-                THROWS(IOException.class,
-                       new Fun() {void f() throws Throwable {pb.start();}});
+                THROWS(IOException.class, () -> pb.start());
             } catch (Throwable t) { unexpected(t);
             } finally {
                 new File("suBdiR/unliKely").delete();
@@ -1921,10 +1910,8 @@ public class Basic {
             equal(SIZE, p.getInputStream().available());
             equal(SIZE, p.getErrorStream().available());
             THROWS(IOException.class,
-                   new Fun(){void f() throws IOException {
-                       p.getOutputStream().write((byte) '!');
-                       p.getOutputStream().flush();
-                       }});
+                   () -> { p.getOutputStream().write((byte) '!');
+                           p.getOutputStream().flush();});
 
             final byte[] bytes = new byte[SIZE + 1];
             equal(SIZE, p.getInputStream().read(bytes));
@@ -1951,12 +1938,9 @@ public class Basic {
             InputStream[] streams = { p.getInputStream(), p.getErrorStream() };
             for (final InputStream in : streams) {
                 Fun[] ops = {
-                    new Fun(){void f() throws IOException {
-                        in.read(); }},
-                    new Fun(){void f() throws IOException {
-                        in.read(bytes); }},
-                    new Fun(){void f() throws IOException {
-                        in.available(); }}
+                    () -> in.read(),
+                    () -> in.read(bytes),
+                    () -> in.available()
                 };
                 for (Fun op : ops) {
                     try {
@@ -2160,21 +2144,17 @@ public class Basic {
         } catch (Throwable t) { unexpected(t); }
 
         THROWS(SecurityException.class,
-            new Fun() { void f() throws IOException {
-                policy.setPermissions(/* Nothing */);
-                System.getenv("foo");}},
-            new Fun() { void f() throws IOException {
-                policy.setPermissions(/* Nothing */);
-                System.getenv();}},
-            new Fun() { void f() throws IOException {
-                policy.setPermissions(/* Nothing */);
-                new ProcessBuilder("echo").start();}},
-            new Fun() { void f() throws IOException {
-                policy.setPermissions(/* Nothing */);
-                Runtime.getRuntime().exec("echo");}},
-            new Fun() { void f() throws IOException {
-                policy.setPermissions(new RuntimePermission("getenv.bar"));
-                System.getenv("foo");}});
+               () -> { policy.setPermissions(/* Nothing */);
+                       System.getenv("foo");},
+               () -> { policy.setPermissions(/* Nothing */);
+                       System.getenv();},
+               () -> { policy.setPermissions(/* Nothing */);
+                       new ProcessBuilder("echo").start();},
+               () -> { policy.setPermissions(/* Nothing */);
+                       Runtime.getRuntime().exec("echo");},
+               () -> { policy.setPermissions(
+                               new RuntimePermission("getenv.bar"));
+                       System.getenv("foo");});
 
         try {
             policy.setPermissions(new RuntimePermission("getenv.foo"));
@@ -2191,18 +2171,16 @@ public class Basic {
             = new FilePermission("<<ALL FILES>>", "execute");
 
         THROWS(SecurityException.class,
-            new Fun() { void f() throws IOException {
-                // environment permission by itself insufficient
-                policy.setPermissions(new RuntimePermission("getenv.*"));
-                ProcessBuilder pb = new ProcessBuilder("env");
-                pb.environment().put("foo","bar");
-                pb.start();}},
-            new Fun() { void f() throws IOException {
-                 // exec permission by itself insufficient
-                 policy.setPermissions(execPermission);
-                 ProcessBuilder pb = new ProcessBuilder("env");
-                 pb.environment().put("foo","bar");
-                 pb.start();}});
+               () -> { // environment permission by itself insufficient
+                       policy.setPermissions(new RuntimePermission("getenv.*"));
+                       ProcessBuilder pb = new ProcessBuilder("env");
+                       pb.environment().put("foo","bar");
+                       pb.start();},
+               () -> { // exec permission by itself insufficient
+                       policy.setPermissions(execPermission);
+                       ProcessBuilder pb = new ProcessBuilder("env");
+                       pb.environment().put("foo","bar");
+                       pb.start();});
 
         try {
             // Both permissions? OK.
@@ -2280,55 +2258,153 @@ public class Basic {
                 fail("Test failed: waitFor didn't take long enough (" + (end - start) + "ns)");
 
             p.destroy();
-
-            start = System.nanoTime();
-            p.waitFor(8, TimeUnit.SECONDS);
-            end = System.nanoTime();
-
-            int exitValue = p.exitValue();
-
-            if ((end - start) > TimeUnit.SECONDS.toNanos(7))
-                fail("Test failed: waitFor took too long on a dead process. (" + (end - start) + "ns)"
-                + ", exitValue: " + exitValue);
         } catch (Throwable t) { unexpected(t); }
 
         //----------------------------------------------------------------
         // Check that Process.waitFor(timeout, TimeUnit.MILLISECONDS)
-        // interrupt works as expected.
+        // interrupt works as expected, if interrupted while waiting.
         //----------------------------------------------------------------
         try {
             List<String> childArgs = new ArrayList<String>(javaChildArgs);
             childArgs.add("sleep");
             final Process p = new ProcessBuilder(childArgs).start();
             final long start = System.nanoTime();
-            final CountDownLatch ready = new CountDownLatch(1);
-            final CountDownLatch done = new CountDownLatch(1);
+            final CountDownLatch aboutToWaitFor = new CountDownLatch(1);
 
             final Thread thread = new Thread() {
                 public void run() {
                     try {
-                        final boolean result;
-                        try {
-                            ready.countDown();
-                            result = p.waitFor(30000, TimeUnit.MILLISECONDS);
-                        } catch (InterruptedException e) {
-                            return;
-                        }
+                        aboutToWaitFor.countDown();
+                        Thread.currentThread().interrupt();
+                        boolean result = p.waitFor(30L * 1000L, TimeUnit.MILLISECONDS);
                         fail("waitFor() wasn't interrupted, its return value was: " + result);
-                    } catch (Throwable t) {
-                        unexpected(t);
-                    } finally {
-                        done.countDown();
-                    }
+                    } catch (InterruptedException success) {
+                    } catch (Throwable t) { unexpected(t); }
                 }
             };
 
             thread.start();
-            ready.await();
-            Thread.sleep(1000);
+            aboutToWaitFor.await();
             thread.interrupt();
-            done.await();
+            thread.join(10L * 1000L);
+            check(millisElapsedSince(start) < 10L * 1000L);
+            check(!thread.isAlive());
             p.destroy();
+        } catch (Throwable t) { unexpected(t); }
+
+        //----------------------------------------------------------------
+        // Check that Process.waitFor(Long.MAX_VALUE, TimeUnit.MILLISECONDS)
+        // interrupt works as expected, if interrupted while waiting.
+        //----------------------------------------------------------------
+        try {
+            List<String> childArgs = new ArrayList<String>(javaChildArgs);
+            childArgs.add("sleep");
+            final Process p = new ProcessBuilder(childArgs).start();
+            final long start = System.nanoTime();
+            final CountDownLatch aboutToWaitFor = new CountDownLatch(1);
+
+            final Thread thread = new Thread() {
+                public void run() {
+                    try {
+                        aboutToWaitFor.countDown();
+                        Thread.currentThread().interrupt();
+                        boolean result = p.waitFor(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
+                        fail("waitFor() wasn't interrupted, its return value was: " + result);
+                    } catch (InterruptedException success) {
+                    } catch (Throwable t) { unexpected(t); }
+                }
+            };
+
+            thread.start();
+            aboutToWaitFor.await();
+            thread.interrupt();
+            thread.join(10L * 1000L);
+            check(millisElapsedSince(start) < 10L * 1000L);
+            check(!thread.isAlive());
+            p.destroy();
+        } catch (Throwable t) { unexpected(t); }
+
+        //----------------------------------------------------------------
+        // Check that Process.waitFor(timeout, TimeUnit.MILLISECONDS)
+        // interrupt works as expected, if interrupted before waiting.
+        //----------------------------------------------------------------
+        try {
+            List<String> childArgs = new ArrayList<String>(javaChildArgs);
+            childArgs.add("sleep");
+            final Process p = new ProcessBuilder(childArgs).start();
+            final long start = System.nanoTime();
+            final CountDownLatch threadStarted = new CountDownLatch(1);
+
+            final Thread thread = new Thread() {
+                public void run() {
+                    try {
+                        threadStarted.countDown();
+                        do { Thread.yield(); }
+                        while (!Thread.currentThread().isInterrupted());
+                        boolean result = p.waitFor(30L * 1000L, TimeUnit.MILLISECONDS);
+                        fail("waitFor() wasn't interrupted, its return value was: " + result);
+                    } catch (InterruptedException success) {
+                    } catch (Throwable t) { unexpected(t); }
+                }
+            };
+
+            thread.start();
+            threadStarted.await();
+            thread.interrupt();
+            thread.join(10L * 1000L);
+            check(millisElapsedSince(start) < 10L * 1000L);
+            check(!thread.isAlive());
+            p.destroy();
+        } catch (Throwable t) { unexpected(t); }
+
+        //----------------------------------------------------------------
+        // Check that Process.waitFor(timeout, null) throws NPE.
+        //----------------------------------------------------------------
+        try {
+            List<String> childArgs = new ArrayList<String>(javaChildArgs);
+            childArgs.add("sleep");
+            final Process p = new ProcessBuilder(childArgs).start();
+            THROWS(NullPointerException.class,
+                    () ->  p.waitFor(10L, null));
+            THROWS(NullPointerException.class,
+                    () ->  p.waitFor(0L, null));
+            THROWS(NullPointerException.class,
+                    () -> p.waitFor(-1L, null));
+            // Terminate process and recheck after it exits
+            p.destroy();
+            p.waitFor();
+            THROWS(NullPointerException.class,
+                    () -> p.waitFor(10L, null));
+            THROWS(NullPointerException.class,
+                    () -> p.waitFor(0L, null));
+            THROWS(NullPointerException.class,
+                    () -> p.waitFor(-1L, null));
+        } catch (Throwable t) { unexpected(t); }
+
+        //----------------------------------------------------------------
+        // Check that default implementation of Process.waitFor(timeout, null) throws NPE.
+        //----------------------------------------------------------------
+        try {
+            List<String> childArgs = new ArrayList<String>(javaChildArgs);
+            childArgs.add("sleep");
+            final Process proc = new ProcessBuilder(childArgs).start();
+            final DelegatingProcess p = new DelegatingProcess(proc);
+
+            THROWS(NullPointerException.class,
+                    () ->  p.waitFor(10L, null));
+            THROWS(NullPointerException.class,
+                    () ->  p.waitFor(0L, null));
+            THROWS(NullPointerException.class,
+                    () ->  p.waitFor(-1L, null));
+            // Terminate process and recheck after it exits
+            p.destroy();
+            p.waitFor();
+            THROWS(NullPointerException.class,
+                    () -> p.waitFor(10L, null));
+            THROWS(NullPointerException.class,
+                    () -> p.waitFor(0L, null));
+            THROWS(NullPointerException.class,
+                    () -> p.waitFor(-1L, null));
         } catch (Throwable t) { unexpected(t); }
 
         //----------------------------------------------------------------
@@ -2509,7 +2585,7 @@ public class Basic {
         try {realMain(args);} catch (Throwable t) {unexpected(t);}
         System.out.printf("%nPassed = %d, failed = %d%n%n", passed, failed);
         if (failed > 0) throw new AssertionError("Some tests failed");}
-    private static abstract class Fun {abstract void f() throws Throwable;}
+    interface Fun {void f() throws Throwable;}
     static void THROWS(Class<? extends Throwable> k, Fun... fs) {
         for (Fun f : fs)
             try { f.f(); fail("Expected " + k.getName() + " not thrown"); }

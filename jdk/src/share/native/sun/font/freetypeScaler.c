@@ -41,6 +41,7 @@
 #include FT_SIZES_H
 #include FT_OUTLINE_H
 #include FT_SYNTHESIS_H
+#include FT_LCD_FILTER_H
 #include FT_MODULE_H
 
 #include "fontscaler.h"
@@ -161,7 +162,7 @@ static unsigned long ReadTTFontFileFunc(FT_Stream stream,
      */
 
     if (numBytes == 0) {
-        if (offset >= scalerInfo->fileSize) {
+        if (offset > scalerInfo->fileSize) {
             return -1;
         } else {
             return 0;
@@ -266,7 +267,7 @@ static void setInterpreterVersion(FT_Library library) {
     const char* property = "interpreter-version";
 
     /* If some one is setting this, don't override it */
-    if (props != NULL && strstr(property, props)) {
+    if (props != NULL && strstr(props, property)) {
         return;
     }
     /*
@@ -490,6 +491,8 @@ static int setupFTContext(JNIEnv *env,
         if (errCode == 0) {
             errCode = FT_Activate_Size(scalerInfo->face->size);
         }
+
+        FT_Library_SetLcdFilter(scalerInfo->library, FT_LCD_FILTER_DEFAULT);
     }
 
     return errCode;
@@ -559,6 +562,14 @@ Java_sun_font_FreetypeFontScaler_getFontMetricsNative(
     /* See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=657854 */
 #define FT_MulFixFloatShift6(a, b) (((float) (a)) * ((float) (b)) / 65536.0 / 64.0)
 
+#define contextAwareMetricsX(x, y) \
+    (FTFixedToFloat(context->transform.xx) * (x) - \
+     FTFixedToFloat(context->transform.xy) * (y))
+
+#define contextAwareMetricsY(x, y) \
+    (-FTFixedToFloat(context->transform.yx) * (x) + \
+     FTFixedToFloat(context->transform.yy) * (y))
+
     /*
      * See FreeType source code: src/base/ftobjs.c ft_recompute_scaled_metrics()
      * http://icedtea.classpath.org/bugzilla/show_bug.cgi?id=1659
@@ -591,12 +602,22 @@ Java_sun_font_FreetypeFontScaler_getFontMetricsNative(
     my = 0;
 
     metrics = (*env)->NewObject(env,
-                                sunFontIDs.strikeMetricsClass,
-                                sunFontIDs.strikeMetricsCtr,
-                                ax, ay, dx, dy, bx, by, lx, ly, mx, my);
+        sunFontIDs.strikeMetricsClass,
+        sunFontIDs.strikeMetricsCtr,
+        contextAwareMetricsX(ax, ay), contextAwareMetricsY(ax, ay),
+        contextAwareMetricsX(dx, dy), contextAwareMetricsY(dx, dy),
+        bx, by,
+        contextAwareMetricsX(lx, ly), contextAwareMetricsY(lx, ly),
+        contextAwareMetricsX(mx, my), contextAwareMetricsY(mx, my));
 
     return metrics;
 }
+
+static jlong
+    getGlyphImageNativeInternal(
+        JNIEnv *env, jobject scaler, jobject font2D,
+        jlong pScalerContext, jlong pScaler, jint glyphCode,
+        jboolean renderImage);
 
 /*
  * Class:     sun_font_FreetypeFontScaler
@@ -609,24 +630,23 @@ Java_sun_font_FreetypeFontScaler_getGlyphAdvanceNative(
         jlong pScalerContext, jlong pScaler, jint glyphCode) {
 
    /* This method is rarely used because requests for metrics are usually
-      coupled with request for bitmap and to large extend work can be reused
-      (to find out metrics we need to hint glyph).
-      So, we typically go through getGlyphImage code path.
-
-      For initial freetype implementation we delegate
-      all work to getGlyphImage but drop result image.
-      This is waste of work related to scan conversion and conversion from
-      freetype format to our format but for now this seems to be ok.
-
-      NB: investigate performance benefits of refactoring code
-      to avoid unnecesary work with bitmaps. */
+    * coupled with a request for the bitmap and to a large extent the
+    * work can be reused (to find out metrics we may need to hint the glyph).
+    * So, we typically go through the getGlyphImage code path.
+    * When we do get here, we need to pass a parameter which indicates
+    * that we don't need freetype to render the bitmap, and consequently
+    * don't need to allocate our own storage either.
+    * This is also important when enter here requesting metrics for sizes
+    * of text which a large size would be rejected for a bitmap but we
+    * still need the metrics.
+    */
 
     GlyphInfo *info;
     jfloat advance = 0.0f;
     jlong image;
 
-    image = Java_sun_font_FreetypeFontScaler_getGlyphImageNative(
-                 env, scaler, font2D, pScalerContext, pScaler, glyphCode);
+    image = getGlyphImageNativeInternal(
+          env, scaler, font2D, pScalerContext, pScaler, glyphCode, JNI_FALSE);
     info = (GlyphInfo*) jlong_to_ptr(image);
 
     if (info != NULL) {
@@ -647,23 +667,22 @@ Java_sun_font_FreetypeFontScaler_getGlyphMetricsNative(
         JNIEnv *env, jobject scaler, jobject font2D, jlong pScalerContext,
         jlong pScaler, jint glyphCode, jobject metrics) {
 
-     /* As initial implementation we delegate all work to getGlyphImage
-        but drop result image. This is clearly waste of resorces.
-
-        TODO: investigate performance benefits of refactoring code
-              by avoiding bitmap generation and conversion from FT
-              bitmap format. */
+     /* See the comments in getGlyphMetricsNative. They apply here too. */
      GlyphInfo *info;
 
-     jlong image = Java_sun_font_FreetypeFontScaler_getGlyphImageNative(
+     jlong image = getGlyphImageNativeInternal(
                                  env, scaler, font2D,
-                                 pScalerContext, pScaler, glyphCode);
+                                 pScalerContext, pScaler, glyphCode, JNI_FALSE);
      info = (GlyphInfo*) jlong_to_ptr(image);
 
-     (*env)->SetFloatField(env, metrics, sunFontIDs.xFID, info->advanceX);
-     (*env)->SetFloatField(env, metrics, sunFontIDs.yFID, info->advanceY);
-
-     free(info);
+     if (info != NULL) {
+         (*env)->SetFloatField(env, metrics, sunFontIDs.xFID, info->advanceX);
+         (*env)->SetFloatField(env, metrics, sunFontIDs.yFID, info->advanceY);
+         free(info);
+     } else {
+         (*env)->SetFloatField(env, metrics, sunFontIDs.xFID, 0.0f);
+         (*env)->SetFloatField(env, metrics, sunFontIDs.yFID, 0.0f);
+     }
 }
 
 
@@ -787,6 +806,17 @@ Java_sun_font_FreetypeFontScaler_getGlyphImageNative(
         JNIEnv *env, jobject scaler, jobject font2D,
         jlong pScalerContext, jlong pScaler, jint glyphCode) {
 
+    return getGlyphImageNativeInternal(
+        env, scaler, font2D,
+        pScalerContext, pScaler, glyphCode, JNI_TRUE);
+}
+
+static jlong
+     getGlyphImageNativeInternal(
+        JNIEnv *env, jobject scaler, jobject font2D,
+        jlong pScalerContext, jlong pScaler, jint glyphCode,
+        jboolean renderImage) {
+
     int error, imageSize;
     UInt16 width, height;
     GlyphInfo *glyphInfo;
@@ -842,22 +872,22 @@ Java_sun_font_FreetypeFontScaler_getGlyphImageNative(
 
     ftglyph = scalerInfo->face->glyph;
 
+    /* apply styles */
     if (context->doItalize) { /* if oblique */
         FT_GlyphSlot_Oblique(ftglyph);
     }
 
     /* generate bitmap if it is not done yet
      e.g. if algorithmic styling is performed and style was added to outline */
-    if (ftglyph->format == FT_GLYPH_FORMAT_OUTLINE) {
+    if (renderImage && (ftglyph->format == FT_GLYPH_FORMAT_OUTLINE)) {
         FT_BBox bbox;
         int w, h;
-        
-        if (context->doBold) { /* if bold style */
-            FT_Pos strength;
-            strength = FT_MulFix(scalerInfo->face->units_per_EM, scalerInfo->face->size->metrics.y_scale)/ 24;
-            FT_Outline_Embolden(&ftglyph->outline, strength);
-        }
-        
+		if (context->doBold) { /* if bold style */
+			FT_Pos strength;
+			strength = FT_MulFix(scalerInfo->face->units_per_EM, scalerInfo->face->size->metrics.y_scale)
+				/ 24;
+			FT_Outline_Embolden(&ftglyph->outline, strength);
+		}
         FT_Outline_Get_CBox(&(ftglyph->outline), &bbox);
         w = (int)((bbox.xMax>>6)-(bbox.xMin>>6));
         h = (int)((bbox.yMax>>6)-(bbox.yMin>>6));
@@ -869,18 +899,23 @@ Java_sun_font_FreetypeFontScaler_getGlyphImageNative(
         if (error != 0) {
             return ptr_to_jlong(getNullGlyphImage());
         }
-    } else{
-        if (context->doBold) { /* if bold style */
-            FT_GlyphSlot_Embolden(ftglyph);
-        }
-    }
+	}else{
+		if (context->doBold) { /* if bold style */
+			FT_GlyphSlot_Embolden(ftglyph);
+		}
+	}
 
-    width  = (UInt16) ftglyph->bitmap.width;
-    height = (UInt16) ftglyph->bitmap.rows;
-    if (width > MAX_GLYPH_DIM || height > MAX_GLYPH_DIM) {
-        glyphInfo = getNullGlyphImage();
-        return ptr_to_jlong(glyphInfo);
-    }
+    if (renderImage) {
+        width  = (UInt16) ftglyph->bitmap.width;
+        height = (UInt16) ftglyph->bitmap.rows;
+            if (width > MAX_GLYPH_DIM || height > MAX_GLYPH_DIM) {
+              glyphInfo = getNullGlyphImage();
+              return ptr_to_jlong(glyphInfo);
+            }
+     } else {
+        width = 0;
+        height = 0;
+     }
 
 
     imageSize = width*height;
@@ -894,13 +929,16 @@ Java_sun_font_FreetypeFontScaler_getGlyphImageNative(
     glyphInfo->rowBytes  = width;
     glyphInfo->width     = width;
     glyphInfo->height    = height;
-    glyphInfo->topLeftX  = (float)  ftglyph->bitmap_left;
-    glyphInfo->topLeftY  = (float) -ftglyph->bitmap_top;
 
-    if (ftglyph->bitmap.pixel_mode ==  FT_PIXEL_MODE_LCD) {
-        glyphInfo->width = width/3;
-    } else if (ftglyph->bitmap.pixel_mode ==  FT_PIXEL_MODE_LCD_V) {
-        glyphInfo->height = glyphInfo->height/3;
+    if (renderImage) {
+        glyphInfo->topLeftX  = (float)  ftglyph->bitmap_left;
+        glyphInfo->topLeftY  = (float) -ftglyph->bitmap_top;
+
+        if (ftglyph->bitmap.pixel_mode ==  FT_PIXEL_MODE_LCD) {
+            glyphInfo->width = width/3;
+        } else if (ftglyph->bitmap.pixel_mode ==  FT_PIXEL_MODE_LCD_V) {
+            glyphInfo->height = glyphInfo->height/3;
+        }
     }
 
     if (context->fmType == TEXT_FM_ON) {
@@ -1205,86 +1243,60 @@ static int allocateSpaceForGP(GPData* gpdata, int npoints, int ncontours) {
         return 1;
 }
 
+static void addSeg(GPData *gp, jbyte type) {
+    gp->pointTypes[gp->numTypes++] = type;
+}
+
+static void addCoords(GPData *gp, FT_Vector *p) {
+    gp->pointCoords[gp->numCoords++] =  F26Dot6ToFloat(p->x);
+    gp->pointCoords[gp->numCoords++] = -F26Dot6ToFloat(p->y);
+}
+
+static int moveTo(FT_Vector *to, GPData *gp) {
+    if (gp->numCoords)
+        addSeg(gp, SEG_CLOSE);
+    addCoords(gp, to);
+    addSeg(gp, SEG_MOVETO);
+    return FT_Err_Ok;
+}
+
+static int lineTo(FT_Vector *to, GPData *gp) {
+    addCoords(gp, to);
+    addSeg(gp, SEG_LINETO);
+    return FT_Err_Ok;
+}
+
+static int conicTo(FT_Vector *control, FT_Vector *to, GPData *gp) {
+    addCoords(gp, control);
+    addCoords(gp, to);
+    addSeg(gp, SEG_QUADTO);
+    return FT_Err_Ok;
+}
+
+static int cubicTo(FT_Vector *control1,
+                   FT_Vector *control2,
+                   FT_Vector *to,
+                   GPData    *gp) {
+    addCoords(gp, control1);
+    addCoords(gp, control2);
+    addCoords(gp, to);
+    addSeg(gp, SEG_CUBICTO);
+    return FT_Err_Ok;
+}
+
 static void addToGP(GPData* gpdata, FT_Outline*outline) {
-    jbyte current_type=SEG_UNKNOWN;
-    int i, j;
-    jfloat x, y;
+    static const FT_Outline_Funcs outline_funcs = {
+        (FT_Outline_MoveToFunc) moveTo,
+        (FT_Outline_LineToFunc) lineTo,
+        (FT_Outline_ConicToFunc) conicTo,
+        (FT_Outline_CubicToFunc) cubicTo,
+        0, /* shift */
+        0, /* delta */
+    };
 
-    j = 0;
-    for(i=0; i<outline->n_points; i++) {
-        x =  F26Dot6ToFloat(outline->points[i].x);
-        y = -F26Dot6ToFloat(outline->points[i].y);
-
-        if (FT_CURVE_TAG(outline->tags[i]) == FT_CURVE_TAG_ON) {
-            /* If bit 0 is unset, the point is "off" the curve,
-             i.e., a Bezier control point, while it is "on" when set. */
-            if (current_type == SEG_UNKNOWN) { /* special case:
-                                                  very first point */
-                /* add segment */
-                gpdata->pointTypes[gpdata->numTypes++] = SEG_MOVETO;
-                current_type = SEG_LINETO;
-            } else {
-                gpdata->pointTypes[gpdata->numTypes++] = current_type;
-                current_type = SEG_LINETO;
-            }
-        } else {
-            if (current_type == SEG_UNKNOWN) { /* special case:
-                                                   very first point */
-                if (FT_CURVE_TAG(outline->tags[i+1]) == FT_CURVE_TAG_ON) {
-                    /* just skip first point. Adhoc heuristic? */
-                    continue;
-                } else {
-                    x = (x + F26Dot6ToFloat(outline->points[i+1].x))/2;
-                    y = (y - F26Dot6ToFloat(outline->points[i+1].y))/2;
-                    gpdata->pointTypes[gpdata->numTypes++] = SEG_MOVETO;
-                    current_type = SEG_LINETO;
-                }
-            } else if (FT_CURVE_TAG(outline->tags[i]) == FT_CURVE_TAG_CUBIC) {
-                /* Bit 1 is meaningful for 'off' points only.
-                   If set, it indicates a third-order Bezier arc control
-                   point; and a second-order control point if unset.  */
-                current_type = SEG_CUBICTO;
-            } else {
-                /* two successive conic "off" points forces the rasterizer
-                   to create (during the scan-line conversion process
-                   exclusively) a virtual "on" point amidst them, at their
-                   exact middle. This greatly facilitates the definition of
-                   successive conic Bezier arcs.  Moreover, it is the way
-                   outlines are described in the TrueType specification. */
-                if (current_type == SEG_QUADTO) {
-                    gpdata->pointCoords[gpdata->numCoords++] =
-                        F26Dot6ToFloat(outline->points[i].x +
-                        outline->points[i-1].x)/2;
-                    gpdata->pointCoords[gpdata->numCoords++] =
-                        - F26Dot6ToFloat(outline->points[i].y +
-                        outline->points[i-1].y)/2;
-                    gpdata->pointTypes[gpdata->numTypes++] = SEG_QUADTO;
-                }
-                current_type = SEG_QUADTO;
-            }
-        }
-        gpdata->pointCoords[gpdata->numCoords++] = x;
-        gpdata->pointCoords[gpdata->numCoords++] = y;
-        if (outline->contours[j] == i) { //end of contour
-            int start = j > 0 ? outline->contours[j-1]+1 : 0;
-            gpdata->pointTypes[gpdata->numTypes++] = current_type;
-            if (current_type == SEG_QUADTO &&
-            FT_CURVE_TAG(outline->tags[start]) != FT_CURVE_TAG_ON) {
-                gpdata->pointCoords[gpdata->numCoords++] =
-                            (F26Dot6ToFloat(outline->points[start].x) + x)/2;
-                gpdata->pointCoords[gpdata->numCoords++] =
-                            (-F26Dot6ToFloat(outline->points[start].y) + y)/2;
-            } else {
-                gpdata->pointCoords[gpdata->numCoords++] =
-                            F26Dot6ToFloat(outline->points[start].x);
-                gpdata->pointCoords[gpdata->numCoords++] =
-                            -F26Dot6ToFloat(outline->points[start].y);
-            }
-            gpdata->pointTypes[gpdata->numTypes++] = SEG_CLOSE;
-            current_type = SEG_UNKNOWN;
-            j++;
-        }
-    }
+    FT_Outline_Decompose(outline, &outline_funcs, gpdata);
+    if (gpdata->numCoords)
+        addSeg(gpdata, SEG_CLOSE);
 
     /* If set to 1, the outline will be filled using the even-odd fill rule */
     if (outline->flags & FT_OUTLINE_EVEN_ODD_FILL) {

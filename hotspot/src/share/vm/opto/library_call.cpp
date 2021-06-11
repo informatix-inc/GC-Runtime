@@ -27,6 +27,7 @@
 #include "classfile/vmSymbols.hpp"
 #include "compiler/compileBroker.hpp"
 #include "compiler/compileLog.hpp"
+#include "jfr/support/jfrIntrinsics.hpp"
 #include "oops/objArrayKlass.hpp"
 #include "opto/addnode.hpp"
 #include "opto/callGenerator.hpp"
@@ -40,7 +41,7 @@
 #include "opto/subnode.hpp"
 #include "prims/nativeLookup.hpp"
 #include "runtime/sharedRuntime.hpp"
-#include "trace/traceMacros.hpp"
+#include "utilities/macros.hpp"
 
 class LibraryIntrinsic : public InlineCallGenerator {
   // Extend the set of intrinsics known to the runtime:
@@ -236,9 +237,9 @@ class LibraryCallKit : public GraphKit {
   bool inline_unsafe_allocate();
   bool inline_unsafe_copyMemory();
   bool inline_native_currentThread();
-#ifdef TRACE_HAVE_INTRINSICS
+#ifdef JFR_HAVE_INTRINSICS
   bool inline_native_classID();
-  bool inline_native_threadID();
+  bool inline_native_getEventWriter();
 #endif
   bool inline_native_time_funcs(address method, const char* funcName);
   bool inline_native_isInterrupted();
@@ -311,6 +312,7 @@ class LibraryCallKit : public GraphKit {
   Node* inline_cipherBlockChaining_AESCrypt_predicate(bool decrypting);
   Node* get_key_start_from_aescrypt_object(Node* aescrypt_object);
   Node* get_original_key_start_from_aescrypt_object(Node* aescrypt_object);
+  bool inline_ghash_processBlocks();
   bool inline_sha_implCompress(vmIntrinsics::ID id);
   bool inline_digestBase_implCompressMB(int predicate);
   bool inline_sha_implCompressMB(Node* digestBaseObj, ciInstanceKlass* instklass_SHA,
@@ -568,6 +570,10 @@ CallGenerator* Compile::make_vm_intrinsic(ciMethod* m, bool is_virtual) {
   case vmIntrinsics::_digestBase_implCompressMB:
     if (!(UseSHA1Intrinsics || UseSHA256Intrinsics || UseSHA512Intrinsics)) return NULL;
     predicates = 3;
+    break;
+
+  case vmIntrinsics::_ghash_processBlocks:
+    if (!UseGHASHIntrinsics) return NULL;
     break;
 
   case vmIntrinsics::_updateCRC32:
@@ -879,10 +885,10 @@ bool LibraryCallKit::try_to_inline(int predicate) {
   case vmIntrinsics::_currentThread:            return inline_native_currentThread();
   case vmIntrinsics::_isInterrupted:            return inline_native_isInterrupted();
 
-#ifdef TRACE_HAVE_INTRINSICS
-  case vmIntrinsics::_classID:                  return inline_native_classID();
-  case vmIntrinsics::_threadID:                 return inline_native_threadID();
-  case vmIntrinsics::_counterTime:              return inline_native_time_funcs(CAST_FROM_FN_PTR(address, TRACE_TIME_METHOD), "counterTime");
+#ifdef JFR_HAVE_INTRINSICS
+  case vmIntrinsics::_counterTime:              return inline_native_time_funcs(CAST_FROM_FN_PTR(address, JFR_TIME_FUNCTION), "counterTime");
+  case vmIntrinsics::_getClassId:               return inline_native_classID();
+  case vmIntrinsics::_getEventWriter:           return inline_native_getEventWriter();
 #endif
   case vmIntrinsics::_currentTimeMillis:        return inline_native_time_funcs(CAST_FROM_FN_PTR(address, os::javaTimeMillis), "currentTimeMillis");
   case vmIntrinsics::_nanoTime:                 return inline_native_time_funcs(CAST_FROM_FN_PTR(address, os::javaTimeNanos), "nanoTime");
@@ -956,6 +962,9 @@ bool LibraryCallKit::try_to_inline(int predicate) {
     return inline_montgomeryMultiply();
   case vmIntrinsics::_montgomerySquare:
     return inline_montgomerySquare();
+
+  case vmIntrinsics::_ghash_processBlocks:
+    return inline_ghash_processBlocks();
 
   case vmIntrinsics::_encodeISOArray:
     return inline_encodeISOArray();
@@ -2703,6 +2712,9 @@ bool LibraryCallKit::inline_unsafe_access(bool is_native_ptr, bool is_store, Bas
   // and it is not possible to fully distinguish unintended nulls
   // from intended ones in this API.
 
+  Node* load = NULL;
+  Node* store = NULL;
+  Node* leading_membar = NULL;
   if (is_volatile) {
     // We need to emit leading and trailing CPU membars (see below) in
     // addition to memory membars when is_volatile. This is a little
@@ -2713,10 +2725,10 @@ bool LibraryCallKit::inline_unsafe_access(bool is_native_ptr, bool is_store, Bas
     need_mem_bar = true;
     // For Stores, place a memory ordering barrier now.
     if (is_store) {
-      insert_mem_bar(Op_MemBarRelease);
+      leading_membar = insert_mem_bar(Op_MemBarRelease);
     } else {
       if (support_IRIW_for_not_multiple_copy_atomic_cpu) {
-        insert_mem_bar(Op_MemBarVolatile);
+        leading_membar = insert_mem_bar(Op_MemBarVolatile);
       }
     }
   }
@@ -2733,7 +2745,7 @@ bool LibraryCallKit::inline_unsafe_access(bool is_native_ptr, bool is_store, Bas
     MemNode::MemOrd mo = is_volatile ? MemNode::acquire : MemNode::unordered;
     // To be valid, unsafe loads may depend on other conditions than
     // the one that guards them: pin the Load node
-    Node* p = make_load(control(), adr, value_type, type, adr_type, mo, LoadNode::Pinned, is_volatile, unaligned, mismatched);
+    load = make_load(control(), adr, value_type, type, adr_type, mo, LoadNode::Pinned, is_volatile, unaligned, mismatched);
     // load value
     switch (type) {
     case T_BOOLEAN:
@@ -2747,13 +2759,13 @@ bool LibraryCallKit::inline_unsafe_access(bool is_native_ptr, bool is_store, Bas
       break;
     case T_OBJECT:
       if (need_read_barrier) {
-        insert_pre_barrier(heap_base_oop, offset, p, !(is_volatile || need_mem_bar));
+        insert_pre_barrier(heap_base_oop, offset, load, !(is_volatile || need_mem_bar));
       }
       break;
     case T_ADDRESS:
       // Cast to an int type.
-      p = _gvn.transform(new (C) CastP2XNode(NULL, p));
-      p = ConvX2UL(p);
+      load = _gvn.transform(new (C) CastP2XNode(NULL, load));
+      load = ConvX2UL(load);
       break;
     default:
       fatal(err_msg_res("unexpected type %d: %s", type, type2name(type)));
@@ -2763,7 +2775,7 @@ bool LibraryCallKit::inline_unsafe_access(bool is_native_ptr, bool is_store, Bas
     // following nodes will have the control of the MemBarCPUOrder inserted at
     // the end of this method.  So, pushing the load onto the stack at a later
     // point is fine.
-    set_result(p);
+    set_result(load);
   } else {
     // place effect of store into memory
     switch (type) {
@@ -2779,18 +2791,20 @@ bool LibraryCallKit::inline_unsafe_access(bool is_native_ptr, bool is_store, Bas
 
     MemNode::MemOrd mo = is_volatile ? MemNode::release : MemNode::unordered;
     if (type == T_OBJECT ) {
-      (void) store_oop_to_unknown(control(), heap_base_oop, adr, adr_type, val, type, mo, mismatched);
+      store = store_oop_to_unknown(control(), heap_base_oop, adr, adr_type, val, type, mo, mismatched);
     } else {
-      (void) store_to_memory(control(), adr, val, type, adr_type, mo, is_volatile, unaligned, mismatched);
+      store = store_to_memory(control(), adr, val, type, adr_type, mo, is_volatile, unaligned, mismatched);
     }
   }
 
   if (is_volatile) {
     if (!is_store) {
-      insert_mem_bar(Op_MemBarAcquire);
+      Node* mb = insert_mem_bar(Op_MemBarAcquire, load);
+      mb->as_MemBar()->set_trailing_load();
     } else {
       if (!support_IRIW_for_not_multiple_copy_atomic_cpu) {
-        insert_mem_bar(Op_MemBarVolatile);
+        Node* mb = insert_mem_bar(Op_MemBarVolatile, store);
+        MemBarNode::set_store_pair(leading_membar->as_MemBar(), mb->as_MemBar());
       }
     }
   }
@@ -2990,7 +3004,7 @@ bool LibraryCallKit::inline_unsafe_load_store(BasicType type, LoadStoreKind kind
   // into actual barriers on most machines, but we still need rest of
   // compiler to respect ordering.
 
-  insert_mem_bar(Op_MemBarRelease);
+  Node* leading_membar = insert_mem_bar(Op_MemBarRelease);
   insert_mem_bar(Op_MemBarCPUOrder);
 
   // 4984716: MemBars must be inserted before this
@@ -3089,6 +3103,8 @@ bool LibraryCallKit::inline_unsafe_load_store(BasicType type, LoadStoreKind kind
   Node* proj = _gvn.transform(new (C) SCMemProjNode(load_store));
   set_memory(proj, alias_idx);
 
+  Node* access = load_store;
+
   if (type == T_OBJECT && kind == LS_xchg) {
 #ifdef _LP64
     if (adr->bottom_type()->is_ptr_to_narrowoop()) {
@@ -3108,7 +3124,8 @@ bool LibraryCallKit::inline_unsafe_load_store(BasicType type, LoadStoreKind kind
 
   // Add the trailing membar surrounding the access
   insert_mem_bar(Op_MemBarCPUOrder);
-  insert_mem_bar(Op_MemBarAcquire);
+  Node* mb = insert_mem_bar(Op_MemBarAcquire, access);
+  MemBarNode::set_load_store_pair(leading_membar->as_MemBar(), mb->as_MemBar());
 
   assert(type2size[load_store->bottom_type()->basic_type()] == type2size[rtype], "result type should match");
   set_result(load_store);
@@ -3243,51 +3260,76 @@ bool LibraryCallKit::inline_unsafe_allocate() {
   return true;
 }
 
-#ifdef TRACE_HAVE_INTRINSICS
+#ifdef JFR_HAVE_INTRINSICS
 /*
  * oop -> myklass
  * myklass->trace_id |= USED
  * return myklass->trace_id & ~0x3
  */
 bool LibraryCallKit::inline_native_classID() {
-  null_check_receiver();  // null-check, then ignore
-  Node* cls = null_check(argument(1), T_OBJECT);
+  Node* cls = null_check(argument(0), T_OBJECT);
   Node* kls = load_klass_from_mirror(cls, false, NULL, 0);
   kls = null_check(kls, T_OBJECT);
-  ByteSize offset = TRACE_ID_OFFSET;
+
+  ByteSize offset = KLASS_TRACE_ID_OFFSET;
   Node* insp = basic_plus_adr(kls, in_bytes(offset));
   Node* tvalue = make_load(NULL, insp, TypeLong::LONG, T_LONG, MemNode::unordered);
-  Node* bits = longcon(~0x03l); // ignore bit 0 & 1
-  Node* andl = _gvn.transform(new (C) AndLNode(tvalue, bits));
+
   Node* clsused = longcon(0x01l); // set the class bit
   Node* orl = _gvn.transform(new (C) OrLNode(tvalue, clsused));
-
   const TypePtr *adr_type = _gvn.type(insp)->isa_ptr();
   store_to_memory(control(), insp, orl, T_LONG, adr_type, MemNode::unordered);
-  set_result(andl);
-  return true;
-}
 
-bool LibraryCallKit::inline_native_threadID() {
-  Node* tls_ptr = NULL;
-  Node* cur_thr = generate_current_thread(tls_ptr);
-  Node* p = basic_plus_adr(top()/*!oop*/, tls_ptr, in_bytes(JavaThread::osthread_offset()));
-  Node* osthread = make_load(NULL, p, TypeRawPtr::NOTNULL, T_ADDRESS, MemNode::unordered);
-  p = basic_plus_adr(top()/*!oop*/, osthread, in_bytes(OSThread::thread_id_offset()));
-
-  Node* threadid = NULL;
-  size_t thread_id_size = OSThread::thread_id_size();
-  if (thread_id_size == (size_t) BytesPerLong) {
-    threadid = ConvL2I(make_load(control(), p, TypeLong::LONG, T_LONG, MemNode::unordered));
-  } else if (thread_id_size == (size_t) BytesPerInt) {
-    threadid = make_load(control(), p, TypeInt::INT, T_INT, MemNode::unordered);
-  } else {
-    ShouldNotReachHere();
-  }
-  set_result(threadid);
-  return true;
-}
+#ifdef TRACE_ID_META_BITS
+  Node* mbits = longcon(~TRACE_ID_META_BITS);
+  tvalue = _gvn.transform(new (C) AndLNode(tvalue, mbits));
 #endif
+#ifdef TRACE_ID_SHIFT
+  Node* cbits = intcon(TRACE_ID_SHIFT);
+  tvalue = _gvn.transform(new (C) URShiftLNode(tvalue, cbits));
+#endif
+
+  set_result(tvalue);
+  return true;
+}
+
+bool LibraryCallKit::inline_native_getEventWriter() {
+  Node* tls_ptr = _gvn.transform(new (C) ThreadLocalNode());
+
+  Node* jobj_ptr = basic_plus_adr(top(), tls_ptr,
+                                  in_bytes(THREAD_LOCAL_WRITER_OFFSET_JFR)
+                                  );
+
+  Node* jobj = make_load(control(), jobj_ptr, TypeRawPtr::BOTTOM, T_ADDRESS, MemNode::unordered);
+
+  Node* jobj_cmp_null = _gvn.transform( new (C) CmpPNode(jobj, null()) );
+  Node* test_jobj_eq_null  = _gvn.transform( new (C) BoolNode(jobj_cmp_null, BoolTest::eq) );
+
+  IfNode* iff_jobj_null =
+    create_and_map_if(control(), test_jobj_eq_null, PROB_MIN, COUNT_UNKNOWN);
+
+  enum { _normal_path = 1,
+         _null_path = 2,
+         PATH_LIMIT };
+
+  RegionNode* result_rgn = new (C) RegionNode(PATH_LIMIT);
+  PhiNode*    result_val = new (C) PhiNode(result_rgn, TypePtr::BOTTOM);
+
+  Node* jobj_is_null = _gvn.transform(new (C) IfTrueNode(iff_jobj_null));
+  result_rgn->init_req(_null_path, jobj_is_null);
+  result_val->init_req(_null_path, null());
+
+  Node* jobj_is_not_null = _gvn.transform(new (C) IfFalseNode(iff_jobj_null));
+  result_rgn->init_req(_normal_path, jobj_is_not_null);
+
+  Node* res = make_load(jobj_is_not_null, jobj, TypeInstPtr::NOTNULL, T_OBJECT, MemNode::unordered);
+  result_val->init_req(_normal_path, res);
+
+  set_result(result_rgn, result_val);
+
+  return true;
+}
+#endif // JFR_HAVE_INTRINSICS
 
 //------------------------inline_native_time_funcs--------------
 // inline code for System.currentTimeMillis() and System.nanoTime()
@@ -6323,8 +6365,9 @@ Node * LibraryCallKit::load_field_from_object(Node * fromObj, const char * field
     type = Type::get_const_basic_type(bt);
   }
 
+  Node* leading_membar = NULL;
   if (support_IRIW_for_not_multiple_copy_atomic_cpu && is_vol) {
-    insert_mem_bar(Op_MemBarVolatile);   // StoreLoad barrier
+    leading_membar = insert_mem_bar(Op_MemBarVolatile);   // StoreLoad barrier
   }
   // Build the load.
   MemNode::MemOrd mo = is_vol ? MemNode::acquire : MemNode::unordered;
@@ -6334,7 +6377,8 @@ Node * LibraryCallKit::load_field_from_object(Node * fromObj, const char * field
   // another volatile read.
   if (is_vol) {
     // Memory barrier includes bogus read of value to force load BEFORE membar
-    insert_mem_bar(Op_MemBarAcquire, loadedField);
+    Node* mb = insert_mem_bar(Op_MemBarAcquire, loadedField);
+    mb->as_MemBar()->set_trailing_load();
   }
   return loadedField;
 }
@@ -6597,6 +6641,35 @@ Node* LibraryCallKit::inline_cipherBlockChaining_AESCrypt_predicate(bool decrypt
 
   record_for_igvn(region);
   return _gvn.transform(region);
+}
+
+//------------------------------inline_ghash_processBlocks
+bool LibraryCallKit::inline_ghash_processBlocks() {
+  address stubAddr;
+  const char *stubName;
+  assert(UseGHASHIntrinsics, "need GHASH intrinsics support");
+
+  stubAddr = StubRoutines::ghash_processBlocks();
+  stubName = "ghash_processBlocks";
+
+  Node* data           = argument(0);
+  Node* offset         = argument(1);
+  Node* len            = argument(2);
+  Node* state          = argument(3);
+  Node* subkeyH        = argument(4);
+
+  Node* state_start  = array_element_address(state, intcon(0), T_LONG);
+  assert(state_start, "state is NULL");
+  Node* subkeyH_start  = array_element_address(subkeyH, intcon(0), T_LONG);
+  assert(subkeyH_start, "subkeyH is NULL");
+  Node* data_start  = array_element_address(data, offset, T_BYTE);
+  assert(data_start, "data is NULL");
+
+  Node* ghash = make_runtime_call(RC_LEAF|RC_NO_FP,
+                                  OptoRuntime::ghash_processBlocks_Type(),
+                                  stubAddr, stubName, TypePtr::BOTTOM,
+                                  state_start, subkeyH_start, data_start, len);
+  return true;
 }
 
 //------------------------------inline_sha_implCompress-----------------------

@@ -159,6 +159,15 @@ COMPILER_NAME=VS2017
 !if "$(MSC_VER)" == "1913"
 COMPILER_NAME=VS2017
 !endif
+!if "$(MSC_VER)" == "1914"
+COMPILER_NAME=VS2017
+!endif
+!if "$(MSC_VER)" == "1915"
+COMPILER_NAME=VS2017
+!endif
+!if "$(MSC_VER)" == "1916"
+COMPILER_NAME=VS2017
+!endif
 !endif
 
 # By default, we do not want to use the debug version of the msvcrt.dll file
@@ -314,6 +323,13 @@ LD_FLAGS = $(SAFESEH_FLAG) $(LD_FLAGS)
 
 CXX_FLAGS = $(CXX_FLAGS) $(MP_FLAG)
 
+!if "$(ENABLE_JFR)" == "true"
+INCLUDE_JFR=1
+!else
+INCLUDE_JFR=0
+!endif
+CXX_FLAGS=$(CXX_FLAGS) /D INCLUDE_JFR=$(INCLUDE_JFR)
+
 # If NO_OPTIMIZATIONS is defined in the environment, turn everything off
 !ifdef NO_OPTIMIZATIONS
 PRODUCT_OPT_OPTION   = $(DEBUG_OPT_OPTION)
@@ -346,7 +362,7 @@ RC_FLAGS=/D "HS_VER=$(HS_VER)" \
 	 /D "HS_BUILD_ID=$(HS_BUILD_ID)" \
 	 /D "JDK_VER=$(JDK_VER)" \
 	 /D "JDK_DOTVER=$(JDK_DOTVER)" \
-	 /D "HS_COMPANY=$(HS_COMPANY)" \
+	 /D "HS_COMPANY=$(COMPANY_NAME)" \
 	 /D "HS_FILEDESC=$(HS_FILEDESC)" \
 	 /D "HS_COPYRIGHT=$(HS_COPYRIGHT)" \
 	 /D "HS_FNAME=$(HS_FNAME)" \
@@ -357,4 +373,3 @@ RC_FLAGS=/D "HS_VER=$(HS_VER)" \
 !if "$(MFC_DEBUG)" == "true"
 RC_FLAGS = $(RC_FLAGS) /D "_DEBUG"
 !endif
-

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003, 2019, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2003, 2021, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -31,6 +31,7 @@ import java.nio.ByteBuffer;
 
 import java.security.*;
 import java.security.interfaces.*;
+import java.security.spec.AlgorithmParameterSpec;
 import sun.nio.ch.DirectBuffer;
 
 import sun.security.util.*;
@@ -244,10 +245,12 @@ final class P11Signature extends SignatureSpi {
             return;
         }
         initialized = false;
+
         try {
             if (session == null) {
                 return;
             }
+
             if (doCancel && token.explicitCancel) {
                 cancelOperation();
             }
@@ -258,59 +261,58 @@ final class P11Signature extends SignatureSpi {
     }
 
     private void cancelOperation() {
-
         token.ensureValid();
-        if (session.hasObjects() == false) {
-            session = token.killSession(session);
-            return;
-        } else {
-            // "cancel" operation by finishing it
-            // XXX make sure all this always works correctly
+        // cancel operation by finishing it; avoid killSession as some
+        // hardware vendors may require re-login
+        try {
             if (mode == M_SIGN) {
-                try {
-                    if (type == T_UPDATE) {
-                        token.p11.C_SignFinal(session.id(), 0);
-                    } else {
-                        byte[] digest;
-                        if (type == T_DIGEST) {
-                            digest = md.digest();
-                        } else { // T_RAW
-                            digest = buffer;
-                        }
-                        token.p11.C_Sign(session.id(), digest);
+                if (type == T_UPDATE) {
+                    token.p11.C_SignFinal(session.id(), 0);
+                } else {
+                    byte[] digest;
+                    if (type == T_DIGEST) {
+                        digest = md.digest();
+                    } else { // T_RAW
+                        digest = buffer;
                     }
-                } catch (PKCS11Exception e) {
-                    throw new ProviderException("cancel failed", e);
+                    token.p11.C_Sign(session.id(), digest);
                 }
             } else { // M_VERIFY
                 byte[] signature;
-                try {
-                    if (keyAlgorithm.equals("DSA")) {
-                        signature = new byte[40];
-                    } else {
-                        signature = new byte[(p11Key.length() + 7) >> 3];
+                if (keyAlgorithm.equals("DSA")) {
+                    signature = new byte[40];
+                } else {
+                    signature = new byte[(p11Key.length() + 7) >> 3];
+                }
+                if (type == T_UPDATE) {
+                    token.p11.C_VerifyFinal(session.id(), signature);
+                } else {
+                    byte[] digest;
+                    if (type == T_DIGEST) {
+                        digest = md.digest();
+                    } else { // T_RAW
+                        digest = buffer;
                     }
-                    if (type == T_UPDATE) {
-                        token.p11.C_VerifyFinal(session.id(), signature);
-                    } else {
-                        byte[] digest;
-                        if (type == T_DIGEST) {
-                            digest = md.digest();
-                        } else { // T_RAW
-                            digest = buffer;
-                        }
-                        token.p11.C_Verify(session.id(), digest, signature);
-                    }
-                } catch (PKCS11Exception e) {
-                    long errorCode = e.getErrorCode();
-                    if ((errorCode == CKR_SIGNATURE_INVALID) ||
-                        (errorCode == CKR_SIGNATURE_LEN_RANGE)) {
-                        // expected since signature is incorrect
-                        return;
-                    }
-                    throw new ProviderException("cancel failed", e);
+                    token.p11.C_Verify(session.id(), digest, signature);
                 }
             }
+        } catch (PKCS11Exception e) {
+            if (e.getErrorCode() == CKR_OPERATION_NOT_INITIALIZED) {
+                // Cancel Operation may be invoked after an error on a PKCS#11
+                // call. If the operation inside the token was already cancelled,
+                // do not fail here. This is part of a defensive mechanism for
+                // PKCS#11 libraries that do not strictly follow the standard.
+                return;
+            }
+            if (mode == M_VERIFY) {
+                long errorCode = e.getErrorCode();
+                if ((errorCode == CKR_SIGNATURE_INVALID) ||
+                     (errorCode == CKR_SIGNATURE_LEN_RANGE)) {
+                     // expected since signature is incorrect
+                     return;
+                }
+            }
+            throw new ProviderException("cancel failed", e);
         }
     }
 
@@ -378,14 +380,19 @@ final class P11Signature extends SignatureSpi {
         if (key instanceof P11Key) {
             keySize = ((P11Key) key).length();
         } else {
-            if (keyAlgo.equals("RSA")) {
-                keySize = ((RSAKey) key).getModulus().bitLength();
-            } else if (keyAlgo.equals("DSA")) {
-                keySize = ((DSAKey) key).getParams().getP().bitLength();
-            } else if (keyAlgo.equals("EC")) {
-                keySize = ((ECKey) key).getParams().getCurve().getField().getFieldSize();
-            } else {
-                throw new ProviderException("Error: unsupported algo " + keyAlgo);
+            try {
+                if (keyAlgo.equals("RSA")) {
+                    keySize = ((RSAKey) key).getModulus().bitLength();
+                } else if (keyAlgo.equals("DSA")) {
+                    keySize = ((DSAKey) key).getParams().getP().bitLength();
+                } else if (keyAlgo.equals("EC")) {
+                    keySize = ((ECKey) key).getParams().getCurve().getField().getFieldSize();
+                } else {
+                    throw new ProviderException("Error: unsupported algo " + keyAlgo);
+                }
+            } catch (ClassCastException cce) {
+                throw new InvalidKeyException(keyAlgo +
+                    " key must be the right type", cce);
             }
         }
         if ((minKeySize != -1) && (keySize < minKeySize)) {
@@ -434,9 +441,9 @@ final class P11Signature extends SignatureSpi {
     }
 
     // see JCA spec
+    @Override
     protected void engineInitVerify(PublicKey publicKey)
             throws InvalidKeyException {
-
         if (publicKey == null) {
             throw new InvalidKeyException("Key must not be null");
         }
@@ -451,9 +458,9 @@ final class P11Signature extends SignatureSpi {
     }
 
     // see JCA spec
+    @Override
     protected void engineInitSign(PrivateKey privateKey)
             throws InvalidKeyException {
-
         if (privateKey == null) {
             throw new InvalidKeyException("Key must not be null");
         }
@@ -468,6 +475,7 @@ final class P11Signature extends SignatureSpi {
     }
 
     // see JCA spec
+    @Override
     protected void engineUpdate(byte b) throws SignatureException {
         ensureInitialized();
         switch (type) {
@@ -492,6 +500,7 @@ final class P11Signature extends SignatureSpi {
     }
 
     // see JCA spec
+    @Override
     protected void engineUpdate(byte[] b, int ofs, int len)
             throws SignatureException {
 
@@ -535,6 +544,7 @@ final class P11Signature extends SignatureSpi {
     }
 
     // see JCA spec
+    @Override
     protected void engineUpdate(ByteBuffer byteBuffer) {
 
         ensureInitialized();
@@ -585,6 +595,7 @@ final class P11Signature extends SignatureSpi {
     }
 
     // see JCA spec
+    @Override
     protected byte[] engineSign() throws SignatureException {
 
         ensureInitialized();
@@ -633,6 +644,11 @@ final class P11Signature extends SignatureSpi {
                 return signature;
             }
         } catch (PKCS11Exception e) {
+            // As per the PKCS#11 standard, C_Sign and C_SignFinal may only
+            // keep the operation active on CKR_BUFFER_TOO_SMALL errors or
+            // successful calls to determine the output length. However,
+            // these cases are handled at OpenJDK's libj2pkcs11 native
+            // library. Thus, doCancel can safely be 'false' here.
             doCancel = false;
             throw new ProviderException(e);
         } finally {
@@ -641,6 +657,7 @@ final class P11Signature extends SignatureSpi {
     }
 
     // see JCA spec
+    @Override
     protected boolean engineVerify(byte[] signature) throws SignatureException {
         ensureInitialized();
         boolean doCancel = true;
@@ -828,14 +845,31 @@ final class P11Signature extends SignatureSpi {
     }
 
     // see JCA spec
+    @Override
     protected void engineSetParameter(String param, Object value)
             throws InvalidParameterException {
         throw new UnsupportedOperationException("setParameter() not supported");
     }
 
+     // see JCA spec
+    @Override
+    protected void engineSetParameter(AlgorithmParameterSpec params)
+            throws InvalidAlgorithmParameterException {
+        if (params != null) {
+            throw new InvalidAlgorithmParameterException("No parameter accepted");
+        }
+    }
+
     // see JCA spec
+    @Override
     protected Object engineGetParameter(String param)
             throws InvalidParameterException {
         throw new UnsupportedOperationException("getParameter() not supported");
+    }
+
+    // see JCA spec
+    @Override
+    protected AlgorithmParameters engineGetParameters() {
+        return null;
     }
 }

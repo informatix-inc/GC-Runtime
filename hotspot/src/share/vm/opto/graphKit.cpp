@@ -864,7 +864,7 @@ void GraphKit::add_safepoint_edges(SafePointNode* call, bool must_throw) {
     }
   }
 
-  if (env()->jvmti_can_access_local_variables()) {
+  if (env()->should_retain_local_variables()) {
     // At any safepoint, this method can get breakpointed, which would
     // then require an immediate deoptimization.
     can_prune_locals = false;  // do not prune locals
@@ -3848,7 +3848,11 @@ void GraphKit::write_barrier_post(Node* oop_store,
 
   // Smash zero into card
   if( !UseConcMarkSweepGC ) {
+#if defined(AARCH64)
+    __ store(__ ctrl(), card_adr, zero, bt, adr_type, MemNode::unordered);
+#else
     __ store(__ ctrl(), card_adr, zero, bt, adr_type, MemNode::release);
+#endif
   } else {
     // Specialized path for CM store barrier
     __ storeCM(__ ctrl(), card_adr, zero, oop_store, adr_idx, bt, adr_type);

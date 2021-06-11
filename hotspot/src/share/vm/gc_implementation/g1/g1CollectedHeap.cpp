@@ -2409,7 +2409,7 @@ void G1CollectedHeap::increment_old_marking_cycles_completed(bool concurrent) {
   // is set) so that if a waiter requests another System.gc() it doesn't
   // incorrectly see that a marking cycle is still in progress.
   if (concurrent) {
-    _cmThread->clear_in_progress();
+    _cmThread->set_idle();
   }
 
   // This notify_all() will ensure that a thread that called
@@ -2520,6 +2520,12 @@ void G1CollectedHeap::collect(GCCause::Cause cause) {
           }
         }
       }
+    } else if (GC_locker::should_discard(cause, gc_count_before)) {
+      // Return to be consistent with VMOp failure due to another
+      // collection slipping in after our gc_count but before our
+      // request is processed.  _gc_locker collections upgraded by
+      // GCLockerInvokesConcurrent are handled above and never discarded.
+      return;
     } else {
       if (cause == GCCause::_gc_locker || cause == GCCause::_wb_young_gc
           DEBUG_ONLY(|| cause == GCCause::_scavenge_alot)) {
@@ -3573,6 +3579,28 @@ void G1CollectedHeap::print_all_rsets() {
 }
 #endif // PRODUCT
 
+G1HeapSummary G1CollectedHeap::create_g1_heap_summary() {
+
+  size_t eden_used_bytes = _young_list->eden_used_bytes();
+  size_t survivor_used_bytes = _young_list->survivor_used_bytes();
+  size_t heap_used = Heap_lock->owned_by_self() ? used() : used_unlocked();
+
+  size_t eden_capacity_bytes =
+    (g1_policy()->young_list_target_length() * HeapRegion::GrainBytes) - survivor_used_bytes;
+
+  VirtualSpaceSummary heap_summary = create_heap_space_summary();
+  return G1HeapSummary(heap_summary, heap_used, eden_used_bytes,
+                       eden_capacity_bytes, survivor_used_bytes, num_regions());
+}
+
+void G1CollectedHeap::trace_heap(GCWhen::Type when, GCTracer* gc_tracer) {
+  const G1HeapSummary& heap_summary = create_g1_heap_summary();
+  gc_tracer->report_gc_heap_summary(when, heap_summary);
+
+  const MetaspaceSummary& metaspace_summary = create_metaspace_summary();
+  gc_tracer->report_metaspace_summary(when, metaspace_summary);
+}
+
 G1CollectedHeap* G1CollectedHeap::heap() {
   assert(_sh->kind() == CollectedHeap::G1CollectedHeap,
          "not a garbage-first heap");
@@ -4090,7 +4118,7 @@ G1CollectedHeap::do_collection_pause_at_safepoint(double target_pause_time_ms) {
         g1_policy()->print_collection_set(g1_policy()->inc_cset_head(), gclog_or_tty);
 #endif // YOUNG_LIST_VERBOSE
 
-        g1_policy()->record_collection_pause_start(sample_start_time_sec);
+        g1_policy()->record_collection_pause_start(sample_start_time_sec, *_gc_tracer_stw);
 
         double scan_wait_start = os::elapsedTime();
         // We have to wait until the CM threads finish scanning the

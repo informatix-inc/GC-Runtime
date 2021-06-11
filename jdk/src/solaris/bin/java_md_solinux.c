@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1998, 2015, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1998, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -240,6 +240,7 @@ ContainsLibJVM(int wanted, const char *env) {
     char serverPattern[PATH_MAX + 1];
     char *envpath;
     char *path;
+    char* save_ptr = NULL;
     jboolean clientPatternFound;
     jboolean serverPatternFound;
 
@@ -263,7 +264,7 @@ ContainsLibJVM(int wanted, const char *env) {
      * we have a suspicious path component, check if it contains a libjvm.so
      */
     envpath = JLI_StringDup(env);
-    for (path = JLI_StrTok(envpath, ":"); path != NULL; path = JLI_StrTok(NULL, ":")) {
+    for (path = strtok_r(envpath, ":", &save_ptr); path != NULL; path = strtok_r(NULL, ":", &save_ptr)) {
         if (clientPatternFound && JLI_StrStr(path, clientPattern) != NULL) {
             if (JvmExists(path)) {
                 JLI_MemFree(envpath);
@@ -1111,3 +1112,24 @@ ProcessPlatformOption(const char *arg)
 {
     return JNI_FALSE;
 }
+
+#ifndef __solaris__
+
+/*
+ * Provide a CounterGet() implementation based on gettimeofday() which
+ * is universally available, even though it may not be 'high resolution'
+ * compared to platforms that provide gethrtime() (like Solaris). It is
+ * also subject to time-of-day changes, but alternatives may not be
+ * known to be available at either build time or run time.
+ */
+uint64_t CounterGet() {
+    uint64_t result = 0;
+    struct timeval tv;
+    if (gettimeofday(&tv, NULL) != -1) {
+        result = 1000000LL * (uint64_t)tv.tv_sec;
+        result += (uint64_t)tv.tv_usec;
+    }
+    return result;
+}
+
+#endif // !__solaris__

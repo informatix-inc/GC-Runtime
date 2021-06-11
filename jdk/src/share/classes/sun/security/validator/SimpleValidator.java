@@ -123,6 +123,7 @@ public final class SimpleValidator extends Validator {
     @Override
     X509Certificate[] engineValidate(X509Certificate[] chain,
             Collection<X509Certificate> otherCerts,
+            List<byte[]> responseList,
             AlgorithmConstraints constraints,
             Object parameter) throws CertificateException {
         if ((chain == null) || (chain.length == 0)) {
@@ -161,7 +162,7 @@ public final class SimpleValidator extends Validator {
         AlgorithmChecker appAlgChecker = null;
         if (constraints != null) {
             appAlgChecker = new AlgorithmChecker(anchor, constraints, null,
-                    null, variant);
+                    variant);
         }
 
         // verify top down, starting at the certificate issued by

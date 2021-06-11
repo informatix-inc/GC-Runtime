@@ -111,7 +111,6 @@ public final class XToolkit extends UNIXToolkit implements Runnable {
     static boolean securityWarningEnabled;
 
     private static volatile int screenWidth = -1, screenHeight = -1; // Dimensions of default screen
-    static long awt_defaultFg; // Pixel
     private static XMouseInfoPeer xPeer;
 
     /**
@@ -240,9 +239,6 @@ public final class XToolkit extends UNIXToolkit implements Runnable {
                 log.finer("X locale modifiers are not supported, using default");
             }
             tryXKB();
-
-            AwtScreenData defaultScreen = new AwtScreenData(XToolkit.getDefaultScreenData());
-            awt_defaultFg = defaultScreen.get_blackpixel();
 
             arrowCursor = XlibWrapper.XCreateFontCursor(XToolkit.getDisplay(),
                 XCursorFontConstants.XC_arrow);
@@ -1335,7 +1331,6 @@ public final class XToolkit extends UNIXToolkit implements Runnable {
     }
 
     static native long getDefaultXColormap();
-    static native long getDefaultScreenData();
 
     static ColorModel screenmodel;
 
@@ -2026,10 +2021,6 @@ public final class XToolkit extends UNIXToolkit implements Runnable {
         }
     }
 
-    static long getAwtDefaultFg() {
-        return awt_defaultFg;
-    }
-
     static boolean isLeftMouseButton(MouseEvent me) {
         switch (me.getID()) {
           case MouseEvent.MOUSE_PRESSED:
@@ -2415,14 +2406,16 @@ public final class XToolkit extends UNIXToolkit implements Runnable {
                  //System.out.println("XkbNewKeyboard:"+(xke.get_new_kbd()));
                  break;
             case XConstants.XkbMapNotify :
-                 //TODO: provide a simple unit test.
-                 XlibWrapper.XkbGetUpdatedMap(getDisplay(),
-                                              XConstants.XkbKeyTypesMask    |
-                                              XConstants.XkbKeySymsMask     |
-                                              XConstants.XkbModifierMapMask |
-                                              XConstants.XkbVirtualModsMask,
-                                              awt_XKBDescPtr);
-                 //System.out.println("XkbMap:"+(xke.get_map()));
+                 if (awt_XKBDescPtr != 0) {
+                    //TODO: provide a simple unit test.
+                    XlibWrapper.XkbGetUpdatedMap(getDisplay(),
+                                                 XConstants.XkbKeyTypesMask    |
+                                                 XConstants.XkbKeySymsMask     |
+                                                 XConstants.XkbModifierMapMask |
+                                                 XConstants.XkbVirtualModsMask,
+                                                 awt_XKBDescPtr);
+                 }
+                //System.out.println("XkbMap:"+(xke.get_map()));
                  break;
             case XConstants.XkbStateNotify :
                  // May use it later e.g. to obtain an effective group etc.

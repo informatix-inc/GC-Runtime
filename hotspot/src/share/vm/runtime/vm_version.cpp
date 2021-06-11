@@ -29,6 +29,9 @@
 #ifdef TARGET_ARCH_x86
 # include "vm_version_x86.hpp"
 #endif
+#ifdef TARGET_ARCH_aarch64
+# include "vm_version_aarch64.hpp"
+#endif
 #ifdef TARGET_ARCH_sparc
 # include "vm_version_sparc.hpp"
 #endif
@@ -194,6 +197,7 @@ const char* Abstract_VM_Version::jre_release_version() {
 #define CPU      IA32_ONLY("x86")                \
                  IA64_ONLY("ia64")               \
                  AMD64_ONLY("amd64")             \
+                 AARCH64_ONLY("aarch64")         \
                  SPARC_ONLY("sparc")
 #endif
 #endif
@@ -227,10 +231,26 @@ const char* Abstract_VM_Version::internal_vm_info_string() {
         #define HOTSPOT_BUILD_COMPILER "MS VC++ 12.0 (VS2013)"
       #elif _MSC_VER == 1900
         #define HOTSPOT_BUILD_COMPILER "MS VC++ 14.0 (VS2015)"
+      #elif _MSC_VER == 1911
+        #define HOTSPOT_BUILD_COMPILER "MS VC++ 15.3 (VS2017)"
       #elif _MSC_VER == 1912
         #define HOTSPOT_BUILD_COMPILER "MS VC++ 15.5 (VS2017)"
       #elif _MSC_VER == 1913
         #define HOTSPOT_BUILD_COMPILER "MS VC++ 15.6 (VS2017)"
+      #elif _MSC_VER == 1914
+        #define HOTSPOT_BUILD_COMPILER "MS VC++ 15.7 (VS2017)"
+      #elif _MSC_VER == 1915
+        #define HOTSPOT_BUILD_COMPILER "MS VC++ 15.8 (VS2017)"
+      #elif _MSC_VER == 1916
+        #define HOTSPOT_BUILD_COMPILER "MS VC++ 15.9 (VS2017)"
+      #elif _MSC_VER == 1920
+        #define HOTSPOT_BUILD_COMPILER "MS VC++ 16.0 (VS2019)"
+      #elif _MSC_VER == 1921
+        #define HOTSPOT_BUILD_COMPILER "MS VC++ 16.1 (VS2019)"
+      #elif _MSC_VER == 1922
+        #define HOTSPOT_BUILD_COMPILER "MS VC++ 16.2 (VS2019)"
+      #elif _MSC_VER == 1923
+        #define HOTSPOT_BUILD_COMPILER "MS VC++ 16.3 (VS2019)"
       #else
         #define HOTSPOT_BUILD_COMPILER "unknown MS VC++:" XSTR(_MSC_VER)
       #endif
@@ -283,7 +303,7 @@ const char *Abstract_VM_Version::vm_build_user() {
 
 unsigned int Abstract_VM_Version::jvm_version() {
   return ((Abstract_VM_Version::vm_major_version() & 0xFF) << 24) |
-         ((Abstract_VM_Version::vm_minor_version() & 0xFF) << 16) |
+         ((Abstract_VM_Version::vm_minor_version() & 0xFFFF) << 8) |
          (Abstract_VM_Version::vm_build_number() & 0xFF);
 }
 

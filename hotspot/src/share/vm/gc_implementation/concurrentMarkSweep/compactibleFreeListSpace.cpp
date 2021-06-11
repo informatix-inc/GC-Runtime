@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2001, 2014, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2001, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -161,6 +161,8 @@ CompactibleFreeListSpace::CompactibleFreeListSpace(BlockOffsetSharedArray* bs,
     }
     _dictionary->set_par_lock(&_parDictionaryAllocLock);
   }
+
+  _used_stable = 0;
 }
 
 // Like CompactibleSpace forward() but always calls cross_threshold() to
@@ -375,6 +377,14 @@ bool CompactibleFreeListSpace::is_free_block(const HeapWord* p) const {
 
 size_t CompactibleFreeListSpace::used() const {
   return capacity() - free();
+}
+
+size_t CompactibleFreeListSpace::used_stable() const {
+  return _used_stable;
+}
+
+void CompactibleFreeListSpace::recalculate_used_stable() {
+  _used_stable = used();
 }
 
 size_t CompactibleFreeListSpace::free() const {
@@ -984,17 +994,16 @@ size_t CompactibleFreeListSpace::block_size(const HeapWord* p) const {
         return res;
       }
     } else {
-      // must read from what 'p' points to in each loop.
-      Klass* k = ((volatile oopDesc*)p)->klass_or_null();
+      // The barrier is required to prevent reordering of the free chunk check
+      // and the klass read.
+      OrderAccess::loadload();
+
+      // Ensure klass read before size.
+      Klass* k = oop(p)->klass_or_null_acquire();
       if (k != NULL) {
         assert(k->is_klass(), "Should really be klass oop.");
         oop o = (oop)p;
         assert(o->is_oop(true /* ignore mark word */), "Should be an oop.");
-
-        // Bugfix for systems with weak memory model (PPC64/IA64).
-        // The object o may be an array. Acquire to make sure that the array
-        // size (third word) is consistent.
-        OrderAccess::acquire();
 
         size_t res = o->size_given_klass(k);
         res = adjustObjectSize(res);
@@ -1039,20 +1048,16 @@ const {
         return res;
       }
     } else {
-      // must read from what 'p' points to in each loop.
-      Klass* k = ((volatile oopDesc*)p)->klass_or_null();
-      // We trust the size of any object that has a non-NULL
-      // klass and (for those in the perm gen) is parsable
-      // -- irrespective of its conc_safe-ty.
+      // The barrier is required to prevent reordering of the free chunk check
+      // and the klass read.
+      OrderAccess::loadload();
+
+      // Ensure klass read before size.
+      Klass* k = oop(p)->klass_or_null_acquire();
       if (k != NULL) {
         assert(k->is_klass(), "Should really be klass oop.");
         oop o = (oop)p;
         assert(o->is_oop(), "Should be an oop");
-
-        // Bugfix for systems with weak memory model (PPC64/IA64).
-        // The object o may be an array. Acquire to make sure that the array
-        // size (third word) is consistent.
-        OrderAccess::acquire();
 
         size_t res = o->size_given_klass(k);
         res = adjustObjectSize(res);
@@ -1101,7 +1106,12 @@ bool CompactibleFreeListSpace::block_is_obj(const HeapWord* p) const {
   // assert(CollectedHeap::use_parallel_gc_threads() || _bt.block_start(p) == p,
   //        "Should be a block boundary");
   if (FreeChunk::indicatesFreeChunk(p)) return false;
-  Klass* k = oop(p)->klass_or_null();
+
+  // The barrier is required to prevent reordering of the free chunk check
+  // and the klass read.
+  OrderAccess::loadload();
+
+  Klass* k = oop(p)->klass_or_null_acquire();
   if (k != NULL) {
     // Ignore mark word because it may have been used to
     // chain together promoted objects (the last one
@@ -1216,6 +1226,13 @@ HeapWord* CompactibleFreeListSpace::allocate(size_t size) {
     _bt.verify_not_unallocated(res, size);
     // mangle a just allocated object with a distinct pattern.
     debug_only(fc->mangleAllocated(size));
+  }
+
+  // During GC we do not need to recalculate the stable used value for
+  // every allocation in old gen. It is done once at the end of GC instead
+  // for performance reasons.
+  if (!Universe::heap()->is_gc_active()) {
+    recalculate_used_stable();
   }
 
   return res;

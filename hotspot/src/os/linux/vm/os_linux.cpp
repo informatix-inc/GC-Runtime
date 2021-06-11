@@ -1418,8 +1418,8 @@ void os::Linux::clock_init() {
 
 #ifndef SYS_clock_getres
 
-#if defined(IA32) || defined(AMD64)
-#define SYS_clock_getres IA32_ONLY(266)  AMD64_ONLY(229)
+#if defined(IA32) || defined(AMD64) || defined(AARCH64)
+#define SYS_clock_getres IA32_ONLY(266)  AMD64_ONLY(229) AARCH64_ONLY(114)
 #define sys_clock_getres(x,y)  ::syscall(SYS_clock_getres, x, y)
 #else
 #warning "SYS_clock_getres not defined for this platform, disabling fast_thread_cpu_time"
@@ -1950,6 +1950,9 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen)
   #ifndef EM_486
   #define EM_486          6               /* Intel 80486 */
   #endif
+  #ifndef EM_AARCH64
+  #define EM_AARCH64    183               /* ARM AARCH64 */
+  #endif
 
   static const arch_t arch_array[]={
     {EM_386,         EM_386,     ELFCLASS32, ELFDATA2LSB, (char*)"IA 32"},
@@ -1971,7 +1974,8 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen)
     {EM_MIPS_RS3_LE, EM_MIPS_RS3_LE, ELFCLASS32, ELFDATA2LSB, (char*)"MIPSel"},
     {EM_MIPS,        EM_MIPS,    ELFCLASS32, ELFDATA2MSB, (char*)"MIPS"},
     {EM_PARISC,      EM_PARISC,  ELFCLASS32, ELFDATA2MSB, (char*)"PARISC"},
-    {EM_68K,         EM_68K,     ELFCLASS32, ELFDATA2MSB, (char*)"M68k"}
+    {EM_68K,         EM_68K,     ELFCLASS32, ELFDATA2MSB, (char*)"M68k"},
+    {EM_AARCH64,     EM_AARCH64, ELFCLASS64, ELFDATA2LSB, (char*)"AARCH64"},
   };
 
   #if  (defined IA32)
@@ -2002,9 +2006,11 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen)
     static  Elf32_Half running_arch_code=EM_MIPS;
   #elif  (defined M68K)
     static  Elf32_Half running_arch_code=EM_68K;
+  #elif  (defined AARCH64)
+    static  Elf32_Half running_arch_code=EM_AARCH64;
   #else
     #error Method os::dll_load requires that one of following is defined:\
-         IA32, AMD64, IA64, __sparc, __powerpc__, ARM, S390, ALPHA, MIPS, MIPSEL, PARISC, M68K
+         IA32, AMD64, IA64, __sparc, __powerpc__, ARM, S390, ALPHA, MIPS, MIPSEL, PARISC, M68K, AARCH64
   #endif
 
   // Identify compatability class for VM's architecture and library's architecture
@@ -2144,6 +2150,41 @@ void os::print_dll_info(outputStream *st) {
    if (!_print_ascii_file(fname, st)) {
      st->print("Can not get library information for pid = %d\n", pid);
    }
+}
+
+int os::get_loaded_modules_info(os::LoadedModulesCallbackFunc callback, void *param) {
+  FILE *procmapsFile = NULL;
+
+  // Open the procfs maps file for the current process
+  if ((procmapsFile = fopen("/proc/self/maps", "r")) != NULL) {
+    // Allocate PATH_MAX for file name plus a reasonable size for other fields.
+    char line[PATH_MAX + 100];
+
+    // Read line by line from 'file'
+    while (fgets(line, sizeof(line), procmapsFile) != NULL) {
+      u8 base, top, offset, inode;
+      char permissions[5];
+      char device[6];
+      char name[PATH_MAX + 1];
+
+      // Parse fields from line
+      sscanf(line, UINT64_FORMAT_X "-" UINT64_FORMAT_X " %4s " UINT64_FORMAT_X " %7s " INT64_FORMAT " %s",
+             &base, &top, permissions, &offset, device, &inode, name);
+
+      // Filter by device id '00:00' so that we only get file system mapped files.
+      if (strcmp(device, "00:00") != 0) {
+
+        // Call callback with the fields of interest
+        if(callback(name, (address)base, (address)top, param)) {
+          // Oops abort, callback aborted
+          fclose(procmapsFile);
+          return 1;
+        }
+      }
+    }
+    fclose(procmapsFile);
+  }
+  return 0;
 }
 
 void os::print_os_info_brief(outputStream* st) {
@@ -2908,12 +2949,7 @@ int os::Linux::sched_getcpu_syscall(void) {
   unsigned int cpu = 0;
   int retval = -1;
 
-#if defined(IA32)
-# ifndef SYS_getcpu
-# define SYS_getcpu 318
-# endif
-  retval = syscall(SYS_getcpu, &cpu, NULL, NULL);
-#elif defined(AMD64)
+#if defined(AMD64)
 // Unfortunately we have to bring all these macros here from vsyscall.h
 // to be able to compile on old linuxes.
 # define __NR_vgetcpu 2
@@ -2923,6 +2959,11 @@ int os::Linux::sched_getcpu_syscall(void) {
   typedef long (*vgetcpu_t)(unsigned int *cpu, unsigned int *node, unsigned long *tcache);
   vgetcpu_t vgetcpu = (vgetcpu_t)VSYSCALL_ADDR(__NR_vgetcpu);
   retval = vgetcpu(&cpu, NULL, NULL);
+#elif defined(IA32) || defined(AARCH64)
+# ifndef SYS_getcpu
+#  define SYS_getcpu AARCH64_ONLY(168) IA32_ONLY(318)
+# endif
+  retval = syscall(SYS_getcpu, &cpu, NULL, NULL);
 #endif
 
   return (retval == -1) ? retval : cpu;
@@ -3476,7 +3517,7 @@ size_t os::Linux::find_large_page_size() {
 
 #ifndef ZERO
   large_page_size = IA32_ONLY(4 * M) AMD64_ONLY(2 * M) IA64_ONLY(256 * M) SPARC_ONLY(4 * M)
-                     ARM_ONLY(2 * M) PPC_ONLY(4 * M);
+                     ARM_ONLY(2 * M) PPC_ONLY(4 * M) AARCH64_ONLY(2 * M);
 #endif // ZERO
 
   FILE *fp = fopen("/proc/meminfo", "r");
@@ -4028,6 +4069,10 @@ char* os::pd_attempt_reserve_memory_at(size_t bytes, char* requested_addr) {
 
 size_t os::read(int fd, void *buf, unsigned int nBytes) {
   return ::read(fd, buf, nBytes);
+}
+
+size_t os::read_at(int fd, void *buf, unsigned int nBytes, jlong offset) {
+  return ::pread(fd, buf, nBytes, offset);
 }
 
 // TODO-FIXME: reconcile Solaris' os::sleep with the linux variation.
@@ -5134,7 +5179,7 @@ jint os::init_2(void)
 
   Linux::capture_initial_stack(JavaThread::stack_size_at_create());
 
-#if defined(IA32)
+#if defined(IA32) && !defined(ZERO)
   workaround_expand_exec_shield_cs_limit();
 #endif
 
@@ -5756,8 +5801,6 @@ jlong os::thread_cpu_time(Thread *thread, bool user_sys_cpu_time) {
 PRAGMA_DIAG_PUSH
 PRAGMA_FORMAT_NONLITERAL_IGNORED
 static jlong slow_thread_cpu_time(Thread *thread, bool user_sys_cpu_time) {
-  static bool proc_task_unchecked = true;
-  static const char *proc_stat_path = "/proc/%d/stat";
   pid_t  tid = thread->osthread()->thread_id();
   char *s;
   char stat[2048];
@@ -5770,23 +5813,7 @@ static jlong slow_thread_cpu_time(Thread *thread, bool user_sys_cpu_time) {
   long ldummy;
   FILE *fp;
 
-  // The /proc/<tid>/stat aggregates per-process usage on
-  // new Linux kernels 2.6+ where NPTL is supported.
-  // The /proc/self/task/<tid>/stat still has the per-thread usage.
-  // See bug 6328462.
-  // There possibly can be cases where there is no directory
-  // /proc/self/task, so we check its availability.
-  if (proc_task_unchecked && os::Linux::is_NPTL()) {
-    // This is executed only once
-    proc_task_unchecked = false;
-    fp = fopen("/proc/self/task", "r");
-    if (fp != NULL) {
-      proc_stat_path = "/proc/self/task/%d/stat";
-      fclose(fp);
-    }
-  }
-
-  sprintf(proc_name, proc_stat_path, tid);
+  snprintf(proc_name, 64, "/proc/self/task/%d/stat", tid);
   fp = fopen(proc_name, "r");
   if ( fp == NULL ) return -1;
   statlen = fread(stat, 1, 2047, fp);

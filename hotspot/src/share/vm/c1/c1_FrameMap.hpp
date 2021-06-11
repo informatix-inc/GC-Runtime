@@ -85,6 +85,9 @@ class FrameMap : public CompilationResourceObj {
 #ifdef TARGET_ARCH_x86
 # include "c1_FrameMap_x86.hpp"
 #endif
+#ifdef TARGET_ARCH_aarch64
+# include "c1_FrameMap_aarch64.hpp"
+#endif
 #ifdef TARGET_ARCH_sparc
 # include "c1_FrameMap_sparc.hpp"
 #endif
@@ -196,6 +199,10 @@ class FrameMap : public CompilationResourceObj {
 
   static LIR_Opr as_metadata_opr(Register r) {
     return LIR_OprFact::single_cpu_metadata(cpu_reg2rnr(r));
+  }
+
+  static LIR_Opr as_address_opr(Register r) {
+    return LIR_OprFact::single_cpu_address(cpu_reg2rnr(r));
   }
 
   FrameMap(ciMethod* method, int monitors, int reserved_argument_area_size);

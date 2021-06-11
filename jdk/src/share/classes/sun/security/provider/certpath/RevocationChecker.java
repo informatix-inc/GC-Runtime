@@ -579,7 +579,7 @@ class RevocationChecker extends PKIXRevocationChecker {
                     approvedCRLs.addAll(DistributionPointFetcher.getCRLs(
                             sel, signFlag, prevKey, prevCert,
                             params.sigProvider(), certStores, reasonsMask,
-                            anchors, null, params.variant()));
+                            anchors, null, params.variant(), anchor));
                 }
             } catch (CertStoreException e) {
                 if (e instanceof CertStoreTypeException) {
@@ -853,7 +853,7 @@ class RevocationChecker extends PKIXRevocationChecker {
                     if (DistributionPointFetcher.verifyCRL(
                             certImpl, point, crl, reasonsMask, signFlag,
                             prevKey, null, params.sigProvider(), anchors,
-                            certStores, params.date(), params.variant()))
+                            certStores, params.date(), params.variant(), anchor))
                     {
                         results.add(crl);
                     }
@@ -986,9 +986,7 @@ class RevocationChecker extends PKIXRevocationChecker {
         // any way to convey them back to the application.
         // That's the default, so no need to write code.
         builderParams.setDate(params.date());
-        // CertPathCheckers need to be cloned to start from fresh state
-        builderParams.setCertPathCheckers(
-            params.getPKIXParameters().getCertPathCheckers());
+        builderParams.setCertPathCheckers(params.certPathCheckers());
         builderParams.setSigProvider(params.sigProvider());
 
         // Skip revocation during this build to detect circular
@@ -1114,15 +1112,6 @@ class RevocationChecker extends PKIXRevocationChecker {
                      -1, BasicReason.UNDETERMINED_REVOCATION_STATUS);
             }
         }
-    }
-
-    @Override
-    public RevocationChecker clone() {
-        RevocationChecker copy = (RevocationChecker)super.clone();
-        // we don't deep-copy the exceptions, but that is ok because they
-        // are never modified after they are instantiated
-        copy.softFailExceptions = new LinkedList<>(softFailExceptions);
-        return copy;
     }
 
     /*

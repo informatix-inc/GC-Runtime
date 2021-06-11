@@ -42,6 +42,14 @@
 # include "utilities/globalDefinitions_xlc.hpp"
 #endif
 
+// Defaults for macros that might be defined per compiler.
+#ifndef NOINLINE
+#define NOINLINE
+#endif
+#ifndef ALWAYSINLINE
+#define ALWAYSINLINE inline
+#endif
+
 #ifndef PRAGMA_DIAG_PUSH
 #define PRAGMA_DIAG_PUSH
 #endif
@@ -419,8 +427,16 @@ enum RTMState {
   ProfileRTM = 0x0  // Use RTM with abort ratio calculation
 };
 
+// The maximum size of the code cache.  Can be overridden by targets.
+#define CODE_CACHE_SIZE_LIMIT (2*G)
+// Allow targets to reduce the default size of the code cache.
+#define CODE_CACHE_DEFAULT_LIMIT CODE_CACHE_SIZE_LIMIT
+
 #ifdef TARGET_ARCH_x86
 # include "globalDefinitions_x86.hpp"
+#endif
+#ifdef TARGET_ARCH_aarch64
+# include "globalDefinitions_aarch64.hpp"
 #endif
 #ifdef TARGET_ARCH_sparc
 # include "globalDefinitions_sparc.hpp"
@@ -642,6 +658,10 @@ inline bool is_subword_type(BasicType t) {
 
 inline bool is_signed_subword_type(BasicType t) {
   return (t == T_BYTE || t == T_SHORT);
+}
+
+inline bool is_reference_type(BasicType t) {
+  return (t == T_OBJECT || t == T_ARRAY);
 }
 
 // Convert a char from a classfile signature to a BasicType
@@ -1046,6 +1066,7 @@ const jint     badInt           = -3;                       // generic "bad int"
 const intptr_t badAddressVal    = -2;                       // generic "bad address" value
 const intptr_t badOopVal        = -1;                       // generic "bad oop" value
 const intptr_t badHeapOopVal    = (intptr_t) CONST64(0x2BAD4B0BBAADBABE); // value used to zap heap after GC
+const int      badStackSegVal   = 0xCA;                     // value used to zap stack segments
 const int      badHandleValue   = 0xBC;                     // value used to zap vm handle area
 const int      badResourceValue = 0xAB;                     // value used to zap resource area
 const int      freeBlockPad     = 0xBA;                     // value used to pad freed blocks.

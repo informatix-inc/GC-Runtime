@@ -41,6 +41,8 @@
 # include "adfiles/ad_x86_32.hpp"
 #elif defined TARGET_ARCH_MODEL_x86_64
 # include "adfiles/ad_x86_64.hpp"
+#elif defined TARGET_ARCH_MODEL_aarch64
+# include "adfiles/ad_aarch64.hpp"
 #elif defined TARGET_ARCH_MODEL_sparc
 # include "adfiles/ad_sparc.hpp"
 #elif defined TARGET_ARCH_MODEL_zero
@@ -248,6 +250,7 @@ bool PhaseCFG::schedule_early(VectorSet &visited, Node_List &roots) {
         int is_visited = visited.test_set(in->_idx);
         if (!has_block(in)) {
           if (is_visited) {
+            assert(false, "graph should be schedulable");
             return false;
           }
           // Save parent node and next input's index.
@@ -1062,6 +1065,7 @@ Block* PhaseCFG::hoist_to_cheaper_block(Block* LCA, Block* early, Node* self) {
 
     if (LCA == NULL) {
       // Bailout without retry
+      assert(false, "graph should be schedulable");
       C->record_method_not_compilable("late schedule failed: LCA == NULL");
       return least;
     }
@@ -1216,6 +1220,7 @@ void PhaseCFG::schedule_late(VectorSet &visited, Node_List &stack) {
         C->record_failure(C2Compiler::retry_no_subsuming_loads());
       } else {
         // Bailout without retry when (early->_dom_depth > LCA->_dom_depth)
+        assert(false, "graph should be schedulable");
         C->record_method_not_compilable("late schedule failed: incorrect graph");
       }
       return;
@@ -1307,8 +1312,6 @@ void PhaseCFG::global_code_motion() {
   // ( visited.Clear() called in schedule_late()->Node_Backward_Iterator() )
   schedule_late(visited, stack);
   if (C->failing()) {
-    // schedule_late fails only when graph is incorrect.
-    assert(!VerifyGraphEdges, "verification should have failed");
     return;
   }
 

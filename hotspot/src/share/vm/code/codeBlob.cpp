@@ -42,6 +42,9 @@
 #ifdef TARGET_ARCH_x86
 # include "nativeInst_x86.hpp"
 #endif
+#ifdef TARGET_ARCH_aarch64
+# include "nativeInst_aarch64.hpp"
+#endif
 #ifdef TARGET_ARCH_sparc
 # include "nativeInst_sparc.hpp"
 #endif
@@ -58,7 +61,7 @@
 #include "c1/c1_Runtime1.hpp"
 #endif
 
-unsigned int align_code_offset(int offset) {
+unsigned int CodeBlob::align_code_offset(int offset) {
   // align the size to CodeEntryAlignment
   return
     ((offset + (int)CodeHeap::header_size() + (CodeEntryAlignment-1)) & ~(CodeEntryAlignment-1))

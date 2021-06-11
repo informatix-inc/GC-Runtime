@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2001, 2014, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2001, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -376,7 +376,7 @@ G1YoungGenSizer::G1YoungGenSizer() : _sizer_kind(SizerDefaults), _adaptive_size(
                              MAX2((uint) (MaxNewSize / HeapRegion::GrainBytes),
                                   1U);
       _sizer_kind = SizerMaxAndNewSize;
-      _adaptive_size = _min_desired_young_length == _max_desired_young_length;
+      _adaptive_size = _min_desired_young_length != _max_desired_young_length;
     } else {
       _sizer_kind = SizerNewSizeOnly;
     }
@@ -839,11 +839,11 @@ void G1CollectorPolicy::record_stop_world_start() {
   _stop_world_start = os::elapsedTime();
 }
 
-void G1CollectorPolicy::record_collection_pause_start(double start_time_sec) {
+void G1CollectorPolicy::record_collection_pause_start(double start_time_sec, GCTracer &tracer) {
   // We only need to do this here as the policy will only be applied
   // to the GC we're about to start. so, no point is calculating this
   // every time we calculate / recalculate the target young length.
-  update_survivors_policy();
+  update_survivors_policy(tracer);
 
   assert(_g1->used() == _g1->recalculate_used(),
          err_msg("sanity, used: " SIZE_FORMAT " recalculate_used: " SIZE_FORMAT,
@@ -1130,11 +1130,11 @@ void G1CollectorPolicy::record_collection_pause_end(double pause_time_ms, Evacua
     _rs_length_diff_seq->add((double) rs_length_diff);
 
     size_t freed_bytes = _heap_used_bytes_before_gc - cur_used_bytes;
-    size_t copied_bytes = _collection_set_bytes_used_before - freed_bytes;
-    double cost_per_byte_ms = 0.0;
 
-    if (copied_bytes > 0) {
-      cost_per_byte_ms = phase_times()->average_time_ms(G1GCPhaseTimes::ObjCopy) / (double) copied_bytes;
+    if (_collection_set_bytes_used_before > freed_bytes) {
+      size_t copied_bytes = _collection_set_bytes_used_before - freed_bytes;
+      double average_copy_time = phase_times()->average_time_ms(G1GCPhaseTimes::ObjCopy);
+      double cost_per_byte_ms = average_copy_time / (double) copied_bytes;
       if (_in_marking_window) {
         _cost_per_byte_ms_during_cm_seq->add(cost_per_byte_ms);
       } else {
@@ -1453,7 +1453,7 @@ void G1CollectorPolicy::update_max_gc_locker_expansion() {
 }
 
 // Calculates survivor space parameters.
-void G1CollectorPolicy::update_survivors_policy() {
+void G1CollectorPolicy::update_survivors_policy(GCTracer &tracer) {
   double max_survivor_regions_d =
                  (double) _young_list_target_length / (double) SurvivorRatio;
   // We use ceiling so that if max_survivor_regions_d is > 0.0 (but
@@ -1461,7 +1461,7 @@ void G1CollectorPolicy::update_survivors_policy() {
   _max_survivor_regions = (uint) ceil(max_survivor_regions_d);
 
   _tenuring_threshold = _survivors_age_table.compute_tenuring_threshold(
-        HeapRegion::GrainWords * _max_survivor_regions);
+        HeapRegion::GrainWords * _max_survivor_regions, tracer);
 }
 
 bool G1CollectorPolicy::force_initial_mark_if_outside_cycle(

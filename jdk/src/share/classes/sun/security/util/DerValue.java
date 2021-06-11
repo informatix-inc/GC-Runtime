@@ -45,8 +45,8 @@ import sun.misc.IOUtils;
  * (such as PKCS #10 certificate requests, and some kinds of PKCS #7 data).
  *
  * A note with respect to T61/Teletex strings: From RFC 1617, section 4.1.3
- * and RFC 3280, section 4.1.2.4., we assume that this kind of string will
- * contain ISO-8859-1 characters only.
+ * and RFC 5280, section 8, we assume that this kind of string will contain
+ * ISO-8859-1 characters only.
  *
  *
  * @author David Brownell
@@ -271,7 +271,7 @@ public class DerValue {
             if (tag != inbuf.read())
                 throw new IOException
                         ("Indefinite length encoding not supported");
-            length = DerInputStream.getLength(inbuf);
+            length = DerInputStream.getDefiniteLength(inbuf);
             buffer = inbuf.dup();
             buffer.truncate(length);
             data = new DerInputStream(buffer);
@@ -403,13 +403,13 @@ public class DerValue {
             if (tag != in.read())
                 throw new IOException
                         ("Indefinite length encoding not supported");
-            length = DerInputStream.getLength(in);
+            length = DerInputStream.getDefiniteLength(in);
         }
 
         if (fullyBuffered && in.available() != length)
             throw new IOException("extra data given to DerValue constructor");
 
-        byte[] bytes = IOUtils.readFully(in, length, true);
+        byte[] bytes = IOUtils.readExactlyNBytes(in, length);
 
         buffer = new DerInputBuffer(bytes, allowBER);
         return new DerInputStream(buffer);
@@ -780,29 +780,21 @@ public class DerValue {
     }
 
     /**
-     * Returns true iff the other object is a DER value which
-     * is bitwise equal to this one.
-     *
-     * @param other the object being compared with this one
-     */
-    public boolean equals(Object other) {
-        if (other instanceof DerValue)
-            return equals((DerValue)other);
-        else
-            return false;
-    }
-
-    /**
      * Bitwise equality comparison.  DER encoded values have a single
      * encoding, so that bitwise equality of the encoded values is an
      * efficient way to establish equivalence of the unencoded values.
      *
      * @param other the object being compared with this one
      */
-    public boolean equals(DerValue other) {
-        if (this == other) {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
+        if (!(o instanceof DerValue)) {
+            return false;
+        }
+        DerValue other = (DerValue) o;
         if (tag != other.tag) {
             return false;
         }
@@ -835,6 +827,7 @@ public class DerValue {
      *
      * @return printable representation of the value
      */
+    @Override
     public String toString() {
         try {
 
@@ -962,6 +955,7 @@ public class DerValue {
      *
      * @return a hashcode for this DerValue.
      */
+    @Override
     public int hashCode() {
         return toString().hashCode();
     }

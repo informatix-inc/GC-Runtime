@@ -25,9 +25,10 @@
 #ifndef SHARE_VM_CLASSFILE_VMSYMBOLS_HPP
 #define SHARE_VM_CLASSFILE_VMSYMBOLS_HPP
 
-#include "oops/symbol.hpp"
+#include "jfr/support/jfrIntrinsics.hpp"
 #include "memory/iterator.hpp"
-#include "trace/traceMacros.hpp"
+#include "oops/symbol.hpp"
+#include "utilities/macros.hpp"
 
 // The class vmSymbols is a name space for fast lookup of
 // symbols commonly used in the VM.
@@ -606,8 +607,8 @@
   template(classRedefinedCount_name,                   "classRedefinedCount")                                     \
   template(classLoader_name,                           "classLoader")                                             \
                                                                                                                   \
-  /* trace signatures */                                                                                          \
-  TRACE_TEMPLATES(template)                                                                                       \
+  /* jfr signatures */                                                                                            \
+  JFR_TEMPLATES(template)                                                                                         \
                                                                                                                   \
   /*end*/
 
@@ -736,7 +737,7 @@
   do_intrinsic(_nanoTime,                 java_lang_System,       nanoTime_name,          void_long_signature,   F_S)   \
    do_name(     nanoTime_name,                                   "nanoTime")                                            \
                                                                                                                         \
-  TRACE_INTRINSICS(do_intrinsic, do_class, do_name, do_signature, do_alias)                                             \
+  JFR_INTRINSICS(do_intrinsic, do_class, do_name, do_signature, do_alias)                                               \
                                                                                                                         \
   do_intrinsic(_arraycopy,                java_lang_System,       arraycopy_name, arraycopy_signature,           F_S)   \
    do_name(     arraycopy_name,                                  "arraycopy")                                           \
@@ -862,6 +863,12 @@
   do_intrinsic(_digestBase_implCompressMB, sun_security_provider_digestbase, implCompressMB_name, implCompressMB_signature, F_R)   \
    do_name(     implCompressMB_name,                               "implCompressMultiBlock0")                           \
    do_signature(implCompressMB_signature,                          "([BII)I")                                           \
+                                                                                                                        \
+  /* support for com.sun.crypto.provider.GHASH */                                                                       \
+  do_class(com_sun_crypto_provider_ghash, "com/sun/crypto/provider/GHASH")                                              \
+  do_intrinsic(_ghash_processBlocks, com_sun_crypto_provider_ghash, processBlocks_name, ghash_processBlocks_signature, F_S) \
+   do_name(processBlocks_name, "processBlocks")                                                                         \
+   do_signature(ghash_processBlocks_signature, "([BII[J[J)V")                                                           \
                                                                                                                         \
   /* support for java.util.zip */                                                                                       \
   do_class(java_util_zip_CRC32,           "java/util/zip/CRC32")                                                        \

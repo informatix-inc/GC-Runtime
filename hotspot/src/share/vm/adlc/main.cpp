@@ -29,7 +29,6 @@
 static void  usage(ArchDesc& AD);          // Print usage message and exit
 static char *strip_ext(char *fname);       // Strip off name extension
 static char *base_plus_suffix(const char* base, const char *suffix);// New concatenated string
-static char *prefix_plus_base_plus_suffix(const char* prefix, const char* base, const char *suffix);// New concatenated string
 static int get_legal_text(FileBuff &fbuf, char **legal_text); // Get pointer to legal text
 
 ArchDesc* globalAD = NULL;      // global reference to Architecture Description object
@@ -234,6 +233,11 @@ int main(int argc, char *argv[])
 #ifdef TARGET_ARCH_x86
   AD.addInclude(AD._CPP_file, "nativeInst_x86.hpp");
   AD.addInclude(AD._CPP_file, "vmreg_x86.inline.hpp");
+#endif
+#ifdef TARGET_ARCH_aarch64
+  AD.addInclude(AD._CPP_file, "assembler_aarch64.inline.hpp");
+  AD.addInclude(AD._CPP_file, "nativeInst_aarch64.hpp");
+  AD.addInclude(AD._CPP_file, "vmreg_aarch64.inline.hpp");
 #endif
 #ifdef TARGET_ARCH_sparc
   AD.addInclude(AD._CPP_file, "nativeInst_sparc.hpp");

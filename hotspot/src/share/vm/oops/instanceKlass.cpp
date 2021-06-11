@@ -78,6 +78,10 @@
 #ifdef COMPILER1
 #include "c1/c1_Compiler.hpp"
 #endif
+#if INCLUDE_JFR
+#include "jfr/jfrEvents.hpp"
+#endif
+
 
 PRAGMA_FORMAT_MUTE_WARNINGS_FOR_GCC
 
@@ -294,6 +298,7 @@ InstanceKlass::InstanceKlass(int vtable_len,
   set_has_unloaded_dependent(false);
   set_init_state(InstanceKlass::allocated);
   set_init_thread(NULL);
+  set_init_state(allocated);
   set_reference_type(rt);
   set_oop_map_cache(NULL);
   set_jni_ids(NULL);
@@ -978,11 +983,13 @@ void InstanceKlass::set_initialization_state_and_notify_impl(instanceKlassHandle
   oop init_lock = this_oop->init_lock();
   if (init_lock != NULL) {
     ObjectLocker ol(init_lock, THREAD);
+    this_oop->set_init_thread(NULL); // reset _init_thread before changing _init_state
     this_oop->set_init_state(state);
     this_oop->fence_and_clear_init_lock();
     ol.notify_all(CHECK);
   } else {
     assert(init_lock != NULL, "The initialization state should never be set twice");
+    this_oop->set_init_thread(NULL); // reset _init_thread before changing _init_state
     this_oop->set_init_state(state);
   }
 }
@@ -1487,18 +1494,22 @@ Method* InstanceKlass::find_method_impl(Symbol* name, Symbol* signature,
 
 // find_instance_method looks up the name/signature in the local methods array
 // and skips over static methods
-Method* InstanceKlass::find_instance_method(
-    Array<Method*>* methods, Symbol* name, Symbol* signature) {
+Method* InstanceKlass::find_instance_method(Array<Method*>* methods,
+                                            Symbol* name,
+                                            Symbol* signature,
+                                            PrivateLookupMode private_mode) {
   Method* meth = InstanceKlass::find_method_impl(methods, name, signature,
-                                                 find_overpass, skip_static, find_private);
+                                                 find_overpass, skip_static, private_mode);
   assert(((meth == NULL) || !meth->is_static()), "find_instance_method should have skipped statics");
   return meth;
 }
 
 // find_instance_method looks up the name/signature in the local methods array
 // and skips over static methods
-Method* InstanceKlass::find_instance_method(Symbol* name, Symbol* signature) {
-    return InstanceKlass::find_instance_method(methods(), name, signature);
+Method* InstanceKlass::find_instance_method(Symbol* name,
+                                            Symbol* signature,
+                                            PrivateLookupMode private_mode) {
+  return InstanceKlass::find_instance_method(methods(), name, signature, private_mode);
 }
 
 // Find looks up the name/signature in the local methods array
@@ -2526,6 +2537,14 @@ void InstanceKlass::notify_unload_class(InstanceKlass* ik) {
 
   // notify ClassLoadingService of class unload
   ClassLoadingService::notify_class_unloaded(ik);
+
+#if INCLUDE_JFR
+  assert(ik != NULL, "invariant");
+  EventClassUnload event;
+  event.set_unloadedClass(ik);
+  event.set_definingClassLoader(ik->class_loader_data());
+  event.commit();
+#endif
 }
 
 void InstanceKlass::release_C_heap_structures(InstanceKlass* ik) {
@@ -3602,6 +3621,7 @@ void InstanceKlass::set_init_state(ClassState state) {
   bool good_state = is_shared() ? (_init_state <= state)
                                                : (_init_state < state);
   assert(good_state || state == allocated, "illegal state transition");
+  assert(_init_thread == NULL, "should be cleared before state change");
   _init_state = (u1)state;
 }
 #endif

@@ -438,6 +438,7 @@ static void parse_caller_options(struct hsdis_app_data* app_data, const char* ca
     }
     p = q;
   }
+  *iop = '\0';
 }
 
 static void print_help(struct hsdis_app_data* app_data,
@@ -490,6 +491,9 @@ static const char* native_arch_name() {
 #endif
 #if defined(LIBARCH_ppc64) || defined(LIBARCH_ppc64le)
   res = "powerpc:common64";
+#endif
+#ifdef LIBARCH_aarch64
+  res = "aarch64";
 #endif
   if (res == NULL)
     res = "architecture not set in Makefile!";

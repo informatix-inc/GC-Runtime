@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2009, 2014, Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 2009, 2020, Oracle and/or its affiliates. All rights reserved.
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
 # This code is free software; you can redistribute it and/or modify it
@@ -22,7 +22,7 @@
 #
 
 # @test
-# @bug 6802846 8172529
+# @bug 6802846 8172529 8227758
 # @summary jarsigner needs enhanced cert validation(options)
 #
 # @run shell/timeout=240 concise_jarsigner.sh
@@ -44,13 +44,13 @@ case "$OS" in
     ;;
 esac
 
-# Choose 1024-bit RSA to make sure it runs fine and fast on all platforms. In
+# Choose 2048-bit RSA to make sure it runs fine and fast on all platforms. In
 # fact, every keyalg/keysize combination is OK for this test.
 
 TESTTOOLVMOPTS="$TESTTOOLVMOPTS -J-Duser.language=en -J-Duser.country=US"
 
 KS=js.ks
-KT="$TESTJAVA${FS}bin${FS}keytool ${TESTTOOLVMOPTS} -storepass changeit -keypass changeit -keystore $KS -keyalg rsa -keysize 1024"
+KT="$TESTJAVA${FS}bin${FS}keytool ${TESTTOOLVMOPTS} -storepass changeit -keypass changeit -keystore $KS -keyalg rsa -keysize 2048"
 JAR="$TESTJAVA${FS}bin${FS}jar ${TESTTOOLVMOPTS}"
 JARSIGNER="$TESTJAVA${FS}bin${FS}jarsigner ${TESTTOOLVMOPTS} -debug"
 JAVAC="$TESTJAVA${FS}bin${FS}javac ${TESTTOOLVMOPTS} ${TESTJAVACOPTS}"
@@ -207,15 +207,11 @@ $JARSIGNER -strict -keystore $KS -storepass changeit a.jar altchain
 $JARSIGNER -strict -keystore $KS -storepass changeit -certchain certchain a.jar altchain
 [ $? = 0 ] || exit $LINENO
 
-# if ca2 is removed, -certchain still work because altchain is a self-signed entry and
-# it is trusted by jarsigner
+# if ca2 is removed and cert is imported, -certchain won't work because this certificate
+# entry is not trusted
 # save ca2.cert for easy replay
 $KT -exportcert -file ca2.cert -alias ca2
 $KT -delete -alias ca2
-$JARSIGNER -strict -keystore $KS -storepass changeit -certchain certchain a.jar altchain
-[ $? = 0 ] || exit $LINENO
-
-# if cert is imported, -certchain won't work because this certificate entry is not trusted
 $KT -importcert -file certchain -alias altchain -noprompt
 $JARSIGNER -strict -keystore $KS -storepass changeit -certchain certchain a.jar altchain
 [ $? = 4 ] || exit $LINENO
@@ -228,8 +224,8 @@ $JARSIGNER -verify a.jar
 # ==========================================================
 
 $KT -genkeypair -alias ee -dname CN=ee
-$KT -genkeypair -alias caone -dname CN=caone
-$KT -genkeypair -alias catwo -dname CN=catwo
+$KT -genkeypair -alias caone -dname CN=caone -ext bc:c
+$KT -genkeypair -alias catwo -dname CN=catwo -ext bc:c
 
 $KT -certreq -alias ee | $KT -gencert -alias catwo -rfc > ee.cert
 $KT -certreq -alias catwo | $KT -gencert -alias caone -sigalg MD5withRSA -rfc > catwo.cert
