@@ -1,7 +1,12 @@
 # GC Runtime
 株式会社Informatixの製品「GeoConic」「GC Server」等の動作を保証するランタイムです。  
-AdoptOpenJDKのソースを取得し、修正を加えたものを公開しています。  
-（**オリジナルのAdoptOpenJDKでは[下記](#修正済の不具合)の不具合が起こります。**）  
+Adoptium/AdoptOpenJDKのソースを取得し、修正を加えたものを公開しています。  
+（**オリジナルのAdoptium/AdoptOpenJDKでは[下記](#修正済の不具合)の不具合が起こります。**）  
+
+- 2022/05/12  
+このバージョンからAdoptOpenJDKではなくAdoptiumのソースになりました。  
+[8u332_b09_adopt](https://github.com/adoptium/jdk8u/tree/jdk8u332-b09_adopt)に変更しました。  
+ビルド番号：**1.8.0_003**
 
 - 2021/06/11  
 AdoptOpenJDKのソースを[8u292_b10](https://github.com/AdoptOpenJDK/openjdk-jdk8u/tree/jdk8u292-b10)に変更しました。  
@@ -17,6 +22,13 @@ AdoptOpenJDKのソースを[8u232_b09](https://github.com/AdoptOpenJDK/openjdk-j
 各ビルドごとに修正した内容についてまとめています。  
 新しいビルドには前のビルドまでの修正も反映されています。
 
+### 1.8.0_003 (8u332_b09)
+- Javaの脆弱性問題に対応。
+- 斜体の文章に角度がついていると、斜体にならず一文字ずつ斜めに傾く問題を修正。  
+※以前、既知の不具合として載せていた現象で、Adoptium側で修正されました。
+    |修正前|修正後|
+    |:---:|:---:|
+    |<img src="./角度付きの斜体_修正前.png" width=100%>|<img src="./角度付きの斜体_修正後.png" width=100%>|
 
 ### 1.8.0_002 (8u292_b10)
 - タッチパネルにおいてピンチイン・インチアウトしても拡大縮小しない問題を修正。
@@ -41,12 +53,3 @@ AdoptOpenJDKのソースを[8u232_b09](https://github.com/AdoptOpenJDK/openjdk-j
     |修正前|修正後|
     |:---:|:---:|
     |<img src="./高解像度_修正前.png" width=100%>|<img src="./高解像度_修正後.png" width=100%>|
-
-
-## 既知の不具合
-修正されていない不具合です。
-- 斜体の文章に角度がついていると、斜体にならず一文字ずつ斜めに傾く。 
-
-    |不具合|本来の表現(Java8)|
-    |:---:|:---:|
-    |<img src="./角度付きの斜体_不具合.png" width=100%>|<img src="./角度付きの斜体_本来想定されている見た目.png" width=100%>|

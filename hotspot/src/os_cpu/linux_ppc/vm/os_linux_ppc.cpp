@@ -75,6 +75,9 @@
 # include <poll.h>
 # include <ucontext.h>
 
+#ifdef MUSL_LIBC
+#include <asm/ptrace.h>
+#endif
 
 address os::current_stack_pointer() {
   intptr_t* csp;
@@ -110,11 +113,19 @@ address os::Linux::ucontext_get_pc(ucontext_t * uc) {
   //   it because the volatile registers are not needed to make setcontext() work.
   //   Hopefully it was zero'd out beforehand.
   guarantee(uc->uc_mcontext.regs != NULL, "only use ucontext_get_pc in sigaction context");
+#ifndef MUSL_LIBC
   return (address)uc->uc_mcontext.regs->nip;
+#else
+  return (address)uc->uc_mcontext.gp_regs[PT_NIP];
+#endif
 }
 
 intptr_t* os::Linux::ucontext_get_sp(ucontext_t * uc) {
+#ifndef MUSL_LIBC
   return (intptr_t*)uc->uc_mcontext.regs->gpr[1/*REG_SP*/];
+#else
+  return (intptr_t*)uc->uc_mcontext.gp_regs[1/*REG_SP*/];
+#endif
 }
 
 intptr_t* os::Linux::ucontext_get_fp(ucontext_t * uc) {
@@ -176,6 +187,10 @@ JVM_handle_linux_signal(int sig,
 
   Thread* t = ThreadLocalStorage::get_thread_slow();
 
+  // Must do this before SignalHandlerMark, if crash protection installed we will longjmp away
+  // (no destructors can be run)
+  os::ThreadCrashProtection::check_crash_protection(sig, t);
+
   SignalHandlerMark shm(t);
 
   // Note: it's not uncommon that JNI code uses signal/sigset to install
@@ -185,7 +200,7 @@ JVM_handle_linux_signal(int sig,
   // avoid unnecessary crash when libjsig is not preloaded, try handle signals
   // that do not require siginfo/ucontext first.
 
-  if (sig == SIGPIPE) {
+  if (sig == SIGPIPE || sig == SIGXFSZ) {
     if (os::Linux::chained_handler(sig, info, ucVoid)) {
       return true;
     } else {
@@ -213,7 +228,11 @@ JVM_handle_linux_signal(int sig,
   if (uc) {
     address const pc = os::Linux::ucontext_get_pc(uc);
     if (pc && StubRoutines::is_safefetch_fault(pc)) {
+#ifndef MUSL_LIBC
       uc->uc_mcontext.regs->nip = (unsigned long)StubRoutines::continuation_for_safefetch_fault(pc);
+#else
+      uc->uc_mcontext.gp_regs[PT_NIP] = (unsigned long)StubRoutines::continuation_for_safefetch_fault(pc);
+#endif
       return true;
     }
   }
@@ -364,7 +383,11 @@ JVM_handle_linux_signal(int sig,
           // continue at the next instruction after the faulting read. Returning
           // garbage from this read is ok.
           thread->set_pending_unsafe_access_error();
+#ifndef MUSL_LIBC
           uc->uc_mcontext.regs->nip = ((unsigned long)pc) + 4;
+#else
+          uc->uc_mcontext.gp_regs[PT_NIP] = ((unsigned long)pc) + 4;
+#endif
           return true;
         }
       }
@@ -383,7 +406,11 @@ JVM_handle_linux_signal(int sig,
         // continue at the next instruction after the faulting read. Returning
         // garbage from this read is ok.
         thread->set_pending_unsafe_access_error();
+#ifndef MUSL_LIBC
         uc->uc_mcontext.regs->nip = ((unsigned long)pc) + 4;
+#else
+        uc->uc_mcontext.gp_regs[PT_NIP] = ((unsigned long)pc) + 4;
+#endif
         return true;
       }
     }
@@ -406,7 +433,11 @@ JVM_handle_linux_signal(int sig,
   if (stub != NULL) {
     // Save all thread context in case we need to restore it.
     if (thread != NULL) thread->set_saved_exception_pc(pc);
+#ifndef MUSL_LIBC
     uc->uc_mcontext.regs->nip = (unsigned long)stub;
+#else
+    uc->uc_mcontext.gp_regs[PT_NIP] = (unsigned long)stub;
+#endif
     return true;
   }
 
@@ -564,6 +595,7 @@ void os::print_context(outputStream *st, void *context) {
   ucontext_t* uc = (ucontext_t*)context;
 
   st->print_cr("Registers:");
+#ifndef MUSL_LIBC
   st->print("pc =" INTPTR_FORMAT "  ", uc->uc_mcontext.regs->nip);
   st->print("lr =" INTPTR_FORMAT "  ", uc->uc_mcontext.regs->link);
   st->print("ctr=" INTPTR_FORMAT "  ", uc->uc_mcontext.regs->ctr);
@@ -572,6 +604,16 @@ void os::print_context(outputStream *st, void *context) {
     st->print("r%-2d=" INTPTR_FORMAT "  ", i, uc->uc_mcontext.regs->gpr[i]);
     if (i % 3 == 2) st->cr();
   }
+#else // Musl
+  st->print("pc =" INTPTR_FORMAT "  ", uc->uc_mcontext.gp_regs[PT_NIP]);
+  st->print("lr =" INTPTR_FORMAT "  ", uc->uc_mcontext.gp_regs[PT_LNK]);
+  st->print("ctr=" INTPTR_FORMAT "  ", uc->uc_mcontext.gp_regs[PT_CTR]);
+  st->cr();
+  for (int i = 0; i < 32; i++) {
+    st->print("r%-2d=" INTPTR_FORMAT "  ", i, uc->uc_mcontext.gp_regs[i]);
+    if (i % 3 == 2) st->cr();
+  }
+#endif
   st->cr();
   st->cr();
 
@@ -600,7 +642,11 @@ void os::print_register_info(outputStream *st, void *context) {
   // this is only for the "general purpose" registers
   for (int i = 0; i < 32; i++) {
     st->print("r%-2d=", i);
+#ifndef MUSL_LIBC
     print_location(st, uc->uc_mcontext.regs->gpr[i]);
+#else
+    print_location(st, uc->uc_mcontext.gp_regs[i]);
+#endif
   }
   st->cr();
 }

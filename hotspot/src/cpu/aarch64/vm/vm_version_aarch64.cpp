@@ -41,6 +41,10 @@
 #define HWCAP_AES   (1<<3)
 #endif
 
+#ifndef HWCAP_PMULL
+#define HWCAP_PMULL (1<<4)
+#endif
+
 #ifndef HWCAP_SHA1
 #define HWCAP_SHA1  (1<<5)
 #endif
@@ -138,6 +142,17 @@ void VM_Version::get_processor_features() {
     if (PrefetchCopyIntervalInBytes >= 32768)
       PrefetchCopyIntervalInBytes = 32760;
   }
+
+  if (AllocatePrefetchDistance !=-1 && (AllocatePrefetchDistance & 7)) {
+    warning("AllocatePrefetchDistance must be multiple of 8");
+    AllocatePrefetchDistance &= ~7;
+  }
+
+  if (AllocatePrefetchStepSize & 7) {
+    warning("AllocatePrefetchStepSize must be multiple of 8");
+    AllocatePrefetchStepSize &= ~7;
+  }
+
   FLAG_SET_DEFAULT(UseSSE42Intrinsics, true);
 
   unsigned long auxv = getauxval(AT_HWCAP);
@@ -226,7 +241,11 @@ void VM_Version::get_processor_features() {
     }
   }
 
-  if (UseGHASHIntrinsics) {
+  if (auxv & HWCAP_PMULL) {
+    if (FLAG_IS_DEFAULT(UseGHASHIntrinsics)) {
+      FLAG_SET_DEFAULT(UseGHASHIntrinsics, true);
+    }
+  } else if (UseGHASHIntrinsics) {
     warning("GHASH intrinsics are not available on this CPU");
     FLAG_SET_DEFAULT(UseGHASHIntrinsics, false);
   }

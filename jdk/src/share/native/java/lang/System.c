@@ -108,20 +108,15 @@ Java_java_lang_System_identityHashCode(JNIEnv *env, jobject this, jobject x)
         (*env)->DeleteLocalRef(env, jkey);                            \
     } else ((void) 0)
 
-#ifndef VENDOR /* Third party may overwrite this. */
-#define VENDOR "AdoptOpenJdk"
-#define VENDOR_URL "https://adoptopenjdk.net/"
-#define VENDOR_URL_BUG "https://github.com/AdoptOpenJDK/openjdk-build/issues"
-#endif
 /* Third party may overwrite these values. */
 #ifndef VENDOR
-#define VENDOR "Oracle Corporation"
+#define VENDOR "Eclipse Foundation"
 #endif
 #ifndef VENDOR_URL
-#define VENDOR_URL "http://java.oracle.com/"
+#define VENDOR_URL "https://adoptium.net/"
 #endif
 #ifndef VENDOR_URL_BUG
-#define VENDOR_URL_BUG "http://bugreport.sun.com/bugreport/"
+#define VENDOR_URL_BUG "https://github.com/adoptium/adoptium-support/issues"
 #endif
 
 #define JAVA_MAX_SUPPORTED_VERSION 52

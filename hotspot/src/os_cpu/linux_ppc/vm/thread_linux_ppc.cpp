@@ -27,6 +27,10 @@
 #include "runtime/frame.inline.hpp"
 #include "runtime/thread.hpp"
 
+#ifdef MUSL_LIBC
+#include <asm/ptrace.h>
+#endif
+
 bool JavaThread::pd_get_top_frame_for_profiling(frame* fr_addr, void* ucontext, bool isInJava) {
   assert(this->is_Java_thread(), "must be JavaThread");
 
@@ -42,8 +46,13 @@ bool JavaThread::pd_get_top_frame_for_profiling(frame* fr_addr, void* ucontext, 
   // if we were running Java code when SIGPROF came in.
   if (isInJava) {
     ucontext_t* uc = (ucontext_t*) ucontext;
+#ifndef MUSL_LIBC
     frame ret_frame((intptr_t*)uc->uc_mcontext.regs->gpr[1/*REG_SP*/],
                      (address)uc->uc_mcontext.regs->nip);
+#else
+    frame ret_frame((intptr_t*)uc->uc_mcontext.gp_regs[1/*REG_SP*/],
+                     (address)uc->uc_mcontext.gp_regs[PT_NIP]);
+#endif
 
     if (ret_frame.pc() == NULL) {
       // ucontext wasn't useful
@@ -51,21 +60,26 @@ bool JavaThread::pd_get_top_frame_for_profiling(frame* fr_addr, void* ucontext, 
     }
 
     if (ret_frame.is_interpreted_frame()) {
-       frame::ijava_state* istate = ret_frame.get_ijava_state();
-       if (!((Method*)(istate->method))->is_metaspace_object()) {
-         return false;
-       }
-       uint64_t reg_bcp = uc->uc_mcontext.regs->gpr[14/*R14_bcp*/];
-       uint64_t istate_bcp = istate->bcp;
-       uint64_t code_start = (uint64_t)(((Method*)(istate->method))->code_base());
-       uint64_t code_end = (uint64_t)(((Method*)istate->method)->code_base() + ((Method*)istate->method)->code_size());
-       if (istate_bcp >= code_start && istate_bcp < code_end) {
-         // we have a valid bcp, don't touch it, do nothing
-       } else if (reg_bcp >= code_start && reg_bcp < code_end) {
-         istate->bcp = reg_bcp;
+      frame::ijava_state *istate = ret_frame.get_ijava_state();
+      const Method *m = (const Method*)(istate->method);
+      if (m == NULL || !m->is_valid_method()) return false;
+      if (!Metaspace::contains((const void*)m)) return false;
+
+#ifndef MUSL_LIBC
+      uint64_t reg_bcp = uc->uc_mcontext.regs->gpr[14/*R14_bcp*/];
+#else
+      uint64_t reg_bcp = uc->uc_mcontext.gp_regs[14/*R14_bcp*/];
+#endif
+      uint64_t istate_bcp = istate->bcp;
+      uint64_t code_start = (uint64_t)(m->code_base());
+      uint64_t code_end = (uint64_t)(m->code_base() + m->code_size());
+      if (istate_bcp >= code_start && istate_bcp < code_end) {
+        // we have a valid bcp, don't touch it, do nothing
+      } else if (reg_bcp >= code_start && reg_bcp < code_end) {
+        istate->bcp = reg_bcp;
       } else {
-         return false;
-       }
+        return false;
+      }
     }
     if (!ret_frame.safe_for_sender(this)) {
       // nothing else to try if the frame isn't good

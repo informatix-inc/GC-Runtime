@@ -594,11 +594,9 @@ AwtComponent::CreateHWnd(JNIEnv *env, LPCWSTR title,
     SubclassHWND();
 
     AwtToolkit& tk = AwtToolkit::GetInstance();
-	/*
-    if (tk.IsWin8OrLater() && tk.IsTouchKeyboardAutoShowEnabled()) {
+    /*if (tk.IsWin8OrLater() && tk.IsTouchKeyboardAutoShowEnabled()) {
         tk.TIRegisterTouchWindow(GetHWnd(), TWF_WANTPALM);
-    }
-	*/
+    }*/
 
     /*
       * Fix for 4046446.
@@ -1721,7 +1719,7 @@ LRESULT AwtComponent::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
           }
           break;
       case WM_TOUCH:
-          // WmTouch(wParam, lParam);
+          //WmTouch(wParam, lParam);
           break;
       case WM_SETCURSOR:
           mr = mrDoDefault;
@@ -2680,6 +2678,9 @@ AwtComponent::GetJavaModifiers()
     }
     if (HIBYTE(::GetKeyState(VK_MENU)) != 0) {
         modifiers |= java_awt_event_InputEvent_ALT_DOWN_MASK;
+    }
+    if (HIBYTE(::GetKeyState(VK_RMENU)) != 0) {
+        modifiers |= java_awt_event_InputEvent_ALT_GRAPH_DOWN_MASK;
     }
     if (HIBYTE(::GetKeyState(VK_MBUTTON)) != 0) {
        modifiers |= java_awt_event_InputEvent_BUTTON2_DOWN_MASK;
