@@ -2025,12 +2025,11 @@ void SystemDictionary::initialize_preloaded_classes(TRAPS) {
   InstanceKlass::cast(WK_KLASS(Reference_klass))->set_reference_type(REF_OTHER);
   InstanceRefKlass::update_nonstatic_oop_maps(WK_KLASS(Reference_klass));
 
-  initialize_wk_klasses_through(WK_KLASS_ENUM_NAME(Cleaner_klass), scan, CHECK);
+  initialize_wk_klasses_through(WK_KLASS_ENUM_NAME(PhantomReference_klass), scan, CHECK);
   InstanceKlass::cast(WK_KLASS(SoftReference_klass))->set_reference_type(REF_SOFT);
   InstanceKlass::cast(WK_KLASS(WeakReference_klass))->set_reference_type(REF_WEAK);
   InstanceKlass::cast(WK_KLASS(FinalReference_klass))->set_reference_type(REF_FINAL);
   InstanceKlass::cast(WK_KLASS(PhantomReference_klass))->set_reference_type(REF_PHANTOM);
-  InstanceKlass::cast(WK_KLASS(Cleaner_klass))->set_reference_type(REF_CLEANER);
 
   initialize_wk_klasses_through(WK_KLASS_ENUM_NAME(ReferenceQueue_klass), scan, CHECK);
 
@@ -2281,7 +2280,7 @@ bool SystemDictionary::add_loader_constraint(Symbol* class_name,
 // Add entry to resolution error table to record the error when the first
 // attempt to resolve a reference to a class has failed.
 void SystemDictionary::add_resolution_error(constantPoolHandle pool, int which,
-                                            Symbol* error, Symbol* message) {
+                                            Symbol* error, const char* message) {
   unsigned int hash = resolution_errors()->compute_hash(pool, which);
   int index = resolution_errors()->hash_to_index(hash);
   {
@@ -2297,7 +2296,7 @@ void SystemDictionary::delete_resolution_error(ConstantPool* pool) {
 
 // Lookup resolution error table. Returns error if found, otherwise NULL.
 Symbol* SystemDictionary::find_resolution_error(constantPoolHandle pool, int which,
-                                                Symbol** message) {
+                                                const char** message) {
   unsigned int hash = resolution_errors()->compute_hash(pool, which);
   int index = resolution_errors()->hash_to_index(hash);
   {

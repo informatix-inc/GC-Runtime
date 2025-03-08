@@ -673,7 +673,6 @@ typedef TwoOopHashtable<Symbol*, mtClass>     SymbolTwoOopHashtable;
       static_field(SystemDictionary,            WK_KLASS(WeakReference_klass),                 Klass*)                               \
       static_field(SystemDictionary,            WK_KLASS(FinalReference_klass),                Klass*)                               \
       static_field(SystemDictionary,            WK_KLASS(PhantomReference_klass),              Klass*)                               \
-      static_field(SystemDictionary,            WK_KLASS(Cleaner_klass),                       Klass*)                               \
       static_field(SystemDictionary,            WK_KLASS(Finalizer_klass),                     Klass*)                               \
       static_field(SystemDictionary,            WK_KLASS(Thread_klass),                        Klass*)                               \
       static_field(SystemDictionary,            WK_KLASS(ThreadGroup_klass),                   Klass*)                               \
@@ -1748,6 +1747,8 @@ typedef TwoOopHashtable<Symbol*, mtClass>     SymbolTwoOopHashtable;
   declare_c2_type(MaxNode, AddNode)                                       \
   declare_c2_type(MaxINode, MaxNode)                                      \
   declare_c2_type(MinINode, MaxNode)                                      \
+  declare_c2_type(MaxLNode, MaxNode)                                      \
+  declare_c2_type(MinLNode, MaxNode)                                      \
   declare_c2_type(StartNode, MultiNode)                                   \
   declare_c2_type(StartOSRNode, StartNode)                                \
   declare_c2_type(ParmNode, ProjNode)                                     \

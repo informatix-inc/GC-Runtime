@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1999, 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1999, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -34,6 +34,7 @@ typedef int (*pthread_getattr_func_type) (pthread_t, pthread_attr_t *);
 static bool zero_page_read_protected() { return true; }
 
 class Linux {
+  friend class CgroupSubsystem;
   friend class os;
   friend class OSContainer;
   friend class TestReserveMemorySpecial;
@@ -61,7 +62,7 @@ class Linux {
   static address   _initial_thread_stack_bottom;
   static uintptr_t _initial_thread_stack_size;
 
-  static const char *_libc_version;
+  static const char *_glibc_version;
   static const char *_libpthread_version;
 
   static bool _is_floating_stack;
@@ -80,8 +81,6 @@ class Linux {
   static const int _vm_default_page_size;
 
   static julong available_memory();
-  static julong physical_memory() { return _physical_memory; }
-  static void set_physical_memory(julong phys_mem) { _physical_memory = phys_mem; }
   static int active_processor_count();
 
   static void initialize_system_info();
@@ -90,7 +89,7 @@ class Linux {
   static int commit_memory_impl(char* addr, size_t bytes,
                                 size_t alignment_hint, bool exec);
 
-  static void set_libc_version(const char *s)       { _libc_version = s; }
+  static void set_glibc_version(const char *s)      { _glibc_version = s; }
   static void set_libpthread_version(const char *s) { _libpthread_version = s; }
 
   static bool supports_variable_stack_size();
@@ -153,6 +152,9 @@ class Linux {
   static intptr_t* ucontext_get_sp(ucontext_t* uc);
   static intptr_t* ucontext_get_fp(ucontext_t* uc);
 
+  static julong physical_memory() { return _physical_memory; }
+  static julong host_swap();
+
   // For Analyzer Forte AsyncGetCallTrace profiling support:
   //
   // This interface should be declared in os_linux_i486.hpp, but
@@ -181,7 +183,7 @@ class Linux {
   static bool chained_handler(int sig, siginfo_t* siginfo, void* context);
 
   // GNU libc and libpthread version strings
-  static const char *libc_version()           { return _libc_version; }
+  static const char *glibc_version()          { return _glibc_version; }
   static const char *libpthread_version()     { return _libpthread_version; }
 
   // NPTL or LinuxThreads?

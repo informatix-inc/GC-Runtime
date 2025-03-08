@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2001, 2016, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2001, 2018, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -36,12 +36,7 @@
 #include <sys/uio.h>
 #include <unistd.h>
 #include <errno.h>
-
-#ifndef MUSL_LIBC
 #include <sys/poll.h>
-#else
-#include <poll.h>
-#endif
 
 /*
  * Stack allocated by thread when doing blocking operation
@@ -63,7 +58,7 @@ typedef struct {
 /*
  * Signal to unblock thread
  */
-static int sigWakeup;
+static int sigWakeup = (__SIGRTMAX - 2);
 
 /*
  * fdTable holds one entry per file descriptor, up to a certain
@@ -152,9 +147,6 @@ static void __attribute((constructor)) init() {
     /*
      * Setup the signal handler
      */
-#ifndef _AIX
-    sigWakeup = SIGRTMAX - 2;
-#endif
     sa.sa_handler = sig_wakeup;
     sa.sa_flags   = 0;
     sigemptyset(&sa.sa_mask);
@@ -296,13 +288,13 @@ static int closefd(int fd1, int fd2) {
          * And close/dup the file descriptor
          * (restart if interrupted by signal)
          */
-        do {
-            if (fd1 < 0) {
-                rv = close(fd2);
-            } else {
+        if (fd1 < 0) {
+            rv = close(fd2);
+        } else {
+            do {
                 rv = dup2(fd1, fd2);
-            }
-        } while (rv == -1 && errno == EINTR);
+            } while (rv == -1 && errno == EINTR);
+        }
 
         /*
          * Send a wakeup signal to all threads blocked on this

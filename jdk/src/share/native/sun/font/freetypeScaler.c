@@ -50,7 +50,7 @@
 #define  FloatToFTFixed(f) (FT_Fixed)((f) * (float)(ftFixed1))
 #define  FTFixedToFloat(x) ((x) / (float)(ftFixed1))
 #define  FT26Dot6ToFloat(x)  ((x) / ((float) (1<<6)))
-#define  ROUND(x) ((int) (x+0.5))
+#define  FT26Dot6ToInt(x) (((int)(x)) >> 6)
 
 typedef struct {
     /* Important note:
@@ -893,16 +893,21 @@ static jlong
 
     ftglyph = scalerInfo->face->glyph;
 
+    /* apply styles */
+    //if (context->doBold) { /* if bold style */
+    //    FT_GlyphSlot_Embolden(ftglyph);
+    //}
+
     /* generate bitmap if it is not done yet
      e.g. if algorithmic styling is performed and style was added to outline */
     if (renderImage && (ftglyph->format == FT_GLYPH_FORMAT_OUTLINE)) {
         FT_BBox bbox;
         int w, h;
-    	if (context->doBold) { /* if bold style */
-    		FT_Pos strength;
-    		strength = FT_MulFix(scalerInfo->face->units_per_EM, scalerInfo->face->size->metrics.y_scale) / 24;
-    		FT_Outline_Embolden(&ftglyph->outline, strength);
-    	}
+		if (context->doBold) { /* if bold style */
+			FT_Pos strength;
+			strength = FT_MulFix(scalerInfo->face->units_per_EM, scalerInfo->face->size->metrics.y_scale) / 24;
+			FT_Outline_Embolden(&ftglyph->outline, strength);
+		}
         FT_Outline_Get_CBox(&(ftglyph->outline), &bbox);
         w = (int)((bbox.xMax>>6)-(bbox.xMin>>6));
         h = (int)((bbox.yMax>>6)-(bbox.yMin>>6));
@@ -914,11 +919,12 @@ static jlong
         if (error != 0) {
             return ptr_to_jlong(getNullGlyphImage());
         }
-    } else {
-    	if (context->doBold) { /* if bold style */
-    		FT_GlyphSlot_Embolden(ftglyph);
-    	}
-    }
+    }else {
+		if (context->doBold) { /* if bold style */
+			FT_GlyphSlot_Embolden(ftglyph);
+		}
+	}
+
 
     if (renderImage) {
         width  = (UInt16) ftglyph->bitmap.width;
@@ -965,12 +971,12 @@ static jlong
     } else {
         if (!ftglyph->advance.y) {
             glyphInfo->advanceX =
-                (float) ROUND(FT26Dot6ToFloat(ftglyph->advance.x));
+                (float) FT26Dot6ToInt(ftglyph->advance.x);
             glyphInfo->advanceY = 0;
         } else if (!ftglyph->advance.x) {
             glyphInfo->advanceX = 0;
             glyphInfo->advanceY =
-                (float) ROUND(FT26Dot6ToFloat(-ftglyph->advance.y));
+                (float) FT26Dot6ToInt(-ftglyph->advance.y);
         } else {
             glyphInfo->advanceX = FT26Dot6ToFloat(ftglyph->advance.x);
             glyphInfo->advanceY = FT26Dot6ToFloat(-ftglyph->advance.y);

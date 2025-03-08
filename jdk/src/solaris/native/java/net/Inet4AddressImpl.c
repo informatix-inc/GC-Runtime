@@ -47,7 +47,7 @@
 
 #include "java_net_Inet4AddressImpl.h"
 
-#if defined(__linux__) || (defined(__FreeBSD__) && (__FreeBSD_version >= 601104))
+#if defined(__GLIBC__) || (defined(__FreeBSD__) && (__FreeBSD_version >= 601104))
 #define HAS_GLIBC_GETHOSTBY_R   1
 #endif
 
@@ -579,7 +579,7 @@ ping4(JNIEnv *env, jint fd, struct sockaddr_in* him, jint timeout,
     struct sockaddr_in sa_recv;
     jchar pid;
     jint tmout2, seq = 1;
-    struct timeval tv;
+    struct timeval tv = { 0, 0 };
     size_t plen;
 
     /* icmp_id is a 16 bit data type, therefore down cast the pid */
@@ -619,7 +619,7 @@ ping4(JNIEnv *env, jint fd, struct sockaddr_in* him, jint timeout,
       seq++;
       gettimeofday(&tv, NULL);
       memcpy(icmp->icmp_data, &tv, sizeof(tv));
-      plen = ICMP_ADVLENMIN + sizeof(tv);
+      plen = ICMP_MINLEN + sizeof(tv);
       icmp->icmp_cksum = 0;
       icmp->icmp_cksum = in_cksum((u_short *)icmp, plen);
       /*

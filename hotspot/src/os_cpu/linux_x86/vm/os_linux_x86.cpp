@@ -72,10 +72,7 @@
 # include <pwd.h>
 # include <poll.h>
 # include <ucontext.h>
-
-#ifndef MUSL_LIBC
-#include <fpu_control.h>
-#endif
+# include <fpu_control.h>
 
 #ifdef AMD64
 #define REG_SP REG_RSP
@@ -280,7 +277,7 @@ JVM_handle_linux_signal(int sig,
   if (info != NULL && uc != NULL && thread != NULL) {
     pc = (address) os::Linux::ucontext_get_pc(uc);
 
-    if (StubRoutines::is_safefetch_fault(pc)) {
+    if ((sig == SIGSEGV || sig == SIGBUS) && StubRoutines::is_safefetch_fault(pc)) {
       uc->uc_mcontext.gregs[REG_PC] = intptr_t(StubRoutines::continuation_for_safefetch_fault(pc));
       return 1;
     }
@@ -546,11 +543,6 @@ JVM_handle_linux_signal(int sig,
   ShouldNotReachHere();
   return true; // Mute compiler
 }
-
-#ifdef MUSL_LIBC
-#define _FPU_GETCW(cw) __asm__ __volatile__ ("fnstcw %0" : "=m" (*&cw))
-#define _FPU_SETCW(cw) __asm__ __volatile__ ("fldcw %0" : : "m" (*&cw))
-#endif
 
 void os::Linux::init_thread_fpu_state(void) {
 #ifndef AMD64

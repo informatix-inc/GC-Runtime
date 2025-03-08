@@ -632,6 +632,11 @@ void* os::malloc(size_t size, MEMFLAGS memflags, const NativeCallStack& stack) {
   NMT_TrackingLevel level = MemTracker::tracking_level();
   size_t            nmt_header_size = MemTracker::malloc_header_size(level);
 
+  // Check for overflow.
+  if (size + nmt_header_size < size) {
+    return NULL;
+  }
+
 #ifndef ASSERT
   const size_t alloc_size = size + nmt_header_size;
 #else
@@ -887,8 +892,12 @@ void os::print_date_and_time(outputStream *st, char* buf, size_t buflen) {
 
   struct tm tz;
   if (localtime_pd(&tloc, &tz) != NULL) {
-    ::strftime(buf, buflen, "%Z", &tz);
-    st->print_cr("timezone: %s", buf);
+    wchar_t w_buf[80];
+    size_t n = ::wcsftime(w_buf, 80, L"%Z", &tz);
+    if (n > 0) {
+      ::wcstombs(buf, w_buf, buflen);
+      st->print_cr("timezone: %s", buf);
+    }
   }
 
   double t = os::elapsedTime();

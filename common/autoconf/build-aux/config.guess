@@ -30,17 +30,6 @@
 DIR=`dirname $0`
 OUT=`. $DIR/autoconf-config.guess`
 
-# Detect C library.
-# Use '-gnu'  suffix on systems that use glibc.
-# Use '-musl' suffix on systems that use the musl libc.
-echo $OUT | grep -- -linux- > /dev/null 2> /dev/null
-if test $? = 0; then
-  ldd_version=`ldd --version 2>&1 | head -1 | cut -f1 -d' '`
-  if [ x"${ldd_version}" = x"musl" ]; then
-    OUT=`echo $OUT | sed 's/-gnu/-musl/'`
-  fi
-fi
-
 # Test and fix solaris on x86_64
 echo $OUT | grep i386-pc-solaris > /dev/null 2> /dev/null
 if test $? = 0; then
@@ -93,6 +82,15 @@ if [ "x$OUT" = x ]; then
   if [ `uname -m` = ppc64le ]; then
     if [ `uname -s` = Linux ]; then
       OUT=powerpc64le-unknown-linux-gnu
+    fi
+  fi
+fi
+
+# Test and fix LoongArch64.
+if [ "x$OUT" = x ]; then
+  if [ `uname -s` = Linux ]; then
+    if [ `uname -m` = loongarch64 ]; then
+      OUT=loongarch64-unknown-linux-gnu
     fi
   fi
 fi

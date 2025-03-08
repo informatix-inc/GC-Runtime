@@ -95,16 +95,13 @@
 # include <string.h>
 # include <syscall.h>
 # include <sys/sysinfo.h>
+# include <gnu/libc-version.h>
 # include <sys/ipc.h>
 # include <sys/shm.h>
 # include <link.h>
 # include <stdint.h>
 # include <inttypes.h>
 # include <sys/ioctl.h>
-
-#ifndef MUSL_LIBC
-#include <gnu/libc-version.h>
-#endif
 
 PRAGMA_FORMAT_MUTE_WARNINGS_FOR_GCC
 
@@ -147,7 +144,7 @@ const int os::Linux::_vm_default_page_size = (8 * K);
 bool os::Linux::_is_floating_stack = false;
 bool os::Linux::_is_NPTL = false;
 bool os::Linux::_supports_fast_thread_cpu_time = false;
-const char * os::Linux::_libc_version = NULL;
+const char * os::Linux::_glibc_version = NULL;
 const char * os::Linux::_libpthread_version = NULL;
 pthread_condattr_t os::Linux::_condattr[1];
 
@@ -187,21 +184,14 @@ julong os::Linux::available_memory() {
   julong avail_mem;
 
   if (OSContainer::is_containerized()) {
-    jlong mem_limit, mem_usage;
-    if ((mem_limit = OSContainer::memory_limit_in_bytes()) < 1) {
-      if (PrintContainerInfo) {
-        tty->print_cr("container memory limit %s: " JLONG_FORMAT ", using host value",
-                       mem_limit == OSCONTAINER_ERROR ? "failed" : "unlimited", mem_limit);
-      }
-    }
-
+    jlong mem_limit = OSContainer::memory_limit_in_bytes();
+    jlong mem_usage;
     if (mem_limit > 0 && (mem_usage = OSContainer::memory_usage_in_bytes()) < 1) {
       if (PrintContainerInfo) {
         tty->print_cr("container memory usage failed: " JLONG_FORMAT ", using host value", mem_usage);
       }
     }
-
-    if (mem_limit > 0 && mem_usage > 0 ) {
+    if (mem_limit > 0 && mem_usage > 0) {
       avail_mem = mem_limit > mem_usage ? (julong)mem_limit - (julong)mem_usage : 0;
       if (PrintContainerInfo) {
         tty->print_cr("available container memory: " JULONG_FORMAT, avail_mem);
@@ -227,11 +217,6 @@ julong os::physical_memory() {
         tty->print_cr("total container memory: " JLONG_FORMAT, mem_limit);
       }
       return mem_limit;
-    }
-
-    if (PrintContainerInfo) {
-      tty->print_cr("container memory limit %s: " JLONG_FORMAT ", using host value",
-                     mem_limit == OSCONTAINER_ERROR ? "failed" : "unlimited", mem_limit);
     }
   }
 
@@ -309,6 +294,14 @@ pid_t os::Linux::gettid() {
   } else {
      return (pid_t)rslt;
   }
+}
+
+// Returns the amount of swap currently configured, in bytes.
+// This can change at any time.
+julong os::Linux::host_swap() {
+  struct sysinfo si;
+  sysinfo(&si);
+  return (julong)si.totalswap;
 }
 
 // Most versions of linux have a bug where the number of processors are
@@ -584,15 +577,6 @@ void os::Linux::hotspot_sigmask(Thread* thread) {
 // detecting pthread library
 
 void os::Linux::libpthread_init() {
-#ifdef MUSL_LIBC
-  // Hard code Alpine Linux supported musl compatible settings.
-  // confstr() from musl libc returns EINVAL for
-  // _CS_GNU_LIBC_VERSION and _CS_GNU_LIBPTHREAD_VERSION
-  os::Linux::set_libc_version("musl - unknown");
-  os::Linux::set_libpthread_version("musl - unknown");
-  os::Linux::set_is_NPTL();
-  os::Linux::set_is_floating_stack();
-#else
   // Save glibc and pthread version strings. Note that _CS_GNU_LIBC_VERSION
   // and _CS_GNU_LIBPTHREAD_VERSION are supported in glibc >= 2.3.2. Use a
   // generic name for earlier versions.
@@ -608,13 +592,13 @@ void os::Linux::libpthread_init() {
   if (n > 0) {
      char *str = (char *)malloc(n, mtInternal);
      confstr(_CS_GNU_LIBC_VERSION, str, n);
-     os::Linux::set_libc_version(str);
+     os::Linux::set_glibc_version(str);
   } else {
      // _CS_GNU_LIBC_VERSION is not supported, try gnu_get_libc_version()
      static char _gnu_libc_version[32];
      jio_snprintf(_gnu_libc_version, sizeof(_gnu_libc_version),
               "glibc %s %s", gnu_get_libc_version(), gnu_get_libc_release());
-     os::Linux::set_libc_version(_gnu_libc_version);
+     os::Linux::set_glibc_version(_gnu_libc_version);
   }
 
   n = confstr(_CS_GNU_LIBPTHREAD_VERSION, NULL, 0);
@@ -627,7 +611,7 @@ void os::Linux::libpthread_init() {
      // So sysconf(_SC_THREAD_THREADS_MAX) will return a positive value.
      // On the other hand, NPTL does not have such a limit, sysconf()
      // will return -1 and errno is not changed. Check if it is really NPTL.
-     if (strcmp(os::Linux::libc_version(), "glibc 2.3.2") == 0 &&
+     if (strcmp(os::Linux::glibc_version(), "glibc 2.3.2") == 0 &&
          strstr(str, "NPTL") &&
          sysconf(_SC_THREAD_THREADS_MAX) > 0) {
        free(str);
@@ -651,7 +635,6 @@ void os::Linux::libpthread_init() {
   if (os::Linux::is_NPTL() || os::Linux::supports_variable_stack_size()) {
      os::Linux::set_is_floating_stack();
   }
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -809,7 +792,7 @@ static void *java_start(Thread *thread) {
   // processors with hyperthreading technology.
   static int counter = 0;
   int pid = os::current_process_id();
-  void *tmp = alloca(((pid ^ counter++) & 7) * 128);
+  alloca(((pid ^ counter++) & 7) * 128);
 
   ThreadLocalStorage::set_thread(thread);
 
@@ -1966,6 +1949,9 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen)
   #ifndef EM_AARCH64
   #define EM_AARCH64    183               /* ARM AARCH64 */
   #endif
+  #ifndef EM_LOONGARCH
+  #define EM_LOONGARCH  258               /* LoongArch */
+  #endif
 
   static const arch_t arch_array[]={
     {EM_386,         EM_386,     ELFCLASS32, ELFDATA2LSB, (char*)"IA 32"},
@@ -1989,6 +1975,7 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen)
     {EM_PARISC,      EM_PARISC,  ELFCLASS32, ELFDATA2MSB, (char*)"PARISC"},
     {EM_68K,         EM_68K,     ELFCLASS32, ELFDATA2MSB, (char*)"M68k"},
     {EM_AARCH64,     EM_AARCH64, ELFCLASS64, ELFDATA2LSB, (char*)"AARCH64"},
+    {EM_LOONGARCH,   EM_LOONGARCH, ELFCLASS64, ELFDATA2LSB, (char*)"LoongArch"},
   };
 
   #if  (defined IA32)
@@ -2021,9 +2008,11 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen)
     static  Elf32_Half running_arch_code=EM_68K;
   #elif  (defined AARCH64)
     static  Elf32_Half running_arch_code=EM_AARCH64;
+  #elif  (defined LOONGARCH64)
+    static  Elf32_Half running_arch_code=EM_LOONGARCH;
   #else
     #error Method os::dll_load requires that one of following is defined:\
-         IA32, AMD64, IA64, __sparc, __powerpc__, ARM, S390, ALPHA, MIPS, MIPSEL, PARISC, M68K, AARCH64
+         IA32, AMD64, IA64, __sparc, __powerpc__, ARM, S390, ALPHA, MIPS, MIPSEL, PARISC, M68K, AARCH64, LOONGARCH64
   #endif
 
   // Identify compatability class for VM's architecture and library's architecture
@@ -2282,7 +2271,7 @@ void os::Linux::print_distro_info(outputStream* st) {
 void os::Linux::print_libversion_info(outputStream* st) {
   // libc, pthread
   st->print("libc:");
-  st->print("%s ", os::Linux::libc_version());
+  st->print("%s ", os::Linux::glibc_version());
   st->print("%s ", os::Linux::libpthread_version());
   if (os::Linux::is_LinuxThreads()) {
      st->print("(%s stack)", os::Linux::is_floating_stack() ? "floating" : "fixed");
@@ -2297,7 +2286,7 @@ void os::Linux::print_full_memory_info(outputStream* st) {
 }
 
 void os::Linux::print_container_info(outputStream* st) {
-if (!OSContainer::is_containerized()) {
+  if (!OSContainer::is_containerized()) {
     return;
   }
 
@@ -2986,14 +2975,6 @@ int os::Linux::sched_getcpu_syscall(void) {
 extern "C" JNIEXPORT void numa_warn(int number, char *where, ...) { }
 extern "C" JNIEXPORT void numa_error(char *where) { }
 extern "C" JNIEXPORT int fork1() { return fork(); }
-
-#ifdef MUSL_LIBC
-  // dlvsym is not a part of POSIX and musl libc doesn't implement it.
-  static void *dlvsym(void *handle, const char *name, const char *ver)
-  {
-    return dlsym(handle, name);
-  }
-#endif
 
 // Handle request to load libnuma symbol version 1.1 (API v1). If it fails
 // load symbol from base version instead.
@@ -5017,8 +4998,7 @@ void os::Linux::check_signal_handler(int sig) {
   }
 
   if (thisHandler != jvmHandler) {
-    if(exception_name(sig, buf, O_BUFLEN))
-      tty->print("Warning: %s handler ", exception_name(sig, buf, O_BUFLEN));
+    tty->print("Warning: %s handler ", exception_name(sig, buf, O_BUFLEN));
     tty->print("expected:%s", get_signal_handler_name(jvmHandler, buf, O_BUFLEN));
     tty->print_cr("  found:%s", get_signal_handler_name(thisHandler, buf, O_BUFLEN));
     // No need to check this sig any longer
@@ -5208,7 +5188,7 @@ jint os::init_2(void)
   Linux::libpthread_init();
   if (PrintMiscellaneous && (Verbose || WizardMode)) {
      tty->print_cr("[HotSpot is running with %s, %s(%s)]\n",
-          Linux::libc_version(), Linux::libpthread_version(),
+          Linux::glibc_version(), Linux::libpthread_version(),
           Linux::is_floating_stack() ? "floating stack" : "fixed stack");
   }
 

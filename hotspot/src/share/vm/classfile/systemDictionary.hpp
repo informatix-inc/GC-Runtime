@@ -127,7 +127,6 @@ class SymbolPropertyTable;
   do_klass(WeakReference_klass,                         java_lang_ref_WeakReference,               Pre                 ) \
   do_klass(FinalReference_klass,                        java_lang_ref_FinalReference,              Pre                 ) \
   do_klass(PhantomReference_klass,                      java_lang_ref_PhantomReference,            Pre                 ) \
-  do_klass(Cleaner_klass,                               sun_misc_Cleaner,                          Pre                 ) \
   do_klass(Finalizer_klass,                             java_lang_ref_Finalizer,                   Pre                 ) \
   do_klass(ReferenceQueue_klass,                        java_lang_ref_ReferenceQueue,              Pre                 ) \
                                                                                                                          \
@@ -550,10 +549,10 @@ public:
   // Record the error when the first attempt to resolve a reference from a constant
   // pool entry to a class fails.
   static void add_resolution_error(constantPoolHandle pool, int which, Symbol* error,
-                                   Symbol* message);
+                                   const char* message);
   static void delete_resolution_error(ConstantPool* pool);
   static Symbol* find_resolution_error(constantPoolHandle pool, int which,
-                                       Symbol** message);
+                                       const char** message);
 
  protected:
 

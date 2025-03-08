@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015, 2019, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -31,13 +31,14 @@ import java.util.List;
 
 import jdk.jfr.internal.Options;
 import jdk.test.lib.Asserts;
+import jdk.test.lib.Utils;
 
 /**
  * @test
  * @summary The test verifies JFR.configure command
  * @key jfr
  *
- * @library /lib /
+ * @library /test/lib /
  *
  * @run main/othervm jdk.jfr.jcmd.TestJcmdConfigure
  */
@@ -62,7 +63,7 @@ public class TestJcmdConfigure {
         // - where feasible, check if they are respected
         //
 
-        String dumpPath = Files.createTempDirectory("dump-path").toAbsolutePath().toString();
+        String dumpPath = Utils.createTempDirectory("dump-path-").toAbsolutePath().toString();
 
         test(DUMPPATH, dumpPath);
         test(STACK_DEPTH, 15);

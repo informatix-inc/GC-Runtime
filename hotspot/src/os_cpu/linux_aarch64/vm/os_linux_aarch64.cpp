@@ -72,12 +72,7 @@
 # include <pwd.h>
 # include <poll.h>
 # include <ucontext.h>
-
-#ifdef MUSL_LIBC
-#include <fpu_control.h>
-#else
-#include <linux/types.h>  /* provides __u64 */
-#endif
+# include <fpu_control.h>
 
 #define REG_FP 29
 
@@ -256,7 +251,7 @@ JVM_handle_linux_signal(int sig,
   if (info != NULL && uc != NULL && thread != NULL) {
     pc = (address) os::Linux::ucontext_get_pc(uc);
 
-    if (StubRoutines::is_safefetch_fault(pc)) {
+    if ((sig == SIGSEGV || sig == SIGBUS) && StubRoutines::is_safefetch_fault(pc)) {
       uc->uc_mcontext.pc = intptr_t(StubRoutines::continuation_for_safefetch_fault(pc));
       return 1;
     }
