@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, 2024, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2023, 2025, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -484,6 +484,58 @@
  * @run main/othervm -Djava.security.debug=certpath CAInterop globalsigne46 CRL
  */
 
+/*
+ * @test id=ssltlsrootecc2022
+ * @bug 8341057
+ * @summary Interoperability tests with SSL TLS 2022 root CAs
+ * @library /test/lib
+ * @build jtreg.SkippedException ValidatePathWithURL CAInterop
+ * @run main/othervm -Djava.security.debug=certpath,ocsp CAInterop ssltlsrootecc2022 DEFAULT
+ * @run main/othervm -Djava.security.debug=certpath,ocsp -Dcom.sun.security.ocsp.useget=false CAInterop ssltlsrootecc2022 DEFAULT
+ * @run main/othervm -Djava.security.debug=certpath CAInterop ssltlsrootecc2022 CRL
+ */
+
+/*
+ * @test id=ssltlsrootrsa2022
+ * @bug 8341057
+ * @summary Interoperability tests with SSL TLS 2022 root CAs
+ * @library /test/lib
+ * @build jtreg.SkippedException ValidatePathWithURL CAInterop
+ * @run main/othervm -Djava.security.debug=certpath,ocsp CAInterop ssltlsrootrsa2022 DEFAULT
+ * @run main/othervm -Djava.security.debug=certpath,ocsp -Dcom.sun.security.ocsp.useget=false CAInterop ssltlsrootrsa2022 DEFAULT
+ * @run main/othervm -Djava.security.debug=certpath CAInterop ssltlsrootrsa2022 CRL
+ */
+
+/*
+ * @test id=sectigotlsrootr46
+ * @bug 8359170
+ * @summary Interoperability tests with Sectigo Public Server Authentication
+ * Root R46
+ * @library /test/lib
+ * @build jtreg.SkippedException ValidatePathWithURL CAInterop
+ * @run main/othervm -Djava.security.debug=certpath,ocsp CAInterop
+ * sectigotlsrootr46 OCSP
+ * @run main/othervm -Djava.security.debug=certpath,ocsp
+ * -Dcom.sun.security.ocsp.useget=false CAInterop sectigotlsrootr46 OCSP
+ * @run main/othervm -Djava.security.debug=certpath CAInterop
+ * sectigotlsrootr46 CRL
+ */
+
+/*
+ * @test id=sectigotlsroote46
+ * @bug 8359170
+ * @summary Interoperability tests with Sectigo Public Server Authentication
+ * Root E46
+ * @library /test/lib
+ * @build jtreg.SkippedException ValidatePathWithURL CAInterop
+ * @run main/othervm -Djava.security.debug=certpath,ocsp CAInterop
+ * sectigotlsroote46 OCSP
+ * @run main/othervm -Djava.security.debug=certpath,ocsp
+ * -Dcom.sun.security.ocsp.useget=false CAInterop sectigotlsroote46 OCSP
+ * @run main/othervm -Djava.security.debug=certpath CAInterop
+ * sectigotlsroote46 CRL
+ */
+
 /**
  * Collection of certificate validation tests for interoperability with external CAs
  */
@@ -659,6 +711,20 @@ public class CAInterop {
             case "globalsigne46":
                     return new CATestURLs("https://valid.e46.roots.globalsign.com",
                             "https://revoked.e46.roots.globalsign.com");
+
+            case "ssltlsrootecc2022":
+                    return new CATestURLs("https://test-root-2022-ecc.ssl.com",
+                            "https://revoked-root-2022-ecc.ssl.com");
+            case "ssltlsrootrsa2022":
+                    return new CATestURLs("https://test-root-2022-rsa.ssl.com",
+                            "https://revoked-root-2022-rsa.ssl.com");
+
+            case "sectigotlsrootr46":
+                    return new CATestURLs("https://sectigopublicserverauthenticationrootr46-ev.sectigo.com",
+                            "https://sectigopublicserverauthenticationrootr46-ev.sectigo.com:444");
+            case "sectigotlsroote46":
+                    return new CATestURLs("https://sectigopublicserverauthenticationroote46-ev.sectigo.com",
+                            "https://sectigopublicserverauthenticationroote46-ev.sectigo.com:444");
 
             default: throw new RuntimeException("No test setup found for: " + alias);
         }
