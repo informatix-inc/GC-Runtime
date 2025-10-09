@@ -919,7 +919,7 @@ static jlong
             FT_GlyphSlot_Embolden(ftglyph);
         }
     }
-
+    
     if (renderImage) {
         width  = (UInt16) ftglyph->bitmap.width;
         height = (UInt16) ftglyph->bitmap.rows;
