@@ -75,15 +75,11 @@ GlyphBlitVector* setupBlitVector(JNIEnv *env, jobject glyphlist) {
         ? (jfloatArray)
       (*env)->GetObjectField(env, glyphlist, sunFontIDs.glyphListPos)
         : NULL;
-    if (len > (SIZE_MAX - sizeof(GlyphBlitVector)) / sizeof(ImageRef)) {
-        return NULL;
-    }
     bytesNeeded = sizeof(GlyphBlitVector)+sizeof(ImageRef)*len;
     gbv = (GlyphBlitVector*)malloc(bytesNeeded);
     if (gbv == NULL) {
         return NULL;
     }
-    memset(gbv, 0, bytesNeeded);
     gbv->numGlyphs = len;
     gbv->glyphs = (ImageRef*)((unsigned char*)gbv+sizeof(GlyphBlitVector));
 
@@ -115,23 +111,6 @@ GlyphBlitVector* setupBlitVector(JNIEnv *env, jobject glyphlist) {
             jfloat py = y + positions[++n];
 
             ginfo = (GlyphInfo*)imagePtrs[g];
-            if (ginfo == NULL) {
-                (*env)->ReleasePrimitiveArrayCritical(env, glyphPositions,
-                                                      positions, JNI_ABORT);
-                (*env)->ReleasePrimitiveArrayCritical(env, glyphImages,
-                                                      imagePtrs, JNI_ABORT);
-                free(gbv);
-                return NULL;
-            }
-            if (ginfo->width < 0 || ginfo->height < 0 ||
-                ginfo->rowBytes < 0 || ginfo->image == NULL) {
-                (*env)->ReleasePrimitiveArrayCritical(env, glyphPositions,
-                                                      positions, JNI_ABORT);
-                (*env)->ReleasePrimitiveArrayCritical(env, glyphImages,
-                                                      imagePtrs, JNI_ABORT);
-                free(gbv);
-                return NULL;
-            }
             gbv->glyphs[g].glyphInfo = ginfo;
             gbv->glyphs[g].pixels = ginfo->image;
             gbv->glyphs[g].width = ginfo->width;
@@ -145,19 +124,6 @@ GlyphBlitVector* setupBlitVector(JNIEnv *env, jobject glyphlist) {
     } else {
         for (g=0; g<len; g++) {
             ginfo = (GlyphInfo*)imagePtrs[g];
-            if (ginfo == NULL) {
-                (*env)->ReleasePrimitiveArrayCritical(env, glyphImages,
-                                                      imagePtrs, JNI_ABORT);
-                free(gbv);
-                return NULL;
-            }
-            if (ginfo->width < 0 || ginfo->height < 0 ||
-                ginfo->rowBytes < 0 || ginfo->image == NULL) {
-                (*env)->ReleasePrimitiveArrayCritical(env, glyphImages,
-                                                      imagePtrs, JNI_ABORT);
-                free(gbv);
-                return NULL;
-            }
             ginfo = (GlyphInfo*)imagePtrs[g];
             gbv->glyphs[g].glyphInfo = ginfo;
             gbv->glyphs[g].pixels = ginfo->image;
