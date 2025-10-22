@@ -33,6 +33,7 @@
 #include "GraphicsPrimitiveMgr.h"
 #include "sun_java2d_loops_DrawGlyphList.h"
 #include "sun_java2d_loops_DrawGlyphListAA.h"
+#include <windows.h> // SEH用
 
 
 /*
@@ -322,20 +323,23 @@ Java_sun_java2d_loops_DrawGlyphList_DrawGlyphList
     GlyphBlitVector* gbv;
     NativePrimitive *pPrim;
 
-    if ((pPrim = GetNativePrim(env, self)) == NULL) {
+    __try {
+        if ((pPrim = GetNativePrim(env, self)) == NULL) {
+            return;
+        }
+
+        if ((gbv = setupBlitVector(env, glyphlist)) == NULL) {
+            return;
+        }
+
+        pixel = GrPrim_Sg2dGetPixel(env, sg2d);
+        color = GrPrim_Sg2dGetEaRGB(env, sg2d);
+        drawGlyphList(env, self, sg2d, sData, gbv, pixel, color,
+                    pPrim, pPrim->funcs.drawglyphlist);
+        free(gbv);
+    } __except(EXCEPTION_EXECUTE_HANDLER) {
         return;
     }
-
-    if ((gbv = setupBlitVector(env, glyphlist)) == NULL) {
-        return;
-    }
-
-    pixel = GrPrim_Sg2dGetPixel(env, sg2d);
-    color = GrPrim_Sg2dGetEaRGB(env, sg2d);
-    drawGlyphList(env, self, sg2d, sData, gbv, pixel, color,
-                  pPrim, pPrim->funcs.drawglyphlist);
-    free(gbv);
-
 }
 
 /*
