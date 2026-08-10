@@ -86,7 +86,7 @@ CXX_FLAGS=$(CXX_FLAGS) /D "IA32" /arch:IA32
 CXX=ARCH_ERROR
 !endif
 
-CXX_FLAGS=$(CXX_FLAGS) /D "WIN32" /D "_WINDOWS"
+CXX_FLAGS=$(CXX_FLAGS) /D "WIN32" /D "_WINDOWS" /wd4819
 # Must specify this for sharedRuntimeTrig.cpp
 CXX_FLAGS=$(CXX_FLAGS) /D "VM_LITTLE_ENDIAN"
 
@@ -172,7 +172,7 @@ COMPILER_NAME=VS2017
 !if "$(MSC_VER)" >= "1920" && "$(MSC_VER)" <= "1929"
 COMPILER_NAME=VS2019
 !endif
-!if "$(MSC_VER)" >= "1930" && "$(MSC_VER)" <= "1938"
+!if "$(MSC_VER)" >= "1930" && "$(MSC_VER)" <= "1944"
 COMPILER_NAME=VS2022
 !endif
 !endif

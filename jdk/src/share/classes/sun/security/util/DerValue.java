@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 1996, 2019, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1996, 2026, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -156,6 +156,9 @@ public class DerValue {
      * "SET OF" (one to N members, order does not matter).
      */
     public final static byte    tag_SetOf = 0x31;
+
+    // Max nested depth for constructed data
+    private static final int MAX_CONSTRUCTED_NEST = 30;
 
     /*
      * These values are the high order bits for the other kinds of tags.
@@ -504,6 +507,14 @@ public class DerValue {
      * @return the octet string held in this DER value
      */
     public byte[] getOctetString() throws IOException {
+        return getOctetString(0);
+    }
+
+    private byte[] getOctetString(int limit) throws IOException {
+        if (++limit > MAX_CONSTRUCTED_NEST) {
+            throw new IOException("Nested OctetString limit reached ("
+                + MAX_CONSTRUCTED_NEST + ").");
+        }
 
         if (tag != tag_OctetString && !isConstructed(tag_OctetString)) {
             throw new IOException(
@@ -530,7 +541,7 @@ public class DerValue {
                 buffer.allowBER);
             bytes = null;
             while (in.available() != 0) {
-                bytes = append(bytes, in.getOctetString());
+                bytes = append(bytes, in.getDerValue().getOctetString(limit));
             }
         }
         return bytes;
@@ -821,6 +832,22 @@ public class DerValue {
                 doEquals(this, other):
                 doEquals(other, this);
     }
+
+    /**
+     * Checks that the BMPString does not contain any surrogate characters,
+     * which are outside the Basic Multilingual Plane.
+     *
+     * @throws IOException if illegal characters are detected
+     */
+    public void validateBMPString() throws IOException {
+        String bmpString = getBMPString();
+        for (int i = 0; i < bmpString.length(); i++) {
+            if (Character.isSurrogate(bmpString.charAt(i))) {
+                throw new IOException(
+                    "Illegal character in BMPString, index: " + i);
+            }
+         }
+     }
 
     /**
      * Helper for public method equals()

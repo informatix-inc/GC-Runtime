@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, 2025, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2023, 2026, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -377,46 +377,6 @@
  */
 
 /*
- * @test id=affirmtrustcommercialca
- * @bug 8040012
- * @summary Interoperability tests with AffirmTrust Commercial CA
- * @library /test/lib
- * @build jtreg.SkippedException ValidatePathWithURL CAInterop
- * @run main/othervm -Djava.security.debug=certpath,ocsp CAInterop affirmtrustcommercialca OCSP
- * @run main/othervm -Djava.security.debug=certpath CAInterop affirmtrustcommercialca CRL
- */
-
-/*
- * @test id=affirmtrustnetworkingca
- * @bug 8040012
- * @summary Interoperability tests with AffirmTrust Networking CA
- * @library /test/lib
- * @build jtreg.SkippedException ValidatePathWithURL CAInterop
- * @run main/othervm -Djava.security.debug=certpath,ocsp CAInterop affirmtrustnetworkingca OCSP
- * @run main/othervm -Djava.security.debug=certpath CAInterop affirmtrustnetworkingca CRL
- */
-
-/*
- * @test id=affirmtrustpremiumca
- * @bug 8040012
- * @summary Interoperability tests with AffirmTrust Premium CA
- * @library /test/lib
- * @build jtreg.SkippedException ValidatePathWithURL CAInterop
- * @run main/othervm -Djava.security.debug=certpath,ocsp CAInterop affirmtrustpremiumca OCSP
- * @run main/othervm -Djava.security.debug=certpath CAInterop affirmtrustpremiumca CRL
- */
-
-/*
- * @test id=affirmtrustpremiumeccca
- * @bug 8040012
- * @summary Interoperability tests with AffirmTrust Premium ECC CA
- * @library /test/lib
- * @build jtreg.SkippedException ValidatePathWithURL CAInterop
- * @run main/othervm -Djava.security.debug=certpath,ocsp CAInterop affirmtrustpremiumeccca OCSP
- * @run main/othervm -Djava.security.debug=certpath CAInterop affirmtrustpremiumeccca CRL
- */
-
-/*
  * @test id=teliarootcav2
  * @bug 8317373
  * @summary Interoperability tests with Telia Root CA V2
@@ -536,6 +496,30 @@
  * sectigotlsroote46 CRL
  */
 
+/*
+ * @test id=wisekeyglobalrootgbca
+ * @bug 8372351
+ * @summary Interoperability tests with OISTE WISeKey Global Root GB CA
+ * @library /test/lib
+ * @build jtreg.SkippedException ValidatePathWithURL CAInterop
+ * @run main/othervm -Djava.security.debug=certpath,ocsp CAInterop
+ * wisekeyglobalrootgbca OCSP
+ * @run main/othervm -Djava.security.debug=certpath CAInterop
+ * wisekeyglobalrootgbca CRL
+ */
+
+/*
+ * @test id=wisekeyglobalrootgcca
+ * @bug 8372351
+ * @summary Interoperability tests with OISTE WISeKey Global Root GC CA
+ * @library /test/lib
+ * @build jtreg.SkippedException ValidatePathWithURL CAInterop
+ * @run main/othervm -Djava.security.debug=certpath,ocsp CAInterop
+ * wisekeyglobalrootgcca OCSP
+ * @run main/othervm -Djava.security.debug=certpath CAInterop
+ * wisekeyglobalrootgcca CRL
+ */
+
 /**
  * Collection of certificate validation tests for interoperability with external CAs
  */
@@ -612,20 +596,20 @@ public class CAInterop {
                     "https://revoked.sfig2.catest.starfieldtech.com");
 
             case "globalsigneccrootcar4":
-                    return new CATestURLs("https://good.gsr4.demo.pki.goog",
-                    "https://revoked.gsr4.demo.pki.goog");
+                    return new CATestURLs("https://good.gsr4.demosite.pki.goog",
+                    "https://revoked.gsr4.demosite.pki.goog");
             case "gtsrootcar1":
-                    return new CATestURLs("https://good.gtsr1.demo.pki.goog",
-                    "https://revoked.gtsr1.demo.pki.goog");
+                    return new CATestURLs("https://good.gtsr1.demosite.pki.goog",
+                    "https://revoked.gtsr1.demosite.pki.goog");
             case "gtsrootcar2":
-                    return new CATestURLs("https://good.gtsr2.demo.pki.goog",
-                    "https://revoked.gtsr2.demo.pki.goog");
+                    return new CATestURLs("https://good.gtsr2.demosite.pki.goog",
+                    "https://revoked.gtsr2.demosite.pki.goog");
             case "gtsrootecccar3":
-                    return new CATestURLs("https://good.gtsr3.demo.pki.goog",
-                    "https://revoked.gtsr3.demo.pki.goog");
+                    return new CATestURLs("https://good.gtsr3.demosite.pki.goog",
+                    "https://revoked.gtsr3.demosite.pki.goog");
             case "gtsrootecccar4":
-                    return new CATestURLs("https://good.gtsr4.demo.pki.goog",
-                    "https://revoked.gtsr4.demo.pki.goog");
+                    return new CATestURLs("https://good.gtsr4.demosite.pki.goog",
+                    "https://revoked.gtsr4.demosite.pki.goog");
 
             case "microsoftecc2017":
                     return new CATestURLs("https://acteccroot2017.pki.microsoft.com",
@@ -677,20 +661,6 @@ public class CAInterop {
                     return new CATestURLs("https://juolukka.cover.telia.fi:10600",
                             "https://juolukka.cover.telia.fi:10601");
 
-            // These are listed at https://www.affirmtrust.com/resources/
-            case "affirmtrustcommercialca":
-                    return new CATestURLs("https://validcommercial.affirmtrust.com",
-                            "https://revokedcommercial.affirmtrust.com");
-            case "affirmtrustnetworkingca":
-                    return new CATestURLs("https://validnetworking.affirmtrust.com",
-                            "https://revokednetworking.affirmtrust.com");
-            case "affirmtrustpremiumca":
-                    return new CATestURLs("https://validpremium.affirmtrust.com",
-                            "https://revokedpremium.affirmtrust.com");
-            case "affirmtrustpremiumeccca":
-                    return new CATestURLs("https://validpremiumecc.affirmtrust.com",
-                            "https://revokedpremiumecc.affirmtrust.com");
-
             case "emsignrootcag1":
                     return new CATestURLs("https://testovg1.emsign.com/RootOVG1.html",
                             "https://testovg1r.emsign.com/RootOVG1MR.html");
@@ -725,6 +695,13 @@ public class CAInterop {
             case "sectigotlsroote46":
                     return new CATestURLs("https://sectigopublicserverauthenticationroote46-ev.sectigo.com",
                             "https://sectigopublicserverauthenticationroote46-ev.sectigo.com:444");
+
+            case "wisekeyglobalrootgbca":
+                    return new CATestURLs("https://gbvalidssl.hightrusted.com",
+                            "https://gbrevokedssl.hightrusted.com");
+            case "wisekeyglobalrootgcca":
+                    return new CATestURLs("https://gcvalidssl.hightrusted.com",
+                            "https://gcrevokedssl.hightrusted.com");
 
             default: throw new RuntimeException("No test setup found for: " + alias);
         }

@@ -1,0 +1,201 @@
+configure: Configuration created at Mon Aug 10 16:26:40 JST 2026.
+configure: configure script generated at timestamp 1779849897.
+checking for basename... /usr/bin/basename
+checking for bash... /usr/bin/bash
+checking for cat... /usr/bin/cat
+checking for chmod... /usr/bin/chmod
+checking for cmp... /usr/bin/cmp
+checking for comm... /usr/bin/comm
+checking for cp... /usr/bin/cp
+checking for cut... /usr/bin/cut
+checking for date... /usr/bin/date
+checking for gdiff... no
+checking for diff... /usr/bin/diff
+checking for dirname... /usr/bin/dirname
+checking for echo... /usr/bin/echo
+checking for expr... /usr/bin/expr
+checking for file... /usr/bin/file
+checking for find... /usr/bin/find
+checking for head... /usr/bin/head
+checking for ln... /usr/bin/ln
+checking for ls... /usr/bin/ls
+checking for mkdir... /usr/bin/mkdir
+checking for mktemp... /usr/bin/mktemp
+checking for mv... /usr/bin/mv
+checking for nawk... no
+checking for gawk... /usr/bin/gawk
+checking for printf... /usr/bin/printf
+checking for rm... /usr/bin/rm
+checking for sh... /usr/bin/sh
+checking for sort... /usr/bin/sort
+checking for tail... /usr/bin/tail
+checking for tar... /usr/bin/tar
+checking for tee... /usr/bin/tee
+checking for touch... /usr/bin/touch
+checking for tr... /usr/bin/tr
+checking for uname... /usr/bin/uname
+checking for uniq... /usr/bin/uniq
+checking for wc... /usr/bin/wc
+checking for which... /usr/bin/which
+checking for xargs... /usr/bin/xargs
+checking for gawk... gawk
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for fgrep... /usr/bin/grep -F
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for cygpath... /usr/bin/cygpath
+checking for greadlink... no
+checking for readlink... /usr/bin/readlink
+checking for df... /usr/bin/df
+checking for SetFile... no
+checking for cpio... /usr/bin/cpio
+checking for pandoc... no
+checking build system type... x86_64-unknown-cygwin
+checking host system type... x86_64-unknown-cygwin
+checking target system type... x86_64-unknown-cygwin
+checking openjdk-build os-cpu... windows-x86_64
+checking openjdk-target os-cpu... windows-x86_64
+checking compilation type... native
+checking cygwin release... 3.6.4-1.x86_64
+checking cygwin root directory as unix-style path... /cygdrive/c/cygwin64
+checking what kind of 'find' is first on the PATH... unix style
+checking for top-level directory... /home/gc/jdk8u
+configure: Rewriting CURDIR to "/cygdrive/c/cygwin64/home/gc/jdk8u"
+configure: Rewriting TOPDIR to "/cygdrive/c/cygwin64/home/gc/jdk8u"
+checking for presence of closed sources... no
+checking if closed source is suppressed (openjdk-only)... no
+checking which variant of the JDK to build... normal
+checking which interpreter of the JVM to build... template
+checking which variants of the JVM to build... server
+checking which debug level to use... release
+checking for sysroot... 
+checking for toolchain path... 
+checking for extra path... 
+checking where to store configuration... in default location
+checking what configuration name to use... windows-x86_64-normal-server-release
+checking for apt-get... no
+checking for yum... no
+checking for port... no
+checking for pkgutil... no
+checking for pkgadd... no
+checking for gmake... no
+checking for make... /usr/bin/make
+configure: Testing potential make at /usr/bin/make, found using make in PATH
+configure: Using GNU make 3.81 (or later) at /usr/bin/make (version: GNU Make 4.4.1)
+checking if find supports -delete... yes
+checking for unzip... /usr/bin/unzip
+checking for zip... /usr/bin/zip
+checking for ldd... /usr/bin/ldd
+checking for readelf... /usr/bin/readelf
+checking for hg... no
+checking for git... /usr/bin/git
+checking for stat... /usr/bin/stat
+checking for time... no
+configure: WARNING: Ignoring value of COMM from the environment. Use command line variables instead.
+checking for comm... (cached) /usr/bin/comm
+checking for pkg-config... no
+checking for 7z... no
+checking for unzip... unzip
+checking for wget... no
+checking for lftp... no
+checking for ftp... ftp
+checking headful support... include support for both headful and headless
+checking whether to build JFR... true
+/cygdrive/c/cygwin64/home/gc/jdk8u/common/autoconf/version-numbers: line 31: Runtime: command not found
+configure: Found potential Boot JDK using configure arguments
+grep: warning: stray \ before "
+checking for Boot JDK... /cygdrive/c/AdoptOpenJDK/prerequisite/jdk7
+checking Boot JDK version... java version "1.7.0_80"  Java(TM) SE Runtime Environment (build 1.7.0_80-b15)  Java HotSpot(TM) 64-Bit Server VM (build 24.80-b11, mixed mode)  
+checking for java in Boot JDK... ok
+checking for javac in Boot JDK... ok
+checking for javah in Boot JDK... ok
+checking for javap in Boot JDK... ok
+checking for jar in Boot JDK... ok
+checking for rmic in Boot JDK... ok
+checking for native2ascii in Boot JDK... ok
+checking if Boot JDK is 32 or 64 bits... 64
+checking flags for boot jdk java command ...  
+checking flags for boot jdk java command for big workloads...  -Xms64M -Xmx1600M -XX:ThreadStackSize=1536 -XX:PermSize=32m -XX:MaxPermSize=160m
+checking flags for boot jdk java command for small workloads...  -XX:+UseSerialGC -Xms32M -Xmx512M
+configure: Using default toolchain microsoft (Microsoft Visual Studio)
+checking for link... /usr/bin/link
+checking if the first found link.exe is actually the Cygwin link tool... yes
+configure: Found Visual Studio installation at /cygdrive/c/Program Files (x86)/Microsoft Visual Studio/2019/Professional using well-known name
+configure: Found Microsoft Visual Studio 2019
+configure: Rewriting VS_ENV_CMD to "/cygdrive/c/progra~2/micros~2/2019/profes~1/vc/auxili~1/build/vcvars~2.bat"
+configure: Trying to extract Visual Studio environment variables
+**********************************************************************
+** Visual Studio 2019 Developer Command Prompt v16.11.51
+** Copyright (c) 2021 Microsoft Corporation
+**********************************************************************
+[vcvarsall.bat] Environment initialized for: 'x86_x64'
+configure: Setting extracted environment variables
+checking for Visual Studio variables... ok
+checking for cl... /cygdrive/c/PROGRA~2/MICROS~2/2019/PROFES~1/VC/Tools/MSVC/14.29.30133/bin/HostX86/x64/cl
+configure: Rewriting CC to "/cygdrive/c/progra~2/micros~2/2019/profes~1/vc/tools/msvc/1429~1.301/bin/hostx86/x64/cl"
+checking resolved symbolic links for CC... no symlink
+configure: Using microsoft C compiler version 19.29.30159 [Microsoft(R) C/C++ Optimizing Compiler Version 19.29.30159 for x64]
+checking whether the C compiler works... yes
+checking for C compiler default output file name... conftest.exe
+checking for suffix of executables... .exe
+checking whether we are cross compiling... no
+checking for suffix of object files... obj
+checking whether we are using the GNU C compiler... no
+checking whether /cygdrive/c/progra~2/micros~2/2019/profes~1/vc/tools/msvc/1429~1.301/bin/hostx86/x64/cl accepts -g... yes
+checking for /cygdrive/c/progra~2/micros~2/2019/profes~1/vc/tools/msvc/1429~1.301/bin/hostx86/x64/cl option to accept ISO C89... none needed
+checking for cl... /cygdrive/c/PROGRA~2/MICROS~2/2019/PROFES~1/VC/Tools/MSVC/14.29.30133/bin/HostX86/x64/cl
+configure: Rewriting CXX to "/cygdrive/c/progra~2/micros~2/2019/profes~1/vc/tools/msvc/1429~1.301/bin/hostx86/x64/cl"
+checking resolved symbolic links for CXX... no symlink
+configure: Using microsoft C++ compiler version 19.29.30159 [Microsoft(R) C/C++ Optimizing Compiler Version 19.29.30159 for x64]
+checking whether we are using the GNU C++ compiler... no
+checking whether /cygdrive/c/progra~2/micros~2/2019/profes~1/vc/tools/msvc/1429~1.301/bin/hostx86/x64/cl accepts -g... yes
+checking how to run the C preprocessor... /cygdrive/c/progra~2/micros~2/2019/profes~1/vc/tools/msvc/1429~1.301/bin/hostx86/x64/cl -E
+checking how to run the C++ preprocessor... /cygdrive/c/progra~2/micros~2/2019/profes~1/vc/tools/msvc/1429~1.301/bin/hostx86/x64/cl -E
+checking for link... link
+configure: Rewriting LD to "/cygdrive/c/progra~2/micros~2/2019/profes~1/vc/tools/msvc/1429~1.301/bin/hostx86/x64/link"
+checking if the found link.exe is actually the Visual Studio linker... yes
+checking for lib... lib
+configure: Rewriting AR to "/cygdrive/c/progra~2/micros~2/2019/profes~1/vc/tools/msvc/1429~1.301/bin/hostx86/x64/lib"
+checking for mt... mt
+configure: Rewriting MT to "/cygdrive/c/progra~2/wi3cf2~1/10/bin/100190~1.0/x86/mt"
+checking for rc... rc
+configure: Rewriting RC to "/cygdrive/c/progra~2/wi3cf2~1/10/bin/100190~1.0/x86/rc"
+checking for dumpbin... dumpbin
+configure: Rewriting DUMPBIN to "/cygdrive/c/progra~2/micros~2/2019/profes~1/vc/tools/msvc/1429~1.301/bin/hostx86/x64/dumpbin"
+checking for msbuild.exe... msbuild.exe
+checking for gobjdump... no
+checking for objdump... objdump
+configure: Rewriting OBJDUMP to "/usr/bin/objdump"
+checking for jtreg... no
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... no
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... no
+checking stdio.h usability... yes
+checking stdio.h presence... yes
+checking for stdio.h... yes
+checking size of int *... 8
+checking for target address size... 64 bits
+checking whether byte ordering is bigendian... no
+checking if the C compiler supports "-m64"... yes
+checking if the C++ compiler supports "-m64"... yes
+checking if both compilers support "-m64"... yes
+checking if the C compiler supports "-m64"... yes
+checking if the C++ compiler supports "-m64"... yes
+checking if both compilers support "-m64"... yes
+checking if we should generate debug symbols... false
+checking if we should zip debug-info files... no
+checking what type of native debug symbols to use (this will override previous settings)... not specified
+configure: --with-native-debug-symbols not specified. Using values from --disable-debug-symbols and --disable-zip-debug-info
+checking if fixpath can be created... yes
+checking if fixpath.exe works... yes
+checking what is not needed on Windows?... alsa cups pulse x11
+checking for X... no
+checking for X11/extensions/shape.h... no
+configure: error: Valid values for --with-freetype are 'system' and 'bundled'

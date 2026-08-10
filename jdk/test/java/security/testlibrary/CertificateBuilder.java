@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015, 2026, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -26,6 +26,7 @@
 package sun.security.testlibrary;
 
 import java.io.*;
+import java.net.IDN;
 import java.util.*;
 import java.security.*;
 import java.security.cert.X509Certificate;
@@ -42,9 +43,13 @@ import sun.security.x509.AccessDescription;
 import sun.security.x509.AlgorithmId;
 import sun.security.x509.AuthorityInfoAccessExtension;
 import sun.security.x509.AuthorityKeyIdentifierExtension;
+import sun.security.x509.CRLDistributionPointsExtension;
+import sun.security.x509.GeneralSubtrees;
+import sun.security.x509.NameConstraintsExtension;
 import sun.security.x509.SubjectKeyIdentifierExtension;
 import sun.security.x509.BasicConstraintsExtension;
 import sun.security.x509.ExtendedKeyUsageExtension;
+import sun.security.x509.DistributionPoint;
 import sun.security.x509.DNSName;
 import sun.security.x509.GeneralName;
 import sun.security.x509.GeneralNames;
@@ -53,16 +58,17 @@ import sun.security.x509.SerialNumber;
 import sun.security.x509.SubjectAlternativeNameExtension;
 import sun.security.x509.URIName;
 import sun.security.x509.KeyIdentifier;
+import sun.security.x509.X500Name;
 
 /**
  * Helper class that builds and signs X.509 certificates.
- *
+ * <p>
  * A CertificateBuilder is created with a default constructor, and then
  * uses additional public methods to set the public key, desired validity
  * dates, serial number and extensions.  It is expected that the caller will
  * have generated the necessary key pairs prior to using a CertificateBuilder
  * to generate certificates.
- *
+ * <p>
  * The following methods are mandatory before calling build():
  * <UL>
  * <LI>{@link #setSubjectName(java.lang.String)}
@@ -76,12 +82,12 @@ import sun.security.x509.KeyIdentifier;
  * Additionally, the caller can either provide a {@link List} of
  * {@link Extension} objects, or use the helper classes to add specific
  * extension types.
- *
+ * <p>
  * When all required and desired parameters are set, the
  * {@link #build(java.security.cert.X509Certificate, java.security.PrivateKey,
  * java.lang.String)} method can be used to create the {@link X509Certificate}
  * object.
- *
+ * <p>
  * Multiple certificates may be cut from the same settings using subsequent
  * calls to the build method.  Settings may be cleared using the
  * {@link #reset()} method.
@@ -89,7 +95,7 @@ import sun.security.x509.KeyIdentifier;
 public class CertificateBuilder {
     private final CertificateFactory factory;
 
-    private X500Principal subjectName = null;
+    private X500Name subjectName = null;
     private BigInteger serialNumber = null;
     private PublicKey publicKey = null;
     private Date notBefore = null;
@@ -114,23 +120,47 @@ public class CertificateBuilder {
      * @param name An {@link X500Principal} to be used as the subject name
      * on this certificate.
      */
-    public void setSubjectName(X500Principal name) {
-        subjectName = name;
+    public CertificateBuilder setSubjectName(X500Principal name) {
+        subjectName = X500Name.asX500Name(name);
+        return this;
     }
 
     /**
      * Set the subject name for the certificate.
      *
      * @param name The subject name in RFC 2253 format
+     *
+     * @throws IllegalArgumentException if any parsing errors on the
+     * {@code name} parameter occur.
      */
-    public void setSubjectName(String name) {
-        subjectName = new X500Principal(name);
+    public CertificateBuilder setSubjectName(String name) {
+        try {
+            subjectName = new X500Name(name);
+        } catch (IOException ioe) {
+            throw new IllegalArgumentException(ioe);
+        }
+        return this;
+    }
+
+    /**
+     * Set the subject name for the certificate. This method is useful when
+     * you need more control over the contents of the subject name.
+     *
+     * @param name an {@code X500Name} to be used as the subject name
+     * on this certificate
+     */
+    public CertificateBuilder setSubjectName(X500Name name) {
+        subjectName = name;
+        return this;
     }
 
     /**
      * Set the public key for this certificate.
      *
      * @param pubKey The {@link PublicKey} to be used on this certificate.
+     *
+     * @throws NullPointerException if the {@code pubKey} parameter
+     * is {@code null}
      */
     public void setPublicKey(PublicKey pubKey) {
         publicKey = Objects.requireNonNull(pubKey, "Caught null public key");
@@ -141,6 +171,9 @@ public class CertificateBuilder {
      *
      * @param nbDate A {@link Date} object specifying the start of the
      * certificate validity period.
+     *
+     * @throws NullPointerException if the {@code nbDate} parameter
+     * is {@code null}
      */
     public void setNotBefore(Date nbDate) {
         Objects.requireNonNull(nbDate, "Caught null notBefore date");
@@ -152,6 +185,9 @@ public class CertificateBuilder {
      *
      * @param naDate A {@link Date} object specifying the end of the
      * certificate validity period.
+     *
+     * @throws NullPointerException if the {@code naDate} parameter
+     * is {@code null}
      */
     public void setNotAfter(Date naDate) {
         Objects.requireNonNull(naDate, "Caught null notAfter date");
@@ -165,6 +201,9 @@ public class CertificateBuilder {
      * certificate validity period.
      * @param naDate A {@link Date} object specifying the end of the
      * certificate validity period.
+     *
+     * @throws NullPointerException if either the {@code nbDate} or
+     * {@code naDate} parameters are {@code null}
      */
     public void setValidity(Date nbDate, Date naDate) {
         setNotBefore(nbDate);
@@ -175,6 +214,8 @@ public class CertificateBuilder {
      * Set the serial number on the certificate.
      *
      * @param serial A serial number in {@link BigInteger} form.
+     *
+     * @throws NullPointerException if {@code serial} is {@code null}
      */
     public void setSerialNumber(BigInteger serial) {
         Objects.requireNonNull(serial, "Caught null serial number");
@@ -187,9 +228,10 @@ public class CertificateBuilder {
      *
      * @param ext The extension to be added.
      */
-    public void addExtension(Extension ext) {
+    public CertificateBuilder addExtension(Extension ext) {
         Objects.requireNonNull(ext, "Caught null extension");
         extensions.put(ext.getId(), ext);
+        return this;
     }
 
     /**
@@ -197,6 +239,8 @@ public class CertificateBuilder {
      *
      * @param extList The {@link List} of extensions to be added to
      * the certificate.
+     *
+     * @throws NullPointerException if {@code extList} is {@code null}
      */
     public void addExtensions(List<Extension> extList) {
         Objects.requireNonNull(extList, "Caught null extension list");
@@ -216,11 +260,37 @@ public class CertificateBuilder {
         if (!dnsNames.isEmpty()) {
             GeneralNames gNames = new GeneralNames();
             for (String name : dnsNames) {
-                gNames.add(new GeneralName(new DNSName(name)));
+                gNames.add(new GeneralName(new DNSName(new DerValue(
+                        DerValue.tag_IA5String, IDN.toASCII(name)))));
             }
             addExtension(new SubjectAlternativeNameExtension(false,
                     gNames));
         }
+    }
+
+    /**
+     * Helper method to add one or more distribution points to the CRL
+     * Distribution Points extension.  This form of the method only supports
+     * URI name types, but can be extended in the future to support other types.
+     *
+     * @param uriNames a list of URIs in String form
+     * @return the {@code CertificateBuilder} configured to add this
+     * CRL Distribution Points extension.
+     *
+     * @throws IOException if any of the URIs in {@code uriNames} are
+     * malformed
+     */
+    public CertificateBuilder addCrlDistributionPointsExt(List<String> uriNames)
+        throws IOException {
+        if (uriNames != null && !uriNames.isEmpty()) {
+            GeneralNames gNames = new GeneralNames();
+            for (String name : uriNames) {
+                gNames.add(new GeneralName(new URIName(name)));
+            }
+            addExtension(new CRLDistributionPointsExtension(Collections.singletonList(
+                    new DistributionPoint(gNames, null, null))));
+        }
+        return this;
     }
 
     /**
@@ -284,6 +354,19 @@ public class CertificateBuilder {
     public void addAuthorityKeyIdExt(X509Certificate authorityCert)
             throws IOException {
         addAuthorityKeyIdExt(authorityCert.getPublicKey());
+    }
+
+    /**
+     * Set the Name Constraints Extension for a certificate.
+     *
+     * @param permitted permitted names
+     * @param excluded excluded names
+     *
+     * @throws IOException if an encoding error occurs.
+     */
+    public CertificateBuilder addNameConstraintsExt(
+            GeneralSubtrees permitted, GeneralSubtrees excluded) throws IOException {
+        return addExtension(new NameConstraintsExtension(permitted, excluded));
     }
 
     /**
@@ -371,7 +454,7 @@ public class CertificateBuilder {
     }
 
     /**
-     * Encode the contents of the outer-most ASN.1 SEQUENCE:
+     * Encode the contents of the outermost ASN.1 SEQUENCE:
      *
      * <PRE>
      *  Certificate  ::=  SEQUENCE  {

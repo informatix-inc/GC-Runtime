@@ -33,6 +33,7 @@
 #include "GraphicsPrimitiveMgr.h"
 #include "sun_java2d_loops_DrawGlyphList.h"
 #include "sun_java2d_loops_DrawGlyphListAA.h"
+#include <windows.h>
 
 
 /*
@@ -62,28 +63,19 @@ GlyphBlitVector* setupBlitVector(JNIEnv *env, jobject glyphlist) {
     jfloat x = (*env)->GetFloatField(env, glyphlist, sunFontIDs.glyphListX);
     jfloat y = (*env)->GetFloatField(env, glyphlist, sunFontIDs.glyphListY);
     jint len =  (*env)->GetIntField(env, glyphlist, sunFontIDs.glyphListLen);
-    if (len <= 0 || len > 65536) {
-        return NULL;
-    }
     jlongArray glyphImages = (jlongArray)
         (*env)->GetObjectField(env, glyphlist, sunFontIDs.glyphImages);
-    if (glyphImages == NULL) {
-        return NULL;
-    }
     jfloatArray glyphPositions =
       (*env)->GetBooleanField(env, glyphlist, sunFontIDs.glyphListUsePos)
         ? (jfloatArray)
       (*env)->GetObjectField(env, glyphlist, sunFontIDs.glyphListPos)
         : NULL;
-    if (len > (SIZE_MAX - sizeof(GlyphBlitVector)) / sizeof(ImageRef)) {
-        return NULL;
-    }
+
     bytesNeeded = sizeof(GlyphBlitVector)+sizeof(ImageRef)*len;
     gbv = (GlyphBlitVector*)malloc(bytesNeeded);
     if (gbv == NULL) {
         return NULL;
     }
-    memset(gbv, 0, bytesNeeded);
     gbv->numGlyphs = len;
     gbv->glyphs = (ImageRef*)((unsigned char*)gbv+sizeof(GlyphBlitVector));
 
@@ -115,23 +107,6 @@ GlyphBlitVector* setupBlitVector(JNIEnv *env, jobject glyphlist) {
             jfloat py = y + positions[++n];
 
             ginfo = (GlyphInfo*)imagePtrs[g];
-            if (ginfo == NULL) {
-                (*env)->ReleasePrimitiveArrayCritical(env, glyphPositions,
-                                                      positions, JNI_ABORT);
-                (*env)->ReleasePrimitiveArrayCritical(env, glyphImages,
-                                                      imagePtrs, JNI_ABORT);
-                free(gbv);
-                return NULL;
-            }
-            if (ginfo->width < 0 || ginfo->height < 0 ||
-                ginfo->rowBytes < 0 || ginfo->image == NULL) {
-                (*env)->ReleasePrimitiveArrayCritical(env, glyphPositions,
-                                                      positions, JNI_ABORT);
-                (*env)->ReleasePrimitiveArrayCritical(env, glyphImages,
-                                                      imagePtrs, JNI_ABORT);
-                free(gbv);
-                return NULL;
-            }
             gbv->glyphs[g].glyphInfo = ginfo;
             gbv->glyphs[g].pixels = ginfo->image;
             gbv->glyphs[g].width = ginfo->width;
@@ -144,20 +119,6 @@ GlyphBlitVector* setupBlitVector(JNIEnv *env, jobject glyphlist) {
                                               positions, JNI_ABORT);
     } else {
         for (g=0; g<len; g++) {
-            ginfo = (GlyphInfo*)imagePtrs[g];
-            if (ginfo == NULL) {
-                (*env)->ReleasePrimitiveArrayCritical(env, glyphImages,
-                                                      imagePtrs, JNI_ABORT);
-                free(gbv);
-                return NULL;
-            }
-            if (ginfo->width < 0 || ginfo->height < 0 ||
-                ginfo->rowBytes < 0 || ginfo->image == NULL) {
-                (*env)->ReleasePrimitiveArrayCritical(env, glyphImages,
-                                                      imagePtrs, JNI_ABORT);
-                free(gbv);
-                return NULL;
-            }
             ginfo = (GlyphInfo*)imagePtrs[g];
             gbv->glyphs[g].glyphInfo = ginfo;
             gbv->glyphs[g].pixels = ginfo->image;
@@ -356,19 +317,25 @@ Java_sun_java2d_loops_DrawGlyphList_DrawGlyphList
     GlyphBlitVector* gbv;
     NativePrimitive *pPrim;
 
-    if ((pPrim = GetNativePrim(env, self)) == NULL) {
+    __try {
+        if ((pPrim = GetNativePrim(env, self)) == NULL) {
+            return;
+        }
+
+        if ((gbv = setupBlitVector(env, glyphlist)) == NULL) {
+            return;
+        }
+
+        pixel = GrPrim_Sg2dGetPixel(env, sg2d);
+        color = GrPrim_Sg2dGetEaRGB(env, sg2d);
+        drawGlyphList(env, self, sg2d, sData, gbv, pixel, color,
+                      pPrim, pPrim->funcs.drawglyphlist);
+        free(gbv);
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        printf("Caught SEH exception in DrawGlyphList\n");
         return;
     }
-
-    if ((gbv = setupBlitVector(env, glyphlist)) == NULL) {
-        return;
-    }
-
-    pixel = GrPrim_Sg2dGetPixel(env, sg2d);
-    color = GrPrim_Sg2dGetEaRGB(env, sg2d);
-    drawGlyphList(env, self, sg2d, sData, gbv, pixel, color,
-                  pPrim, pPrim->funcs.drawglyphlist);
-    free(gbv);
 
 }
 
@@ -386,18 +353,25 @@ Java_sun_java2d_loops_DrawGlyphListAA_DrawGlyphListAA
     GlyphBlitVector* gbv;
     NativePrimitive *pPrim;
 
-    if ((pPrim = GetNativePrim(env, self)) == NULL) {
+    __try {
+        if ((pPrim = GetNativePrim(env, self)) == NULL) {
+            return;
+        }
+
+        if ((gbv = setupBlitVector(env, glyphlist)) == NULL) {
+            return;
+        }
+        pixel = GrPrim_Sg2dGetPixel(env, sg2d);
+        color = GrPrim_Sg2dGetEaRGB(env, sg2d);
+        drawGlyphList(env, self, sg2d, sData, gbv, pixel, color,
+            pPrim, pPrim->funcs.drawglyphlistaa);
+        free(gbv);
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        printf("Caught SEH exception in DrawGlyphListAA\n");
         return;
     }
 
-    if ((gbv = setupBlitVector(env, glyphlist)) == NULL) {
-        return;
-    }
-    pixel = GrPrim_Sg2dGetPixel(env, sg2d);
-    color = GrPrim_Sg2dGetEaRGB(env, sg2d);
-    drawGlyphList(env, self, sg2d, sData, gbv, pixel, color,
-                  pPrim, pPrim->funcs.drawglyphlistaa);
-    free(gbv);
 }
 
 /*
@@ -415,21 +389,27 @@ Java_sun_java2d_loops_DrawGlyphListLCD_DrawGlyphListLCD
     GlyphBlitVector* gbv;
     NativePrimitive *pPrim;
 
-    if ((pPrim = GetNativePrim(env, self)) == NULL) {
-        return;
-    }
+    __try {
+        if ((pPrim = GetNativePrim(env, self)) == NULL) {
+            return;
+        }
 
-    if ((gbv = setupLCDBlitVector(env, glyphlist)) == NULL) {
+        if ((gbv = setupLCDBlitVector(env, glyphlist)) == NULL) {
+            return;
+        }
+        pixel = GrPrim_Sg2dGetPixel(env, sg2d);
+        color = GrPrim_Sg2dGetEaRGB(env, sg2d);
+        contrast = GrPrim_Sg2dGetLCDTextContrast(env, sg2d);
+        rgbOrder = (*env)->GetBooleanField(env,glyphlist, sunFontIDs.lcdRGBOrder);
+        drawGlyphListLCD(env, self, sg2d, sData, gbv, pixel, color,
+                         rgbOrder, contrast,
+                         pPrim, pPrim->funcs.drawglyphlistlcd);
+        free(gbv);
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        printf("Caught SEH exception in DrawGlyphListLCD\n");
         return;
     }
-    pixel = GrPrim_Sg2dGetPixel(env, sg2d);
-    color = GrPrim_Sg2dGetEaRGB(env, sg2d);
-    contrast = GrPrim_Sg2dGetLCDTextContrast(env, sg2d);
-    rgbOrder = (*env)->GetBooleanField(env,glyphlist, sunFontIDs.lcdRGBOrder);
-    drawGlyphListLCD(env, self, sg2d, sData, gbv, pixel, color,
-                     rgbOrder, contrast,
-                     pPrim, pPrim->funcs.drawglyphlistlcd);
-    free(gbv);
 }
 
 /*

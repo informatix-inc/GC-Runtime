@@ -893,6 +893,11 @@ static jlong
 
     ftglyph = scalerInfo->face->glyph;
 
+    /* apply styles */
+    //if (context->doBold) { /* if bold style */
+    //    FT_GlyphSlot_Embolden(ftglyph);
+    //}
+
     /* generate bitmap if it is not done yet
      e.g. if algorithmic styling is performed and style was added to outline */
     if (renderImage && (ftglyph->format == FT_GLYPH_FORMAT_OUTLINE)) {
@@ -919,7 +924,8 @@ static jlong
             FT_GlyphSlot_Embolden(ftglyph);
         }
     }
-    
+
+
     if (renderImage) {
         width  = (UInt16) ftglyph->bitmap.width;
         height = (UInt16) ftglyph->bitmap.rows;
