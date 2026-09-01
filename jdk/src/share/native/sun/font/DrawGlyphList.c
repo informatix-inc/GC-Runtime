@@ -35,7 +35,6 @@
 #include "sun_java2d_loops_DrawGlyphListAA.h"
 #include <windows.h>
 
-
 /*
  * Need to account for the rare case when (eg) repainting damaged
  * areas results in the drawing location being negative, in which
@@ -316,7 +315,7 @@ Java_sun_java2d_loops_DrawGlyphList_DrawGlyphList
     jint pixel, color;
     GlyphBlitVector* gbv;
     NativePrimitive *pPrim;
-
+    
     __try {
         if ((pPrim = GetNativePrim(env, self)) == NULL) {
             return;
@@ -331,12 +330,10 @@ Java_sun_java2d_loops_DrawGlyphList_DrawGlyphList
         drawGlyphList(env, self, sg2d, sData, gbv, pixel, color,
                       pPrim, pPrim->funcs.drawglyphlist);
         free(gbv);
-    }
-    __except (EXCEPTION_EXECUTE_HANDLER) {
+    } __except(EXCEPTION_EXECUTE_HANDLER) {
         printf("Caught SEH exception in DrawGlyphList\n");
         return;
     }
-
 }
 
 /*
@@ -364,14 +361,12 @@ Java_sun_java2d_loops_DrawGlyphListAA_DrawGlyphListAA
         pixel = GrPrim_Sg2dGetPixel(env, sg2d);
         color = GrPrim_Sg2dGetEaRGB(env, sg2d);
         drawGlyphList(env, self, sg2d, sData, gbv, pixel, color,
-            pPrim, pPrim->funcs.drawglyphlistaa);
+                      pPrim, pPrim->funcs.drawglyphlistaa);
         free(gbv);
-    }
-    __except (EXCEPTION_EXECUTE_HANDLER) {
+    } __except(EXCEPTION_EXECUTE_HANDLER) {
         printf("Caught SEH exception in DrawGlyphListAA\n");
         return;
     }
-
 }
 
 /*
@@ -405,11 +400,11 @@ Java_sun_java2d_loops_DrawGlyphListLCD_DrawGlyphListLCD
                          rgbOrder, contrast,
                          pPrim, pPrim->funcs.drawglyphlistlcd);
         free(gbv);
-    }
-    __except (EXCEPTION_EXECUTE_HANDLER) {
+    } __except(EXCEPTION_EXECUTE_HANDLER) {
         printf("Caught SEH exception in DrawGlyphListLCD\n");
         return;
     }
+
 }
 
 /*

@@ -1719,7 +1719,7 @@ LRESULT AwtComponent::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
           }
           break;
       case WM_TOUCH:
-          // WmTouch(wParam, lParam);
+          //WmTouch(wParam, lParam);
           break;
       case WM_SETCURSOR:
           mr = mrDoDefault;

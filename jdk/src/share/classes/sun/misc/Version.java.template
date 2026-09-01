@@ -86,6 +86,14 @@ public class Version {
         System.err.println();
     }
 
+    private static String vendorSuffix() {
+        String vendor = System.getProperty("java.vendor", "");
+        if (vendor.length() == 0 || vendor.equals("N/A")) {
+            return " ";
+        }
+        return " (" + vendor + ")";
+    }
+
     /**
      * Give a stream, it will print version info on it.
      */
@@ -103,7 +111,7 @@ public class Version {
 
         /* Second line: runtime version (ie, libraries). */
 
-        ps.print(java_runtime_name + " (build " + java_runtime_version);
+        ps.print(java_runtime_name + vendorSuffix() + "(build " + java_runtime_version);
 
         if (java_profile_name.length() > 0) {
             // profile name
@@ -120,7 +128,7 @@ public class Version {
         String java_vm_name    = System.getProperty("java.vm.name");
         String java_vm_version = System.getProperty("java.vm.version");
         String java_vm_info    = System.getProperty("java.vm.info");
-        ps.println(java_vm_name + " (build " + java_vm_version + ", " +
+        ps.println(java_vm_name + vendorSuffix() + "(build " + java_vm_version + ", " +
                    java_vm_info + ")");
     }
 

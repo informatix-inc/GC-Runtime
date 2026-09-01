@@ -1,40 +1,44 @@
 # GC Runtime
 
-株式会社 Informatix の製品「GeoConic」「GC Server」等の動作を保証するランタイムです。  
-Adoptium/AdoptOpenJDK のソースを取得し、修正を加えたものを公開しています。  
+株式会社 Informatix の製品「GeoConic」「GC Server」等の動作を保証するランタイムです。
+Adoptium/AdoptOpenJDK のソースを取得し、修正を加えたものを公開しています。
 （**オリジナルの Adoptium/AdoptOpenJDK では[下記](#修正済の不具合)の不具合が起こります。**）
 
-- 2026/08/10  
-  Adoptium のソースを[8u502_ga](https://github.com/adoptium/jdk8u/tree/jdk8u502-ga)に変更しました。  
+- 2026/09/01
+  Adoptium のソースを[8u504_b01](https://github.com/adoptium/jdk8u/tree/jdk8u504-b01)に変更しました。
+  ビルド番号：**1.8.0_012**
+
+- 2026/08/10
+  Adoptium のソースを[8u502_ga](https://github.com/adoptium/jdk8u/tree/jdk8u502-ga)に変更しました。
   ビルド番号：**1.8.0_011**
 
-- 2024/08/30  
-  Adoptium のソースを[8u422_b05_adopt](https://github.com/adoptium/jdk8u/tree/jdk8u422-b05_adopt)に変更しました。  
+- 2024/08/30
+  Adoptium のソースを[8u422_b05_adopt](https://github.com/adoptium/jdk8u/tree/jdk8u422-b05_adopt)に変更しました。
   ビルド番号：**1.8.0_004**
 
-- 2022/05/12  
-  このバージョンから AdoptOpenJDK ではなく Adoptium のソースになりました。  
-  [8u332_b09_adopt](https://github.com/adoptium/jdk8u/tree/jdk8u332-b09_adopt)に変更しました。  
+- 2022/05/12
+  このバージョンから AdoptOpenJDK ではなく Adoptium のソースになりました。
+  [8u332_b09_adopt](https://github.com/adoptium/jdk8u/tree/jdk8u332-b09_adopt)に変更しました。
   ビルド番号：**1.8.0_003**
 
-- 2021/06/11  
-  AdoptOpenJDK のソースを[8u292_b10](https://github.com/AdoptOpenJDK/openjdk-jdk8u/tree/jdk8u292-b10)に変更しました。  
+- 2021/06/11
+  AdoptOpenJDK のソースを[8u292_b10](https://github.com/AdoptOpenJDK/openjdk-jdk8u/tree/jdk8u292-b10)に変更しました。
   ビルド番号：**1.8.0_002**
 
-- 2019/10/28  
-  AdoptOpenJDK のソースを[8u232_b09](https://github.com/AdoptOpenJDK/openjdk-jdk8u/tree/jdk8u232-b09)に変更しました。  
-  今までは AdoptOpenJDK のブランチ名をそのままバージョン名として使用していましたが、「1.8.0_xxx」という表記に変更しました。xxx には数字が入ります。  
+- 2019/10/28
+  AdoptOpenJDK のソースを[8u232_b09](https://github.com/AdoptOpenJDK/openjdk-jdk8u/tree/jdk8u232-b09)に変更しました。
+  今までは AdoptOpenJDK のブランチ名をそのままバージョン名として使用していましたが、「1.8.0_xxx」という表記に変更しました。xxx には数字が入ります。
   今回のビルドを「**1.8.0_001**」とします。
 
 ## 修正済の不具合
 
-各ビルドごとに修正した内容についてまとめています。  
+各ビルドごとに修正した内容についてまとめています。
 新しいビルドには前のビルドまでの修正も反映されています。
 
 ### 1.8.0_003 (8u332_b09)
 
 - Java の脆弱性問題に対応。
-- 斜体の文章に角度がついていると、斜体にならず一文字ずつ斜めに傾く問題を修正。  
+- 斜体の文章に角度がついていると、斜体にならず一文字ずつ斜めに傾く問題を修正。
   ※以前、既知の不具合として載せていた現象で、Adoptium 側で修正されました。
   |修正前|修正後|
   |:---:|:---:|
