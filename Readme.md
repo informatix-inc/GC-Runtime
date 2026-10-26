@@ -4,6 +4,10 @@
 Adoptium/AdoptOpenJDK のソースを取得し、修正を加えたものを公開しています。
 （**オリジナルの Adoptium/AdoptOpenJDK では[下記](#修正済の不具合)の不具合が起こります。**）
 
+- 2026/10/24
+  Java の脆弱性問題に対応しました。Adoptium のソースは 1.8.0_012 と同じ[8u504](https://github.com/adoptium/jdk8u/tree/jdk8u504-ga)です。
+  ビルド番号：**1.8.0_013**
+
 - 2026/09/01
   Adoptium のソースを[8u504_b01](https://github.com/adoptium/jdk8u/tree/jdk8u504-b01)に変更しました。
   ビルド番号：**1.8.0_012**
